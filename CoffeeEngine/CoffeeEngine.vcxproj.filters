@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{81bcd512-b558-491f-8251-d155e0df5081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Globals">
+      <UniqueIdentifier>{e574e7e6-6f93-462c-b9fe-ecd02030157f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{47458e41-398c-48c2-9a3d-02f8de9799fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exceptions">
+      <UniqueIdentifier>{9b192670-d0b9-478a-8405-a249a98f39ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine">
+      <UniqueIdentifier>{d34777da-454c-40df-bb62-458a521662ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Src">
+      <UniqueIdentifier>{68626e4c-84f0-4fb5-af67-5ac10b699236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Globals\Src">
+      <UniqueIdentifier>{4e00a2ec-c929-4518-8d48-590007dc5ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Base">
+      <UniqueIdentifier>{75f8f2eb-2718-466c-87c6-9d79ca9e1678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Base\Src">
+      <UniqueIdentifier>{2dd4162c-c361-4625-984f-809d3f8fe4b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{c18304bc-c01a-4d58-aca6-eb8d7a4b43c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win32">
+      <UniqueIdentifier>{90703e5a-fc85-477b-b15b-ec3bd0a36cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win32\Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="System\Win32\Src">
+      <UniqueIdentifier>{582f78df-ff06-4027-8739-eaea858ddf64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\DirectX11">
+      <UniqueIdentifier>{9ceeb97d-d32b-4278-bea0-db2eb2c4058f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\DirectX11\Src">
+      <UniqueIdentifier>{0662bb3d-611a-4b54-9c2c-900d72265b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{add1b3a3-37d7-4939-a696-372a02dfd63a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\DirectX11">
+      <UniqueIdentifier>{5b49c9d8-cbe5-4996-9060-13ab26328976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Linux">
+      <UniqueIdentifier>{f027ec49-ce9e-40f1-a0fe-9440c9894b43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Linux\Src">
+      <UniqueIdentifier>{17725ceb-36ef-4008-8e4f-420671a305fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\OpenGL">
+      <UniqueIdentifier>{d936e76c-e58c-4c52-aa0e-60335bd65617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\OpenGL\Src">
+      <UniqueIdentifier>{36ec19c4-7556-425f-811e-7b32d54bc9bd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="Resources\CoffeeEngine.ico">
+      <Filter>System\Win32\Resources</Filter>
+    </None>
+    <None Include="Resources\small.ico">
+      <Filter>System\Win32\Resources</Filter>
+    </None>
+    <None Include="Resources\favicon.ico">
+      <Filter>System\Win32\Resources</Filter>
+    </None>
+    <None Include="CommentTemplate.txt" />
+    <None Include="Shaders\DirectX11\Default.fx">
+      <Filter>Shaders\DirectX11</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resources\Resource.h">
+      <Filter>System\Win32\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Global.h">
+      <Filter>Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Common.h">
+      <Filter>Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\stdafx.h">
+      <Filter>System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\targetver.h">
+      <Filter>System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Exceptions\Exception.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Exceptions\NotSupportedException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Exceptions\NullArgumentException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\IGraphics.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\ISystem.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\BaseGraphicsClass.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\System\Win32\Windows_EntryPoint.h">
+      <Filter>System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\System\Win32\WindowsSystemClass.h">
+      <Filter>System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX11\D3DGraphicsClass.h">
+      <Filter>Graphics\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Engine\CoffeeEngineClass.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\ModelClass.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX11\D3DModelClass.h">
+      <Filter>Graphics\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\IModel.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\ICamera.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\CameraClass.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX11\D3DCameraClass.h">
+      <Filter>Graphics\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX11\D3DCommon.h">
+      <Filter>Graphics\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GraphicsCommon.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\System\Linux\Linux_EntryPoint.h">
+      <Filter>System\Linux</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\IShader.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\ShaderClass.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX11\D3DShaderClass.h">
+      <Filter>Graphics\DirectX11</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\stdafx.cpp">
+      <Filter>System\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Global.cpp">
+      <Filter>Globals\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\BaseGraphicsClass.cpp">
+      <Filter>Graphics\Base\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Win32\Windows_EntryPoint.cpp">
+      <Filter>System\Win32\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Win32\WindowsSystemClass.cpp">
+      <Filter>System\Win32\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX11\D3DGraphicsClass.cpp">
+      <Filter>Graphics\DirectX11\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Engine\CoffeeEngineClass.cpp">
+      <Filter>GameEngine\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\ModelClass.cpp">
+      <Filter>Graphics\Base\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX11\D3DModelClass.cpp">
+      <Filter>Graphics\DirectX11\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\CameraClass.cpp">
+      <Filter>Graphics\Base\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX11\D3DCameraClass.cpp">
+      <Filter>Graphics\DirectX11\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Linux\Linux_EntryPoint.cpp">
+      <Filter>System\Linux\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\ShaderClass.cpp">
+      <Filter>Graphics\Base\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp">
+      <Filter>Graphics\DirectX11\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX11\D3DCommon.cpp">
+      <Filter>Graphics\DirectX11\Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\CoffeeEngine.rc">
+      <Filter>System\Win32\Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

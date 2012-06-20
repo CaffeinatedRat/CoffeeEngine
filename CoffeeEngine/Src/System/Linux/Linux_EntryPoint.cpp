@@ -1,0 +1,26 @@
+//--------------------------------------------------------------------------------------
+// Description: Defines the LINUX entry point for the application.
+//
+// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+//--------------------------------------------------------------------------------------
+
+#include "System\Linux\Linux_EntryPoint.h"
+#include "Global.h"
+
+using namespace CoffeeEngine;
+//using namespace CoffeeEngine::System;
+
+int linux_main(int argc, char *argv[])
+{
+	//if( (g_pSystem = new ISystem()) != NULL)
+	//{
+	//	if(g_pSystem->Initialize())
+	//		g_pSystem->Run();
+
+	//	//Shutdown and release the memory.
+	//	g_pSystem->Shutdown();
+	//	delete g_pSystem;
+	//}
+
+	return 0;
+}
