@@ -26,7 +26,7 @@ BaseGraphicsClass::BaseGraphicsClass()
 BaseGraphicsClass::BaseGraphicsClass(ISystem* pSystem)
 {
 	if(pSystem == NULL)
-		throw NullArgumentException("ISystem is null.");
+		throw NullArgumentException("BaseGraphicsClass", "Constructor", "pSystem");
 
 	m_pSystem = pSystem;
 }

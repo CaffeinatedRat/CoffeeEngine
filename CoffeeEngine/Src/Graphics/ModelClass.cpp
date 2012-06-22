@@ -23,7 +23,7 @@ ModelClass::ModelClass()
 ModelClass::ModelClass(BaseGraphicsClass* pBaseGraphicsClass)
 {
 	if(pBaseGraphicsClass == NULL)
-		throw NullArgumentException("BaseGraphicsClass is null.");
+		throw NullArgumentException("ModelClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;
 }

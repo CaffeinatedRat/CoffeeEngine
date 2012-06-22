@@ -20,8 +20,10 @@ int WinMain_ENTRY(HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
+	//Instantiate the main windows operating system object.
 	if( (g_pSystem = new WindowsSystemClass()) != NULL)
 	{
+		//Attempt to initialize the operating system object and run it if initialization is successful.
 		if(g_pSystem->Initialize())
 			g_pSystem->Run();
 
@@ -32,12 +34,6 @@ int WinMain_ENTRY(HINSTANCE hInstance,
 
 	return 0;
 }
-
-////////////////////////////////////////////////////////////
-//
-//                External
-// 
-////////////////////////////////////////////////////////////
 
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)

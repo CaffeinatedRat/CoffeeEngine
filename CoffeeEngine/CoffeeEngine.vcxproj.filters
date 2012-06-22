@@ -67,7 +67,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="Resources\CoffeeEngine.ico">
       <Filter>System\Win32\Resources</Filter>
     </None>
@@ -99,9 +98,6 @@
       <Filter>System\Win32</Filter>
     </ClInclude>
     <ClInclude Include="Include\Exceptions\Exception.h">
-      <Filter>Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Exceptions\NotSupportedException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="Include\Exceptions\NullArgumentException.h">
@@ -164,12 +160,14 @@
     <ClInclude Include="Include\Graphics\DirectX11\D3DShaderClass.h">
       <Filter>Graphics\DirectX11</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Exceptions\NotImplementedException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">
       <Filter>System\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Global.cpp">
       <Filter>Globals\Src</Filter>
     </ClCompile>
@@ -212,6 +210,7 @@
     <ClCompile Include="Src\Graphics\DirectX11\D3DCommon.cpp">
       <Filter>Graphics\DirectX11\Src</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\CoffeeEngine.rc">

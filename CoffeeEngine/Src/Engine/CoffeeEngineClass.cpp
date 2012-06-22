@@ -35,10 +35,10 @@ CoffeeEngineClass::CoffeeEngineClass()
 CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraphics)
 {
 	if(pSystem == NULL)
-		throw NullArgumentException("ISystem is null.");
+		throw NullArgumentException("CoffeeEngineClass", "Constructor", "pSystem");
 
 	if(pGraphics == NULL)
-		throw NullArgumentException("IGraphics is null.");
+		throw NullArgumentException("CoffeeEngineClass", "Constructor", "pGraphics");
 
 	m_pSystem = pSystem;
 	m_pGraphics = pGraphics;

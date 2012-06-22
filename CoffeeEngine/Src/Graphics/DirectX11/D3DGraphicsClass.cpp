@@ -71,7 +71,7 @@ D3DGraphicsClass::~D3DGraphicsClass()
 bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
 {
 	if(m_pSystem == NULL)
-		throw NullArgumentException("ISystem is null.");
+		throw NullArgumentException("D3DGraphicsClass", "Initialize", "m_pSystem");
 
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
 	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
@@ -198,7 +198,7 @@ void D3DGraphicsClass::SetMasterCamera(ICamera* camera)
 
 std::vector<std::string> D3DGraphicsClass::GetVideoCardInfo()
 {
-	throw NotSupportedException("GetVideoCardInfo");
+	throw NotImplementedException("D3DGraphicsClass", "GetVideoCardInfo");
 }
 
 ////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ bool D3DGraphicsClass::CreateSwapChain()
 	else
 	{
 		if(result == E_INVALIDARG)
-			throw NotSupportedException("DirectX is not supported on this machine.");
+			throw Exception("D3DGraphicsClass", "CreateSwapChain", "DirectX is not supported on this machine.");
 	}
 
 	// Clean up regardless of the status.

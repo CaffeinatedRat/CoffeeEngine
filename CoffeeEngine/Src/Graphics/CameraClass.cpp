@@ -23,7 +23,7 @@ CameraClass::CameraClass()
 CameraClass::CameraClass(BaseGraphicsClass* pBaseGraphicsClass)
 {
 	if(pBaseGraphicsClass == NULL)
-		throw NullArgumentException("BaseGraphicsClass is null.");
+		throw NullArgumentException("CameraClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;
 }

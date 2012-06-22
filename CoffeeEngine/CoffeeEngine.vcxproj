@@ -82,7 +82,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="CommentTemplate.txt" />
-    <None Include="ReadMe.txt" />
     <None Include="Resources\CoffeeEngine.ico" />
     <None Include="Resources\favicon.ico" />
     <None Include="Resources\small.ico" />
@@ -92,7 +91,7 @@
     <ClInclude Include="Include\Common.h" />
     <ClInclude Include="Include\Engine\CoffeeEngineClass.h" />
     <ClInclude Include="Include\Exceptions\Exception.h" />
-    <ClInclude Include="Include\Exceptions\NotSupportedException.h" />
+    <ClInclude Include="Include\Exceptions\NotImplementedException.h" />
     <ClInclude Include="Include\Exceptions\NullArgumentException.h" />
     <ClInclude Include="Include\Global.h" />
     <ClInclude Include="Include\Graphics\BaseGraphicsClass.h" />
@@ -118,6 +117,7 @@
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Src\Engine\CoffeeEngineClass.cpp" />
     <ClCompile Include="Src\Graphics\BaseGraphicsClass.cpp" />
     <ClCompile Include="Src\Graphics\CameraClass.cpp" />
@@ -128,7 +128,6 @@
     <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp" />
     <ClCompile Include="Src\Graphics\ModelClass.cpp" />
     <ClCompile Include="Src\Graphics\ShaderClass.cpp" />
-    <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Global.cpp" />
     <ClCompile Include="Src\stdafx.cpp" />
     <ClCompile Include="Src\System\Linux\Linux_EntryPoint.cpp" />

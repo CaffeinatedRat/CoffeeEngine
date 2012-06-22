@@ -48,11 +48,11 @@ WindowsSystemClass::WindowsSystemClass(const WindowsSystemClass& systemClass)
 	
 	//When copying the system class we need to create a new instance of graphics object.
 	if((m_pGraphics = new D3DGraphicsClass(this)) == NULL)
-		throw Exception("Unable to copy the D3DGraphicsClass");
+		throw Exception("WindowsSystemClass", "Constructor", "Unable to copy the D3DGraphicsClass");
 
 	//When copying the system class we also need a new copy of the main game engine.
 	if ((m_pCoffeeEngine = new CoffeeEngineClass(this, m_pGraphics)) == NULL)
-		throw Exception("Unable to copy the CoffeeEngineClass");
+		throw Exception("WindowsSystemClass", "Constructor", "Unable to copy the CoffeeEngineClass");
 }
 
 WindowsSystemClass::~WindowsSystemClass()
@@ -137,12 +137,12 @@ bool WindowsSystemClass::Initialize()
 
 	try
 	{
-		//Attempt to create the D3DGraphics class.
+		//Attempt to create the D3DGraphics object.
 		// TO-DO: Add an option to use an OpenGLGraphicsClass.
 		if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
 			return false;
 
-		//Attempt to create the main engin and pass the graphics class to the engine.
+		//Attempt to create the main engine and pass a reference to the graphics and system objects.
 		if ( (m_pCoffeeEngine = new CoffeeEngineClass(this, m_pGraphics) ) == NULL )
 			return false;
 
@@ -225,7 +225,7 @@ void WindowsSystemClass::Shutdown()
 
 	UnregisterClass(m_szWindowClass, m_hInstance);
 
-	//Shutdown the graphics & engine.
+	//Shutdown the graphics & engine objects.
 	if(m_pGraphics != NULL)
 		m_pGraphics->Shutdown();
 
@@ -237,7 +237,7 @@ void WindowsSystemClass::Shutdown()
 }
 
 /// <summary>
-/// Writes a message to the OSes console.
+/// Writes a message to the OS's console.
 /// </summary>
 void WindowsSystemClass::ConsoleWrite(std::string sMessage)
 {

@@ -8,9 +8,6 @@
 #ifndef _NULLARGUMENT_EXCEPTION_H_
 #define _NULLARGUMENT_EXCEPTION_H_
 
-#include <iostream>
-#include "stdarg.h"
-
 namespace CoffeeEngine
 {
 	namespace Exceptions
@@ -19,31 +16,14 @@ namespace CoffeeEngine
 		{
 		public:
 		
-			NullArgumentException()
+			NullArgumentException(std::string sClassName, std::string sMethodName, std::string sArgument)
+				: Exception(sClassName, sMethodName)
 			{
-				m_sMessage = "An argument is null.";
+				m_sMessage.append("The argument ");
+				m_sMessage.append(sArgument);
+				m_sMessage.append(" is null.");
 			}
-
-			NullArgumentException(std::string sMessage) : Exception(sMessage) {}
 			
-			NullArgumentException(int nAmount, ...)
-			{
-				va_list vl;
-				va_start(vl, nAmount);
-
-				std::string sCompiledMessage = "";
-
-				for(int i = 0; i < nAmount; i++)
-				{
-					std::string msg = std::string(va_arg(vl, const char*));
-					sCompiledMessage.append(msg);
-				}
-
-				va_end(vl);
-
-				m_sMessage = sCompiledMessage;
-			}
-
 			NullArgumentException(const NullArgumentException& exception) : Exception(exception) {}
 		};
 	};

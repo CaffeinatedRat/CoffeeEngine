@@ -43,7 +43,7 @@ D3DCameraClass::~D3DCameraClass()
 bool D3DCameraClass::Initialize()
 {
 	if(m_pGraphicsClass == NULL)
-		throw NullArgumentException("m_pGraphicsClass");
+		throw NullArgumentException("D3DCameraClass", "Initialize", "m_pGraphicsClass");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 

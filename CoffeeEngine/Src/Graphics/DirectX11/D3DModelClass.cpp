@@ -45,7 +45,7 @@ D3DModelClass::~D3DModelClass()
 bool D3DModelClass::Initialize()
 {
 	if(m_pGraphicsClass == NULL)
-		throw NullArgumentException("m_pGraphicsClass");
+		throw NullArgumentException("D3DModelClass", "Initialize", "m_pGraphicsClass");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
@@ -67,10 +67,10 @@ bool D3DModelClass::Initialize()
 	D3DX11CreateShaderResourceViewFromFile(pDevice, fileNameW.c_str(), NULL, NULL, &m_pTexture, NULL);
 
 	// Set the number of vertices in the vertex array.
-	m_nVertexCount = 3;
+	m_nVertexCount = 6;
 
 	// Set the number of indices in the index array.
-	m_nIndexCount = 3;
+	m_nIndexCount = 6;
 
 	// Create the vertex array.
 	VertexType* vertices = new VertexType[m_nVertexCount];
@@ -80,22 +80,38 @@ bool D3DModelClass::Initialize()
 	if ( (vertices != NULL) && (indices != NULL) ) 
 	{
 		// Load the vertex array with data.
-		vertices[0].position = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);  // Bottom left.
+		vertices[0].position = D3DXVECTOR3(-3.0f, 3.0f, 0.0f);  // Top left.
 		vertices[0].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.5f);
-		vertices[0].texture = D3DXVECTOR2(0.0f, 1.0f);
+		vertices[0].texture = D3DXVECTOR2(0.0f, 0.0f);
 
-		vertices[1].position = D3DXVECTOR3(0.0f, 1.0f, 0.0f);  // Top middle.
+		vertices[1].position = D3DXVECTOR3(3.0f, 3.0f, 0.0f);  // Top right.
 		vertices[1].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertices[1].texture = D3DXVECTOR2(0.5f, 0.0f);
+		vertices[1].texture = D3DXVECTOR2(1.0f, 0.0f);
 
-		vertices[2].position = D3DXVECTOR3(1.0f, -1.0f, 0.0f);  // Bottom right.
+		vertices[2].position = D3DXVECTOR3(-3.0f, -3.0f, 0.0f);  // Bottom left.
 		vertices[2].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertices[2].texture = D3DXVECTOR2(1.0f, 1.0f);
+		vertices[2].texture = D3DXVECTOR2(0.0f, 1.0f);
+
+		vertices[3].position = D3DXVECTOR3(3.0f, 3.0f, 0.0f);  // Top right.
+		vertices[3].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+		vertices[3].texture = D3DXVECTOR2(1.0f, 0.0f);
+
+		vertices[4].position = D3DXVECTOR3(3.0f, -3.0f, 0.0f);  // Bottom Right.
+		vertices[4].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.5f);
+		vertices[4].texture = D3DXVECTOR2(1.0f, 1.0f);
+
+		vertices[5].position = D3DXVECTOR3(-3.0f, -3.0f, 0.0f);  // Bottom left.
+		vertices[5].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+		vertices[5].texture = D3DXVECTOR2(0.0f, 1.0f);
+
 
 		// Load the index array with data.
-		indices[0] = 0;  // Bottom left.
-		indices[1] = 1;  // Top middle.
-		indices[2] = 2;  // Bottom right.
+		indices[0] = 0;  // Top Left.
+		indices[1] = 1;  // Top Right.
+		indices[2] = 2;  // Bottom Left.
+		indices[3] = 3;  // Bottom Right.
+		indices[4] = 4;  // Bottom Right.
+		indices[5] = 5;  // Bottom Right.
 
 		// Set up the description of the vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -165,7 +181,7 @@ bool D3DModelClass::Initialize()
 void D3DModelClass::Render(IShader* pShader)
 {
 	if(m_pGraphicsClass == NULL)
-		throw NullArgumentException("m_pGraphicsClass");
+		throw NullArgumentException("D3DModelClass", "Render", "m_pGraphicsClass");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 

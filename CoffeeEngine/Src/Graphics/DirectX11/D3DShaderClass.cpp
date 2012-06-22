@@ -45,7 +45,7 @@ D3DShaderClass::~D3DShaderClass()
 bool D3DShaderClass::Initialize(std::string sFileName)
 {
 	if(sFileName.length() == 0)
-		throw NullArgumentException("sFileName");
+		throw NullArgumentException("D3DShaderClass", "Initialize", "sFileName");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
@@ -190,13 +190,13 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 void D3DShaderClass::Render()
 {
 	if(m_pGraphicsClass == NULL)
-		throw NullArgumentException("m_pGraphicsClass");
+		throw  NullArgumentException("D3DShaderClass", "Render", "m_pGraphicsClass");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == NULL)
-		throw Exception("There is no master camera.  You need a camera to see!");
+		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
 
 	D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
 	D3DXMATRIX viewMatrix = pMasterCamera->GetViewMatrix();

@@ -23,7 +23,7 @@ ShaderClass::ShaderClass()
 ShaderClass::ShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
 {
 	if(pBaseGraphicsClass == NULL)
-		throw NullArgumentException("BaseGraphicsClass is null.");
+		throw NullArgumentException("ShaderClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;
 }
