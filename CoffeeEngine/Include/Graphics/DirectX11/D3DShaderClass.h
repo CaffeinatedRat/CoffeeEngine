@@ -27,6 +27,21 @@ namespace CoffeeEngine
 			class D3DShaderClass : public ShaderClass
 			{
 			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				ID3D11VertexShader* m_pVertexShader;
+				ID3D11PixelShader* m_pPixelShader;
+
+				ID3D11InputLayout* m_pLayout;
+				ID3D11Buffer* m_pMatrixBuffer;
+				ID3D11SamplerState* m_pSampleState;
+
+			private:
 				D3DShaderClass();
 
 				struct VertexType
@@ -51,16 +66,6 @@ namespace CoffeeEngine
 				virtual bool Initialize(std::string sFileName);
 				virtual void Shutdown();
 				virtual void Render();
-
-			protected:
-
-			private:
-				ID3D11VertexShader* m_pVertexShader;
-				ID3D11PixelShader* m_pPixelShader;
-
-				ID3D11InputLayout* m_pLayout;
-				ID3D11Buffer* m_pMatrixBuffer;
-				ID3D11SamplerState* m_pSampleState;
 			};
 		};
 	};

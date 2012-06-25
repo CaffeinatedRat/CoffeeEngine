@@ -65,6 +65,12 @@
     <Filter Include="Graphics\OpenGL\Src">
       <UniqueIdentifier>{36ec19c4-7556-425f-811e-7b32d54bc9bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{8c9c67b0-4f80-4a9a-89b1-1e7b9fa0e121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Src">
+      <UniqueIdentifier>{1c7bbcd9-b444-4902-81be-3430557b9ab6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CoffeeEngine.ico">
@@ -163,6 +169,15 @@
     <ClInclude Include="Include\Exceptions\NotImplementedException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Utility\Logger.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\ITimer.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\System\Win32\Timer.h">
+      <Filter>System\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">
@@ -211,6 +226,12 @@
       <Filter>Graphics\DirectX11\Src</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Src\Utility\Logger.cpp">
+      <Filter>Utility\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Win32\Timer.cpp">
+      <Filter>System\Win32\Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\CoffeeEngine.rc">

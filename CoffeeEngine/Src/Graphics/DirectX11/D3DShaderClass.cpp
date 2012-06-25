@@ -42,6 +42,12 @@ D3DShaderClass::~D3DShaderClass()
 	Shutdown();
 }
 
+////////////////////////////////////////////////////////////
+//
+//                Public Methods
+// 
+////////////////////////////////////////////////////////////
+
 bool D3DShaderClass::Initialize(std::string sFileName)
 {
 	if(sFileName.length() == 0)
@@ -80,7 +86,7 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 			{
 				// Now setup the layout of the data that goes into the shader.
 				// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-				D3D11_INPUT_ELEMENT_DESC polygonLayout[3];
+				D3D11_INPUT_ELEMENT_DESC polygonLayout[4];
 				polygonLayout[0].SemanticName = "POSITION";
 				polygonLayout[0].SemanticIndex = 0;
 				polygonLayout[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -104,6 +110,14 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 				polygonLayout[2].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 				polygonLayout[2].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 				polygonLayout[2].InstanceDataStepRate = 0;
+
+				polygonLayout[3].SemanticName = "NORMAL";
+				polygonLayout[3].SemanticIndex = 0;
+				polygonLayout[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+				polygonLayout[3].InputSlot = 0;
+				polygonLayout[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+				polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+				polygonLayout[3].InstanceDataStepRate = 0;
 
 				// Get a count of the elements in the layout.
 				unsigned int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
@@ -171,12 +185,14 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 		}
 		else
 		{
-			char* err = (char*)pErrorMessage->GetBufferPointer();
+			//For development...add logging.
+			throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 		}
 	}
 	else
 	{
-		char* err = (char*)(pErrorMessage->GetBufferPointer());
+		//For development...add logging.
+		throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 	}
 
 	// Clean up regardless of the status.

@@ -48,6 +48,8 @@ CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraph
 	m_pCamera = NULL;
 	m_pModel = NULL;
 	m_pShader = NULL;
+
+	m_bDisplayReady = false;
 }
 
 CoffeeEngineClass::~CoffeeEngineClass()
@@ -57,7 +59,7 @@ CoffeeEngineClass::~CoffeeEngineClass()
 
 ////////////////////////////////////////////////////////////
 //
-//                Public
+//                Public Methods
 // 
 ////////////////////////////////////////////////////////////
 
@@ -79,6 +81,7 @@ bool CoffeeEngineClass::Initialize()
 	if(!m_pShader->Initialize("Default.fx"))
 		return false;
 
+	m_bDisplayReady = true;
 	return true;
 }
 
@@ -89,12 +92,15 @@ void CoffeeEngineClass::Run()
 
 void CoffeeEngineClass::Render()
 {
-	m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
+	if(m_bDisplayReady)
+	{
+		m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
 
-	m_pCamera->Render();
-	m_pModel->Render(m_pShader);
+		m_pCamera->Render();
+		m_pModel->Render(m_pShader);
 
-	m_pGraphics->EndScene();
+		m_pGraphics->EndScene();
+	}
 }
 
 bool CoffeeEngineClass::Frame()

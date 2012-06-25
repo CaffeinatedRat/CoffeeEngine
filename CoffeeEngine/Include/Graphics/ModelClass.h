@@ -20,6 +20,9 @@ namespace CoffeeEngine
 	{
 		class ModelClass : public IModel
 		{
+		protected:
+			BaseGraphicsClass* m_pGraphicsClass;
+
 		private:
 			ModelClass();
 
@@ -28,10 +31,6 @@ namespace CoffeeEngine
 			ModelClass(BaseGraphicsClass* pBaseGraphicsClass);
 			ModelClass(const ModelClass& object);
 			virtual ~ModelClass() { };
-
-		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
-
 		};
 	};
 };

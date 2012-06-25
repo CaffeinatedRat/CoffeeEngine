@@ -22,6 +22,9 @@ namespace CoffeeEngine
 		class BaseGraphicsClass : public IGraphics
 		{
 		protected:
+			ISystem* m_pSystem;
+
+		protected:
 
 			BaseGraphicsClass();
 
@@ -38,9 +41,6 @@ namespace CoffeeEngine
 			/// Returns the current operating system.
 			/// </returns>
 			inline ISystem* GetSystem() { return m_pSystem; }
-
-		protected:
-			ISystem* m_pSystem;
 		};
 	};
 };

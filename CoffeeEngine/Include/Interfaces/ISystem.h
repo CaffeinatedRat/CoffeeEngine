@@ -29,12 +29,6 @@ namespace CoffeeEngine
 			virtual void Run() = 0;
 
 			/// <summary>
-			/// Performs an individual frame render.
-			/// </summary>
-			/// NOTE: This may need to be removed from the contract as it may only be accessed internally by the OS object itself.
-			virtual bool Frame() = 0;
-
-			/// <summary>
 			/// Begins the process of shutting down the operating system class and all dependencies.
 			/// </summary>
 			virtual void Shutdown() = 0;

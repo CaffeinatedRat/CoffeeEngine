@@ -3,7 +3,7 @@ CoffeeEngine
 
 This project is simply a learning tool for DirectX11.  It is a very simplistic 3d engine.
 
-* NOTE: Most of the DirectX11, Direct3d code comes directly from the RasterTek samples.
+* NOTE: Most of the DirectX11 Direct3d code comes either directly from or as a derivative of the RasterTek samples.
 
 Windows Compilation
 -----------

@@ -20,6 +20,9 @@ namespace CoffeeEngine
 	{
 		class CameraClass : public ICamera
 		{
+		protected:
+			BaseGraphicsClass* m_pGraphicsClass;
+
 		private:
 			CameraClass();
 
@@ -28,10 +31,6 @@ namespace CoffeeEngine
 			CameraClass(BaseGraphicsClass* pBaseGraphicsClass);
 			CameraClass(const CameraClass& object);
 			virtual ~CameraClass() { };
-
-		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
-
 		};
 	};
 };

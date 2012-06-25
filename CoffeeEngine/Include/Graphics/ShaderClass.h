@@ -20,6 +20,9 @@ namespace CoffeeEngine
 	{
 		class ShaderClass : public IShader
 		{
+		protected:
+			BaseGraphicsClass* m_pGraphicsClass;
+
 		private:
 			ShaderClass();
 
@@ -28,10 +31,6 @@ namespace CoffeeEngine
 			ShaderClass(BaseGraphicsClass* pBaseGraphicsClass);
 			ShaderClass(const ShaderClass& object);
 			virtual ~ShaderClass() { };
-
-		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
-
 		};
 	};
 };

@@ -62,7 +62,7 @@ WindowsSystemClass::~WindowsSystemClass()
 
 ////////////////////////////////////////////////////////////
 //
-//                Protected
+//                Protected Methods
 // 
 ////////////////////////////////////////////////////////////
 
@@ -93,9 +93,11 @@ bool WindowsSystemClass::InitializeWindow()
 
 	RegisterClassEx(&wcex);
 
+	//Create a window half the size of the desktop.
 	m_nScreenWidth  = GetSystemMetrics(SM_CXSCREEN) / 2;
 	m_nScreenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
 
+	//Center the window.
 	int xPos = m_nScreenWidth / 2;
 	int yPos = m_nScreenHeight / 2;
 
@@ -126,7 +128,7 @@ bool WindowsSystemClass::InitializeWindow()
 
 ////////////////////////////////////////////////////////////
 //
-//                Public
+//                Public Methods
 // 
 ////////////////////////////////////////////////////////////
 
@@ -167,9 +169,8 @@ bool WindowsSystemClass::Initialize()
 	//TO-DO: For testing only, remove when completed...
 	catch(Exception& exception)
 	{
-		std::string message = exception.GetMessage();
-		std::wstring temp(message.begin(), message.end());
-		throw MessageBox(m_hWnd, temp.c_str(), L"System Error", MB_OK);
+		Logger::Write(exception.GetMessage());
+		return false;
 	}
 
 	return true;
@@ -241,11 +242,14 @@ void WindowsSystemClass::Shutdown()
 /// </summary>
 void WindowsSystemClass::ConsoleWrite(std::string sMessage)
 {
-	std::wstring temp(sMessage.begin(), sMessage.end());
-	m_log.push_back(temp);
+	//std::wstring temp(sMessage.begin(), sMessage.end());
+	//m_log.push_back(temp);
 
-	if(m_hWnd != NULL)
-		InvalidateRect(m_hWnd, NULL, true);
+	//if(m_hWnd != NULL)
+	//	InvalidateRect(m_hWnd, NULL, true);
+
+	//Re-route to the logger for now.
+	Logger::Write(sMessage);
 }
 
 std::string WindowsSystemClass::GetCurrentDirectory()
@@ -262,9 +266,12 @@ std::string WindowsSystemClass::GetCurrentDirectory()
 		//Allocate memory for the wide character string and return an empty string if no memory could be allocated.
 		if ( (buffer = new wchar_t[dwBufferSize]) != NULL)
 		{
+			//Get the current directory.
+			//NOTE: This will be returned as a wide character string.
 			DWORD dwStatus = ::GetCurrentDirectory(dwBufferSize, buffer);
 			if(dwStatus > 0)
 			{
+				//Attempt to convert the wide character string to a single character string.
 				size_t bufferSize = wcslen(buffer) + 1;
 				if ( (convertedString = new char[bufferSize]) != NULL)
 				{
@@ -322,24 +329,24 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 			if(this->m_pCoffeeEngine != NULL)
 				this->m_pCoffeeEngine->Frame();
 		
-			if(m_log.size() > 0)
-			{
-				std::wstring wsCompiledString;
-				for(std::vector<std::wstring>::iterator it = m_log.begin(); it != m_log.end(); it++)
-				{
-					wsCompiledString.append(*it);
-					wsCompiledString.append(L"\r\n");
-				}
+			//if(m_log.size() > 0)
+			//{
+			//	std::wstring wsCompiledString;
+			//	for(std::vector<std::wstring>::iterator it = m_log.begin(); it != m_log.end(); it++)
+			//	{
+			//		wsCompiledString.append(*it);
+			//		wsCompiledString.append(L"\r\n");
+			//	}
 
-				RECT rect;
-				GetClientRect (hWnd, &rect) ;
-				SetTextColor(hdc, 0x00000000);
-				SetBkMode(hdc,TRANSPARENT);
-				rect.left=0;
-				rect.top=0;
-				DrawText( hdc, (LPCTSTR)wsCompiledString.c_str(), -1, &rect, DT_WORDBREAK | DT_NOCLIP  ) ;
-				DeleteDC(hdc); 
-			}
+			//	RECT rect;
+			//	GetClientRect (hWnd, &rect) ;
+			//	SetTextColor(hdc, 0x00000000);
+			//	SetBkMode(hdc,TRANSPARENT);
+			//	rect.left=0;
+			//	rect.top=0;
+			//	DrawText( hdc, (LPCTSTR)wsCompiledString.c_str(), -1, &rect, DT_WORDBREAK | DT_NOCLIP  ) ;
+			//	DeleteDC(hdc); 
+			//}
 
 			EndPaint(hWnd, &ps);
 		}

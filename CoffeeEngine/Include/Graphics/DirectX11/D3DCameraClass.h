@@ -29,6 +29,21 @@ namespace CoffeeEngine
 			class D3DCameraClass : public CameraClass
 			{
 			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				float m_positionX, m_positionY, m_positionZ;
+				float m_rotationX, m_rotationY, m_rotationZ;
+				
+				D3DXMATRIX m_viewMatrix;
+				D3DXMATRIX m_projectionMatrix;
+				D3DXMATRIX m_worldMatrix;
+
+			private:
 				D3DCameraClass();
 
 			public:
@@ -56,14 +71,6 @@ namespace CoffeeEngine
 				inline D3DXMATRIX& GetProjectionMatrix() { return m_projectionMatrix; }
 				inline D3DXMATRIX& GetWorldMatrix() { return m_worldMatrix; }
 				inline D3DXMATRIX& GetViewMatrix() { return m_viewMatrix; }
-
-			private:
-				float m_positionX, m_positionY, m_positionZ;
-				float m_rotationX, m_rotationY, m_rotationZ;
-				
-				D3DXMATRIX m_viewMatrix;
-				D3DXMATRIX m_projectionMatrix;
-				D3DXMATRIX m_worldMatrix;
 			};
 		}
 	};

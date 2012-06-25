@@ -109,11 +109,14 @@
     <ClInclude Include="Include\Interfaces\IModel.h" />
     <ClInclude Include="Include\Interfaces\IShader.h" />
     <ClInclude Include="Include\Interfaces\ISystem.h" />
+    <ClInclude Include="Include\Interfaces\ITimer.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\System\Linux\Linux_EntryPoint.h" />
     <ClInclude Include="Include\System\Win32\WindowsSystemClass.h" />
+    <ClInclude Include="Include\System\Win32\Timer.h" />
     <ClInclude Include="Include\System\Win32\Windows_EntryPoint.h" />
     <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Include\Utility\Logger.h" />
     <ClInclude Include="Resources\Resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -131,8 +134,10 @@
     <ClCompile Include="Src\Global.cpp" />
     <ClCompile Include="Src\stdafx.cpp" />
     <ClCompile Include="Src\System\Linux\Linux_EntryPoint.cpp" />
+    <ClCompile Include="Src\System\Win32\Timer.cpp" />
     <ClCompile Include="Src\System\Win32\WindowsSystemClass.cpp" />
     <ClCompile Include="Src\System\Win32\Windows_EntryPoint.cpp" />
+    <ClCompile Include="Src\Utility\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\CoffeeEngine.rc" />

@@ -1,14 +1,22 @@
 /////////////
 // GLOBALS //
 /////////////
+
+Texture2D shaderTexture;
+SamplerState SampleType;
+
 cbuffer MatrixBuffer
 {
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
+};
 
-	Texture2D shaderTexture;
-	SamplerState SampleType;
+cbuffer LightBuffer
+{
+	float4 diffuseColor;
+	float3 lightDirection;
+	float padding;
 };
 
 //////////////
@@ -19,6 +27,7 @@ struct VertexInputType
     float4 position : POSITION;
     float4 color : COLOR;
 	float2 texIn : TEXCOORD0;
+	float3 normal: NORMAL;
 };
 
 struct PixelInputType
@@ -26,6 +35,7 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float4 color : COLOR;
 	float2 texIn : TEXCOORD0;
+	float3 normal: NORMAL;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,9 +53,12 @@ PixelInputType DefaultVertexShader(VertexInputType input)
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
-    // Store the input color for the pixel shader to use.
+    // Store the various properties for the pixel shader.
     output.color = input.color;
 	output.texIn = input.texIn;
+	
+	output.normal = mul(input.normal, (float3x3)worldMatrix);
+	output.normal = normalize(output.normal);
     
     return output;
 }
@@ -56,6 +69,20 @@ PixelInputType DefaultVertexShader(VertexInputType input)
 float4 DefaultPixelShader(PixelInputType input) : SV_TARGET
 {
 	float4 textureColor;
+	float3 lightDir;
+	float lightIntensity;
+	float4 color;
+
 	textureColor = shaderTexture.Sample(SampleType, input.texIn);
-    return textureColor * input.color;
+    //lightDir = -lightDirection;
+
+	//lightIntensity = saturate(dot(input.normal, lightDir));
+	//color = saturate(diffuseColor * lightIntensity);
+	color = input.color;
+	color = color * textureColor;
+	return color;
+
+	//float4 textureColor;
+	//textureColor = shaderTexture.Sample(SampleType, input.texIn);
+    //return textureColor * input.color;
 }

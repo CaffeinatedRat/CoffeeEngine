@@ -33,6 +33,37 @@ namespace CoffeeEngine
 		{
 			class D3DGraphicsClass : public BaseGraphicsClass
 			{
+			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				bool m_bFullScreen;
+				bool m_bDisplayReady;
+				bool m_bVsyncEnabled;
+				int m_nScreenWidth;
+				int m_nScreenHeight;
+				int m_videoCardMemory;
+				std::string m_videoCardDescription;
+				unsigned int m_nNumOfModes;
+
+				DXGI_MODE_DESC* m_pDisplayModeList;
+				IDXGISwapChain* m_pSwapChain;
+				ID3D11Device* m_pDevice;
+				ID3D11DeviceContext* m_pDeviceContext;
+				ID3D11RenderTargetView* m_pRenderTargetView;
+				ID3D11Texture2D* m_pDepthStencilBuffer;
+				ID3D11DepthStencilState* m_pDepthStencilState;
+				ID3D11DepthStencilView* m_pDepthStencilView;
+				ID3D11RasterizerState* m_pRasterState;
+
+				D3DXMATRIX m_orthoMatrix;
+
+				D3DCameraClass* m_pMasterCamera;
+
 			public:
 		
 				////////////////////////////////////////////////////////////
@@ -177,31 +208,6 @@ namespace CoffeeEngine
 				/// True if the viewport was successfully created.
 				/// </returns>
 				bool CreateViewPort();
-
-			private:
-
-				bool m_bFullScreen;
-				bool m_bDisplayReady;
-				bool m_bVsyncEnabled;
-				int m_nScreenWidth;
-				int m_nScreenHeight;
-				int m_videoCardMemory;
-				std::string m_videoCardDescription;
-				unsigned int m_nNumOfModes;
-
-				DXGI_MODE_DESC* m_pDisplayModeList;
-				IDXGISwapChain* m_pSwapChain;
-				ID3D11Device* m_pDevice;
-				ID3D11DeviceContext* m_pDeviceContext;
-				ID3D11RenderTargetView* m_pRenderTargetView;
-				ID3D11Texture2D* m_pDepthStencilBuffer;
-				ID3D11DepthStencilState* m_pDepthStencilState;
-				ID3D11DepthStencilView* m_pDepthStencilView;
-				ID3D11RasterizerState* m_pRasterState;
-
-				D3DXMATRIX m_orthoMatrix;
-
-				D3DCameraClass* m_pMasterCamera;
 			};
 		};
 	};

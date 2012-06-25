@@ -13,12 +13,14 @@
 #include "Interfaces\ISystem.h"
 #include "Graphics\BaseGraphicsClass.h"
 #include "Engine\CoffeeEngineClass.h"
+#include "Utility\Logger.h"
 
 #define MAX_LOADSTRING 100
 
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Engine;
+using namespace CoffeeEngine::Utility;
 
 namespace CoffeeEngine
 {
@@ -26,6 +28,22 @@ namespace CoffeeEngine
 	{
 		class WindowsSystemClass : public ISystem
 		{
+		private:
+
+			//Windows specific member variables
+			HINSTANCE m_hInstance;
+			HWND m_hWnd;
+			TCHAR m_szTitle[MAX_LOADSTRING];
+			TCHAR m_szWindowClass[MAX_LOADSTRING];
+
+			int m_nScreenWidth, m_nScreenHeight;
+
+			bool m_bIsIdle;
+			BaseGraphicsClass* m_pGraphics;
+			CoffeeEngineClass* m_pCoffeeEngine;
+
+			std::vector<std::wstring> m_log;
+
 		public:
 		
 			WindowsSystemClass();
@@ -81,22 +99,6 @@ namespace CoffeeEngine
 			/// Initializes and creates the window for the Windows Operating System.
 			/// </summary>
 			bool InitializeWindow();
-
-		private:
-
-			//Windows specific member variables
-			HINSTANCE m_hInstance;
-			HWND m_hWnd;
-			TCHAR m_szTitle[MAX_LOADSTRING];
-			TCHAR m_szWindowClass[MAX_LOADSTRING];
-
-			int m_nScreenWidth, m_nScreenHeight;
-
-			bool m_bIsIdle;
-			BaseGraphicsClass* m_pGraphics;
-			CoffeeEngineClass* m_pCoffeeEngine;
-
-			std::vector<std::wstring> m_log;
 		};
 	};
 };

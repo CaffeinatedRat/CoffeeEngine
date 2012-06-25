@@ -42,6 +42,12 @@ D3DModelClass::~D3DModelClass()
 	Shutdown();
 }
 
+////////////////////////////////////////////////////////////
+//
+//                Public Methods
+// 
+////////////////////////////////////////////////////////////
+
 bool D3DModelClass::Initialize()
 {
 	if(m_pGraphicsClass == NULL)
@@ -202,7 +208,7 @@ void D3DModelClass::Render(IShader* pShader)
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	pGraphicsClass->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Render the texture?
+	// Render the texture.
 	pGraphicsClass->GetDeviceContext()->PSSetShaderResources(0, 1, &m_pTexture);
 
 	// Render the triangle.

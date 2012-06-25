@@ -24,6 +24,18 @@ namespace CoffeeEngine
 	{
 		class CoffeeEngineClass
 		{
+		private:
+			BaseGraphicsClass* m_pGraphics;
+
+			ISystem* m_pSystem;
+			ICamera* m_pCamera;
+
+			//Temporary for testing.
+			IModel* m_pModel;
+			IShader* m_pShader;
+
+			bool m_bDisplayReady;
+
 		public:
 		
 			CoffeeEngineClass();
@@ -35,16 +47,6 @@ namespace CoffeeEngine
 			void Render();
 			bool Frame();
 			void Shutdown();
-		
-		private:
-			BaseGraphicsClass* m_pGraphics;
-
-			ISystem* m_pSystem;
-			ICamera* m_pCamera;
-
-			//Temporary for testing.
-			IModel* m_pModel;
-			IShader* m_pShader;
 		};
 	};
 };

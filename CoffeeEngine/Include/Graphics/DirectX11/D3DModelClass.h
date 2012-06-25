@@ -27,7 +27,12 @@ namespace CoffeeEngine
 			class D3DModelClass : public ModelClass
 			{
 			private:
-				D3DModelClass();
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Data types
+				// 
+				////////////////////////////////////////////////////////////
 
 				struct VertexType
 				{
@@ -42,6 +47,21 @@ namespace CoffeeEngine
 					D3DXMATRIX view;
 					D3DXMATRIX projection;
 				};
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
+				int m_nVertexCount, m_nIndexCount;
+				
+				//Temporary...
+				ID3D11ShaderResourceView* m_pTexture;
+
+			private:
+				D3DModelClass();
 
 			public:
 			
@@ -73,17 +93,6 @@ namespace CoffeeEngine
 				bool InitializeShaders();
 				void ShutdownShaders();
 				void RenderShaders();
-
-			protected:
-
-			private:
-				//IShader* m_pShader;
-				
-				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
-				int m_nVertexCount, m_nIndexCount;
-				
-				//Temporary...
-				ID3D11ShaderResourceView* m_pTexture;
 			};
 		};
 	};
