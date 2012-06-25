@@ -11,6 +11,7 @@
 #include "stdafx.h"
 #include "Common.h"
 #include "Interfaces\ISystem.h"
+#include "Interfaces\ITimer.h"
 #include "Graphics\BaseGraphicsClass.h"
 #include "Engine\CoffeeEngineClass.h"
 #include "Utility\Logger.h"
@@ -79,6 +80,12 @@ namespace CoffeeEngine
 			/// Returns the root directory the executable is running in.
 			/// </summary>
 			std::string GetCurrentDirectory();
+
+			/// <summary>
+			/// Create's system timer.
+			/// NOTE: This creates a new instance of the object.  It is your responsibility to delete this instance when done with it.
+			/// </summary>
+			ITimer* CreateTimer();
 
 			////////////////////////////////////////////////////////////
 			//

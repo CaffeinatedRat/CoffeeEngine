@@ -175,7 +175,7 @@
     <ClInclude Include="Include\Interfaces\ITimer.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\Win32\Timer.h">
+    <ClInclude Include="Include\System\Win32\TimerClass.h">
       <Filter>System\Win32</Filter>
     </ClInclude>
   </ItemGroup>
@@ -229,7 +229,7 @@
     <ClCompile Include="Src\Utility\Logger.cpp">
       <Filter>Utility\Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\System\Win32\Timer.cpp">
+    <ClCompile Include="Src\System\Win32\TimerClass.cpp">
       <Filter>System\Win32\Src</Filter>
     </ClCompile>
   </ItemGroup>

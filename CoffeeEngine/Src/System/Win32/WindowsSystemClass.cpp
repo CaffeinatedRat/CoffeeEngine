@@ -8,8 +8,8 @@
 #include "..\Resources\Resource.h"
 #include "System\Win32\Windows_EntryPoint.h"
 #include "System\Win32\WindowsSystemClass.h"
+#include "System\Win32\TimerClass.h"
 #include "Graphics\GraphicsCommon.h"
-#include "Graphics\BaseGraphicsClass.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
 
 #include "Global.h"
@@ -19,7 +19,6 @@ using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::DirectX11;
-
 
 ////////////////////////////////////////////////////////////
 //
@@ -291,6 +290,11 @@ std::string WindowsSystemClass::GetCurrentDirectory()
 	SAFE_DELETE(convertedString);
 
 	return sRootDirectory;
+}
+
+ITimer* WindowsSystemClass::CreateTimer()
+{
+	return ((ITimer*)new TimerClass());
 }
 
 ////////////////////////////////////////////////////////////

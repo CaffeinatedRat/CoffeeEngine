@@ -25,11 +25,14 @@ using namespace CoffeeEngine::Engine;
 CoffeeEngineClass::CoffeeEngineClass()
 {
 	m_pSystem = NULL;
-	m_pGraphics = NULL;
+	m_pTimer = NULL;
 
+	m_pGraphics = NULL;
 	m_pCamera = NULL;
 	m_pModel = NULL;
 	m_pShader = NULL;
+
+	m_bReady = false;
 }
 
 CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraphics)
@@ -41,15 +44,14 @@ CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraph
 		throw NullArgumentException("CoffeeEngineClass", "Constructor", "pGraphics");
 
 	m_pSystem = pSystem;
+	m_pTimer = NULL;
+	
 	m_pGraphics = pGraphics;
-
-	m_pSystem->ConsoleWrite("Constructing!");
-
 	m_pCamera = NULL;
 	m_pModel = NULL;
 	m_pShader = NULL;
 
-	m_bDisplayReady = false;
+	m_bReady = false;
 }
 
 CoffeeEngineClass::~CoffeeEngineClass()
@@ -65,7 +67,16 @@ CoffeeEngineClass::~CoffeeEngineClass()
 
 bool CoffeeEngineClass::Initialize()
 {
-	m_pSystem->ConsoleWrite("Initializing!");
+	if(m_pSystem == NULL)
+		throw NullArgumentException("CoffeeEngineClass", "Initialize", "m_pSystem");
+
+	if(m_pGraphics == NULL)
+		throw NullArgumentException("CoffeeEngineClass", "Initialize", "m_pGraphics");
+
+	//Create the system timer.
+	m_pTimer = m_pSystem->CreateTimer();
+	if(!m_pTimer->Start())
+		return false;
 
 	m_pCamera = m_pGraphics->CreateCamera();
 	if(!m_pCamera->Initialize())
@@ -81,26 +92,28 @@ bool CoffeeEngineClass::Initialize()
 	if(!m_pShader->Initialize("Default.fx"))
 		return false;
 
-	m_bDisplayReady = true;
-	return true;
+	return (m_bReady = true);
 }
 
 void CoffeeEngineClass::Run()
 {
-	this->Render();
+	if(m_bReady)
+	{
+		m_pTimer->Run();
+		this->Render();
+	}
 }
 
 void CoffeeEngineClass::Render()
 {
-	if(m_bDisplayReady)
-	{
-		m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
+	m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
 
-		m_pCamera->Render();
-		m_pModel->Render(m_pShader);
+	float timeDiff = m_pTimer->GetFrameRate();
 
-		m_pGraphics->EndScene();
-	}
+	m_pCamera->Render();
+	m_pModel->Render(m_pShader);
+
+	m_pGraphics->EndScene();
 }
 
 bool CoffeeEngineClass::Frame()
@@ -114,4 +127,7 @@ void CoffeeEngineClass::Shutdown()
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pModel);
 	SAFE_DELETE(m_pShader);
+	SAFE_DELETE(m_pTimer);
+
+	m_bReady = false;
 }

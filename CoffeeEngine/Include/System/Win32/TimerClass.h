@@ -1,46 +1,63 @@
 //--------------------------------------------------------------------------------------
-// Description: The system timer.
+// Description: Manages the windows operating system.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
 //--------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef _ITIMER_INTERFACE_H_
-#define _ITIMER_INTERFACE_H_
+#ifndef _WINDOWS_TIMER_CLASS_H_
+#define _WINDOWS_TIMER_CLASS_H_
+
+#include "stdafx.h"
+#include "Common.h"
+#include "Interfaces\ITimer.h"
+
+using namespace CoffeeEngine::Interfaces;
 
 namespace CoffeeEngine
 {
-	namespace Interfaces
+	namespace System
 	{
-		class ITimer
+		class TimerClass : public ITimer
 		{
+		private:
+			INT64 m_nFrequency;
+			float m_fTicksPerSecond;
+			INT64 m_nStartTime;
+			float m_fFrameRate;
+			bool m_bRun;
+
 		public:
 		
+			TimerClass();
+			TimerClass(const TimerClass&);
+			~TimerClass();
+
 			/// <summary>
 			/// Starts the timer.
 			/// </summary>
-			virtual bool Start() = 0;
+			bool Start();
 			
 			/// <summary>
 			/// Pauses the timer so that it can resume with another call to Start.
 			/// </summary>
-			virtual void Pause() = 0;
+			void Pause();
 
 			/// <summary>
 			/// Stops and resets the timer.
 			/// </summary>
-			virtual void Stop() = 0;
+			void Stop();
 
 			/// <summary>
 			/// Runs the timer and calculates the frame rate.
 			/// This must be called at least once before GetFrameRate().
 			/// </summary>
-			virtual void Run() = 0;
+			void Run();
 
 			/// <summary>
 			/// Returns the current frame time.
 			/// </summary>
-			virtual float GetFrameRate() = 0;
+			float GetFrameRate() { return m_fFrameRate; }
 		};
 	};
 };

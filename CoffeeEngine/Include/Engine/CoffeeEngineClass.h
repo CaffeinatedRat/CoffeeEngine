@@ -12,6 +12,7 @@
 #include "Common.h"
 
 #include "Interfaces\ISystem.h"
+#include "Interfaces\ITimer.h"
 #include "Graphics\BaseGraphicsClass.h"
 #include "Graphics\ModelClass.h"
 
@@ -29,12 +30,13 @@ namespace CoffeeEngine
 
 			ISystem* m_pSystem;
 			ICamera* m_pCamera;
+			ITimer* m_pTimer;
 
 			//Temporary for testing.
 			IModel* m_pModel;
 			IShader* m_pShader;
 
-			bool m_bDisplayReady;
+			bool m_bReady;
 
 		public:
 		

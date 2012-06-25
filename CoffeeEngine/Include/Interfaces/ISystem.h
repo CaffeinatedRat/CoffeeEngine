@@ -9,6 +9,7 @@
 #define _ISYSTEM_INTERFACE_H_
 
 #include <iostream>
+#include "Interfaces\ITimer.h"
 
 namespace CoffeeEngine
 {
@@ -42,6 +43,12 @@ namespace CoffeeEngine
 			/// Returns the root directory the executable is running in.
 			/// </summary>
 			virtual std::string GetCurrentDirectory() = 0;
+
+			/// <summary>
+			/// Create's system timer.
+			/// NOTE: This creates a new instance of the object.  It is your responsibility to delete this instance when done with it.
+			/// </summary>
+			virtual ITimer* CreateTimer() = 0;
 		};
 	};
 };
