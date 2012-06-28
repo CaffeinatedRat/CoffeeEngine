@@ -2,6 +2,7 @@
 // Description: Manages the windows operating system.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 //Windows specific.
@@ -69,6 +70,10 @@ bool WindowsSystemClass::InitializeWindow()
 {
 	// Get the instance of this application.
 	m_hInstance = GetModuleHandle(NULL);
+
+	//We're screwed if this happens.
+	if(m_hInstance == NULL)
+		throw NullArgumentException("WindowsSystemClass", "InitializeWindow", "m_hInstance");
 
 	// Initialize global strings
 	LoadString(m_hInstance, IDS_APP_TITLE, m_szTitle, MAX_LOADSTRING);
@@ -165,7 +170,6 @@ bool WindowsSystemClass::Initialize()
 		if(!m_pCoffeeEngine->Initialize())
 			return false;
 	}
-	//TO-DO: For testing only, remove when completed...
 	catch(Exception& exception)
 	{
 		Logger::Write(exception.GetMessage());

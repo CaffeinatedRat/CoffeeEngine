@@ -2,6 +2,7 @@
 // Description: The main engine.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Engine\CoffeeEngineClass.h"
@@ -108,10 +109,8 @@ void CoffeeEngineClass::Render()
 {
 	m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
 
-	float timeDiff = m_pTimer->GetFrameRate();
-
-	m_pCamera->Render();
-	m_pModel->Render(m_pShader);
+	m_pCamera->Render(m_pTimer->GetElaspedTime());
+	m_pModel->Render(m_pShader, m_pTimer->GetElaspedTime());
 
 	m_pGraphics->EndScene();
 }
