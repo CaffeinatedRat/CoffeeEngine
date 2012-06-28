@@ -1,9 +1,28 @@
+//////////////
+// TYPEDEFS //
+//////////////
+struct SimpleVertexInputType
+{
+    float4 position : POSITION;
+    float4 color : COLOR;
+    float2 texIn : TEXCOORD0;
+    float3 normal: NORMAL;
+};
+
+struct SimplePixelInputType
+{
+    float4 position : SV_POSITION;
+    float4 color : COLOR;
+    float2 texIn : TEXCOORD0;
+    float3 normal: NORMAL;
+};
+
 /////////////
 // GLOBALS //
 /////////////
 
-Texture2D shaderTexture;
 SamplerState SampleType;
+Texture2D shaderTexture;
 
 cbuffer MatrixBuffer
 {
@@ -12,51 +31,26 @@ cbuffer MatrixBuffer
     matrix projectionMatrix;
 };
 
-cbuffer LightBuffer
-{
-    float4 diffuseColor;
-    float3 lightDirection;
-    float padding;
-};
-
-//////////////
-// TYPEDEFS //
-//////////////
-struct VertexInputType
-{
-    float4 position : POSITION;
-    float4 color : COLOR;
-    float2 texIn : TEXCOORD0;
-    float3 normal: NORMAL;
-};
-
-struct PixelInputType
-{
-    float4 position : SV_POSITION;
-    float4 color : COLOR;
-    float2 texIn : TEXCOORD0;
-    float3 normal: NORMAL;
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 // Vertex Shader
 ////////////////////////////////////////////////////////////////////////////////
-PixelInputType DefaultVertexShader(VertexInputType input)
+SimplePixelInputType DefaultVertexShader(SimpleVertexInputType input)
 {
-    PixelInputType output;
+    SimplePixelInputType output;
 
-    // Change the position vector to be 4 units for proper matrix calculations.
+    // Set the homogenous component of the vector.
     input.position.w = 1.0f;
 
-    // Calculate the position of the vertex against the world, view, and projection matrices.
+    // Transform the position against the world, view, and projection matrices.
     output.position = mul(input.position, worldMatrix);
     output.position = mul(output.position, viewMatrix);
     output.position = mul(output.position, projectionMatrix);
     
-    // Store the various properties for the pixel shader.
+    //Copy the color and texture information.
     output.color = input.color;
     output.texIn = input.texIn;
     
+	//Transform the vertex's normal against the world matrix and normalize it.
     output.normal = mul(input.normal, (float3x3)worldMatrix);
     output.normal = normalize(output.normal);
     return output;
@@ -65,23 +59,19 @@ PixelInputType DefaultVertexShader(VertexInputType input)
 ////////////////////////////////////////////////////////////////////////////////
 // Pixel Shader
 ////////////////////////////////////////////////////////////////////////////////
-float4 DefaultPixelShader(PixelInputType input) : SV_TARGET
+float4 DefaultPixelShader(SimplePixelInputType input) : SV_TARGET
 {
-    float4 textureColor;
     float3 lightDir;
     float lightIntensity;
-    float4 color;
 
-    textureColor = shaderTexture.Sample(SampleType, input.texIn);
+    float4 textureColor = shaderTexture.Sample(SampleType, input.texIn);
     //lightDir = -lightDirection;
 
     //lightIntensity = saturate(dot(input.normal, lightDir));
     //color = saturate(diffuseColor * lightIntensity);
-    color = input.color;
+
+	//Get pixels color and blend it with the texture's color.
+	float4 color = input.color;
     color = color * textureColor;
     return color;
-
-    //float4 textureColor;
-    //textureColor = shaderTexture.Sample(SampleType, input.texIn);
-    //return textureColor * input.color;
 }
