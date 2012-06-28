@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -15,8 +16,6 @@
 
 #include "Graphics\DirectX11\D3DCommon.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include <d3d10.h>
-#include <d3dx10math.h>
 
 namespace CoffeeEngine
 {
@@ -30,32 +29,15 @@ namespace CoffeeEngine
 
 				////////////////////////////////////////////////////////////
 				//
-				//                Data types
-				// 
-				////////////////////////////////////////////////////////////
-
-				struct VertexType
-				{
-					D3DXVECTOR3 position;
-					D3DXVECTOR4 color;
-					D3DXVECTOR2 texture;
-				};
-
-				struct MatrixBufferType
-				{
-					D3DXMATRIX world;
-					D3DXMATRIX view;
-					D3DXMATRIX projection;
-				};
-
-				////////////////////////////////////////////////////////////
-				//
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
 
-				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
+				//Primitives
 				int m_nVertexCount, m_nIndexCount;
+
+				//Direct3d
+				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
 				
 				//Temporary...
 				ID3D11ShaderResourceView* m_pTexture;
@@ -75,24 +57,14 @@ namespace CoffeeEngine
 				bool Initialize();
 
 				/// <summary>
+				/// Begin rendering the model.
+				/// </summary>
+				void Render(IShader* pShader, float fElapsedTime);
+
+				/// <summary>
 				/// Begins the process of cleaning up the model.
 				/// </summary>
 				void Shutdown();
-
-				/// <summary>
-				/// Assigns a shader to the model.
-				/// </summary>
-				//void SetShader(IShader* pShader);
-
-				/// <summary>
-				/// Begin rendering the model.
-				/// </summary>
-				void Render(IShader* pShader);
-
-			private:
-				bool InitializeShaders();
-				void ShutdownShaders();
-				void RenderShaders();
 			};
 		};
 	};

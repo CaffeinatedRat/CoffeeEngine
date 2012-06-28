@@ -3,10 +3,13 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
 #include "Graphics\DirectX11\D3DCameraClass.h"
+
+#include <cmath>
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
@@ -72,7 +75,7 @@ bool D3DCameraClass::Initialize()
 	return true;
 }
 
-void D3DCameraClass::Render()
+void D3DCameraClass::Render(float fElapsedTime)
 {
 	D3DXVECTOR3 up, position, lookAt;
 	float yaw, pitch, roll;
@@ -93,10 +96,14 @@ void D3DCameraClass::Render()
 	lookAt.y = 0.0f;
 	lookAt.z = 1.0f;
 
+	m_rotationX = fmod((m_rotationX + 0.001f * fElapsedTime),3.14f);
+	m_rotationY = fmod((m_rotationY + 0.001f * fElapsedTime),3.14f);
+	m_rotationZ = fmod((m_rotationZ + 0.001f * fElapsedTime),3.14f);
+
 	// Set the yaw (Y axis), pitch (X axis), and roll (Z axis) rotations in radians.
-	pitch = m_rotationX * 0.0174532925f;
-	yaw   = m_rotationY * 0.0174532925f;
-	roll  = m_rotationZ * 0.0174532925f;
+	pitch = m_rotationX;// * 0.0174532925f * fElapsedTime;
+	yaw   = m_rotationY;// * 0.0174532925f * fElapsedTime;
+	roll  = m_rotationZ;// * 0.0174532925f * fElapsedTime;
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, yaw, pitch, roll);

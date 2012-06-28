@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -13,10 +14,7 @@
 #include "Graphics\BaseGraphicsClass.h"
 #include "Graphics\CameraClass.h"
 
-#include <dxgi.h>
-#include <d3dcommon.h>
-#include <d3d11.h>
-#include <d3dx10math.h>
+#include "Graphics\DirectX11\D3DCommon.h"
 
 using namespace CoffeeEngine::Graphics;
 
@@ -36,9 +34,11 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
+				//Primitives
 				float m_positionX, m_positionY, m_positionZ;
 				float m_rotationX, m_rotationY, m_rotationZ;
 				
+				//Direct3d
 				D3DXMATRIX m_viewMatrix;
 				D3DXMATRIX m_projectionMatrix;
 				D3DXMATRIX m_worldMatrix;
@@ -59,8 +59,8 @@ namespace CoffeeEngine
 				virtual ~D3DCameraClass();
 
 				bool Initialize();
+				void Render(float fElapsedTime);
 				void Shutdown();
-				void Render();
 
 				////////////////////////////////////////////////////////////
 				//

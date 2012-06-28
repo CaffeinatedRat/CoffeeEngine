@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -17,11 +18,6 @@
 
 #include "Graphics\DirectX11\D3DCommon.h"
 #include "Graphics\DirectX11\D3DCameraClass.h"
-
-#include <dxgi.h>
-#include <d3dcommon.h>
-#include <d3d11.h>
-#include <d3dx10math.h>
 
 using namespace CoffeeEngine::Interfaces;
 
@@ -41,6 +37,7 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
+				//Primitives
 				bool m_bFullScreen;
 				bool m_bDisplayReady;
 				bool m_bVsyncEnabled;
@@ -50,6 +47,7 @@ namespace CoffeeEngine
 				std::string m_videoCardDescription;
 				unsigned int m_nNumOfModes;
 
+				//Direct3d
 				DXGI_MODE_DESC* m_pDisplayModeList;
 				IDXGISwapChain* m_pSwapChain;
 				ID3D11Device* m_pDevice;
@@ -62,6 +60,7 @@ namespace CoffeeEngine
 
 				D3DXMATRIX m_orthoMatrix;
 
+				//CoffeeEngine constructs.
 				D3DCameraClass* m_pMasterCamera;
 
 			public:

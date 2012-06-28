@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
@@ -79,7 +80,7 @@ bool D3DModelClass::Initialize()
 	m_nIndexCount = 6;
 
 	// Create the vertex array.
-	VertexType* vertices = new VertexType[m_nVertexCount];
+	SimpleVertexType* vertices = new SimpleVertexType[m_nVertexCount];
 	unsigned long* indices = new unsigned long[m_nIndexCount];
 	
 	//Temporary...
@@ -103,13 +104,12 @@ bool D3DModelClass::Initialize()
 		vertices[3].texture = D3DXVECTOR2(1.0f, 0.0f);
 
 		vertices[4].position = D3DXVECTOR3(3.0f, -3.0f, 0.0f);  // Bottom Right.
-		vertices[4].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.5f);
+		vertices[4].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 0.2f);
 		vertices[4].texture = D3DXVECTOR2(1.0f, 1.0f);
 
 		vertices[5].position = D3DXVECTOR3(-3.0f, -3.0f, 0.0f);  // Bottom left.
 		vertices[5].color = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
 		vertices[5].texture = D3DXVECTOR2(0.0f, 1.0f);
-
 
 		// Load the index array with data.
 		indices[0] = 0;  // Top Left.
@@ -121,7 +121,7 @@ bool D3DModelClass::Initialize()
 
 		// Set up the description of the vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_nVertexCount;
+		vertexBufferDesc.ByteWidth = sizeof(SimpleVertexType) * m_nVertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
@@ -170,21 +170,7 @@ bool D3DModelClass::Initialize()
 	return bStatus;
 }
 
-//The Shader may need to be internal.
-//There are two problems.
-// 1) The first is if the shader is created outside the model, it should be destroyed outside of the model.
-//    In addition, the render method should really be called outside of the model, but the model needs to sandwich the shader render between its own render calls.
-// 2) If the shader is handled internally by the model, then custom shaders cannot be passed to a model to change it as needed.
-// 3) Pass the shader during rendering?
-//void D3DModelClass::SetShader(IShader* pShader)
-//{
-//	if(pShader == NULL)
-//		throw NullArgumentException("pShader");
-//
-//	m_pShader = pShader;
-//}
-
-void D3DModelClass::Render(IShader* pShader)
+void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 {
 	if(m_pGraphicsClass == NULL)
 		throw NullArgumentException("D3DModelClass", "Render", "m_pGraphicsClass");
@@ -193,10 +179,10 @@ void D3DModelClass::Render(IShader* pShader)
 
 	//Render a shader if one was provided...if not good luck!
 	if (pShader != NULL)
-		pShader->Render();
+		pShader->Render(fElapsedTime);
 	
 	// Set vertex buffer stride and offset.
-	unsigned int stride = sizeof(VertexType); 
+	unsigned int stride = sizeof(SimpleVertexType); 
 	unsigned int offset = 0;
     
 	// Set the vertex buffer to active in the input assembler so it can be rendered.

@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
@@ -53,6 +54,8 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	if(sFileName.length() == 0)
 		throw NullArgumentException("D3DShaderClass", "Initialize", "sFileName");
 
+	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
+	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
 	//Locals
@@ -70,22 +73,21 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	vertexShaderPath.append(sFileName);
 	std::wstring vertexShaderPathW(vertexShaderPath.begin(), vertexShaderPath.end());
 
-	result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultVertexShader", VERTEX_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, 
-				       &pVertexShaderBuffer, &pErrorMessage, NULL);
+	//Attempt to load and compile the vertex shader.
+	result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultVertexShader", VERTEX_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pVertexShaderBuffer, &pErrorMessage, NULL);
 	if(SUCCEEDED(result))
 	{
 		SAFE_RELEASE(pErrorMessage);
 
-		// Compile the pixel shader code.
-		result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultPixelShader", PIXEL_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, 
-						   &pPixelShaderBuffer, &pErrorMessage, NULL);
+		//Attempt to load and compile the pixel shader, which uses the same file as the vertex shader.
+		result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultPixelShader", PIXEL_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pPixelShaderBuffer, &pErrorMessage, NULL);
 		if(SUCCEEDED(result))
 		{
-			// Create the vertex shader from the buffer.
+			//Attempt to create the VertexShaderBuffer.
 			if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &m_pVertexShader)))
 			{
-				// Now setup the layout of the data that goes into the shader.
-				// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
+				// Define the layout of the vertex shader's structure and format.
+				// This should match our SimpleVertexType structure defined in D3DCommon.h
 				D3D11_INPUT_ELEMENT_DESC polygonLayout[4];
 				polygonLayout[0].SemanticName = "POSITION";
 				polygonLayout[0].SemanticIndex = 0;
@@ -119,12 +121,11 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 				polygonLayout[3].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 				polygonLayout[3].InstanceDataStepRate = 0;
 
-				// Get a count of the elements in the layout.
+				// Determine the number of elements 
 				unsigned int numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
 				// Create the vertex input layout.
-				result = pGraphicsClass->GetDevice()->CreateInputLayout(polygonLayout, numElements, pVertexShaderBuffer->GetBufferPointer(), 
-									pVertexShaderBuffer->GetBufferSize(), &m_pLayout);
+				result = pGraphicsClass->GetDevice()->CreateInputLayout(polygonLayout, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), &m_pLayout);
 				if(SUCCEEDED(result))
 				{
 					bStatus = true;
@@ -132,6 +133,7 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 			}
 			//END OF if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &m_pVertexShader)))...
 
+			//Attempt to create the PixelShaderBuffer; there are no descriptive elements for now.
 			if(SUCCEEDED(pGraphicsClass->GetDevice()->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(), pPixelShaderBuffer->GetBufferSize(), NULL, &m_pPixelShader)))
 			{
 				bStatus &= true;
@@ -141,17 +143,18 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 				bStatus = false;
 			}
 
-			// Setup the description of the dynamic matrix constant buffer that is in the vertex shader.
+			// Setup the description of the dynamic matrix constant buffer defined in the shader.
 			D3D11_BUFFER_DESC matrixBufferDesc;
 			matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-			matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
+			matrixBufferDesc.ByteWidth = sizeof(SimpleMatrixBufferType);
 			matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			matrixBufferDesc.MiscFlags = 0;
 			matrixBufferDesc.StructureByteStride = 0;
 
 			// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
-			if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_pMatrixBuffer)))
+			HRESULT hresult;
+			if(SUCCEEDED(hresult = pGraphicsClass->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_pMatrixBuffer)))
 			{
 				// Create a texture sampler state description.
 				D3D11_SAMPLER_DESC samplerDesc;
@@ -182,18 +185,21 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 			{
 				bStatus = false;
 			}
+			//END OF if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateBuffer(&matrixBufferDesc, NULL, &m_pMatrixBuffer)))...
 		}
 		else
 		{
 			//For development...add logging.
 			throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 		}
+		//END OF result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultPixelShader", PIXEL_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pPixelShaderBuffer, &pErrorMessage, NULL);...
 	}
 	else
 	{
 		//For development...add logging.
 		throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 	}
+	//END OF result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultVertexShader", VERTEX_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pVertexShaderBuffer, &pErrorMessage, NULL);...
 
 	// Clean up regardless of the status.
 	SAFE_RELEASE(pVertexShaderBuffer);
@@ -203,51 +209,64 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	return bStatus;
 }
 
-void D3DShaderClass::Render()
+bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 {
-	if(m_pGraphicsClass == NULL)
-		throw  NullArgumentException("D3DShaderClass", "Render", "m_pGraphicsClass");
-
+	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
+	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == NULL)
 		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
 
+	//Retrieve all of our matric
 	D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
 	D3DXMATRIX viewMatrix = pMasterCamera->GetViewMatrix();
 	D3DXMATRIX projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
 	// Transpose the matrices to prepare them for the shader.
+	// Why do the matrices have to be transposed?
+	// Answer: "Also, because matrices are arranged differently in memory in C++ and HLSL, we must transpose the matrices before updating them."
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
 	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
 	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
 
-	// Lock the constant buffer so it can be written to.
+	// Lock the buffer to prevent the Readers-Writers synchronization issue.
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT result = pGraphicsClass->GetDeviceContext()->Map(m_pMatrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	if(FAILED(result))
 	{
-		//return false;
-		return;
+		//Discard the frame at this time.
+		return false;
 	}
 
 	// Get a pointer to the data in the constant buffer.
-	MatrixBufferType* dataPtr = (MatrixBufferType*)mappedResource.pData;
+	SimpleMatrixBufferType* dataPtr = (SimpleMatrixBufferType*)mappedResource.pData;
 
-	// Copy the matrices into the constant buffer.
+	//Copy our matricies into our buffer so they can become accessible to the shader.
 	dataPtr->world = worldMatrix;
 	dataPtr->view = viewMatrix;
 	dataPtr->projection = projectionMatrix;
 
-	// Unlock the constant buffer.
+	//Release the buffer, we are done.
 	pGraphicsClass->GetDeviceContext()->Unmap(m_pMatrixBuffer, 0);
 
-	// Set the position of the constant buffer in the vertex shader.
-	unsigned int bufferNumber = 0;
-
 	// Finanly set the constant buffer in the vertex shader with the updated values.
-	pGraphicsClass->GetDeviceContext()->VSSetConstantBuffers(bufferNumber, 1, &m_pMatrixBuffer);
+	pGraphicsClass->GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_pMatrixBuffer);
+
+	return true;
+}
+
+void D3DShaderClass::Render(float fElapsedTime)
+{
+	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
+	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).	
+	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+
+	//Set our shader parameters before we begin rendering.
+	//If we fail...skip a frame.
+	if(!SetShaderParameters(fElapsedTime))
+		return;
 
 	// Set the vertex input layout.
 	pGraphicsClass->GetDeviceContext()->IASetInputLayout(m_pLayout);

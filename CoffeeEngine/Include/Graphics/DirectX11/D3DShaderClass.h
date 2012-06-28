@@ -3,6 +3,7 @@
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -15,8 +16,6 @@
 
 #include "Graphics\DirectX11\D3DCommon.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include <d3d10.h>
-#include <d3dx10math.h>
 
 namespace CoffeeEngine
 {
@@ -34,6 +33,7 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
+				//Direct3d
 				ID3D11VertexShader* m_pVertexShader;
 				ID3D11PixelShader* m_pPixelShader;
 
@@ -44,19 +44,6 @@ namespace CoffeeEngine
 			private:
 				D3DShaderClass();
 
-				struct VertexType
-				{
-					D3DXVECTOR3 position;
-					D3DXVECTOR4 color;
-				};
-
-				struct MatrixBufferType
-				{
-					D3DXMATRIX world;
-					D3DXMATRIX view;
-					D3DXMATRIX projection;
-				};
-
 			public:
 			
 				D3DShaderClass(BaseGraphicsClass* pBaseGraphicsClass);
@@ -64,8 +51,11 @@ namespace CoffeeEngine
 				virtual ~D3DShaderClass();
 
 				virtual bool Initialize(std::string sFileName);
+				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
-				virtual void Render();
+
+			private:
+				bool SetShaderParameters(float fElapsedTime);
 			};
 		};
 	};
