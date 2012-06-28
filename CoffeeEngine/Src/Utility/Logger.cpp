@@ -2,9 +2,10 @@
 // Description: A logging utility.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-//
+//Disable the security warnings created by Windows, so that we can increase portability.
 #define _CRT_SECURE_NO_WARNINGS
 
 //Windows specific.

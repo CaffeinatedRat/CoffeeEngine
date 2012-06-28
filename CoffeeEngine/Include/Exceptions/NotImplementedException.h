@@ -2,6 +2,7 @@
 // Description: Provides a not implemented exception for features that have not been built yet.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once

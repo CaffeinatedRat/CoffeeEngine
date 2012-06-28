@@ -2,6 +2,7 @@
 // Description: The base camera class.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Graphics\CameraClass.h"

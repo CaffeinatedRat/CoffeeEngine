@@ -2,6 +2,7 @@
 // Description: This exception usually occurs if an argument that is supplied is null.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once

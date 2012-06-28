@@ -2,6 +2,7 @@
 // Description: The graphics interface.  Used to provide a light-weight skeleton of how the other graphics classes should be created.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once

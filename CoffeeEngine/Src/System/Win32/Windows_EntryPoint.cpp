@@ -2,6 +2,7 @@
 // Description: Defines the WINDOWS entry point for the application.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "System\Win32\Windows_EntryPoint.h"
