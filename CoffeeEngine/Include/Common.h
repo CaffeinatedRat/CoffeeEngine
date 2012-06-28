@@ -2,6 +2,7 @@
 // Description: Provides a common set of includes and definitions that are used globally that are not OS specific.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -12,7 +13,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
-#include <iostream>
+#include <string>
 #include <vector>
 
 // Exception classes.
