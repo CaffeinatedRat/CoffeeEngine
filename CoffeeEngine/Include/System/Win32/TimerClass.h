@@ -2,6 +2,7 @@
 // Description: Manages the windows operating system.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -22,9 +23,9 @@ namespace CoffeeEngine
 		{
 		private:
 			INT64 m_nFrequency;
-			float m_fTicksPerSecond;
-			INT64 m_nStartTime;
-			float m_fFrameRate;
+			INT64 m_nTickStart;
+			float m_fTicksPerMilliseconds;
+			float m_fElapsedTimeInMilliseconds;
 			bool m_bRun;
 
 		public:
@@ -43,10 +44,6 @@ namespace CoffeeEngine
 			/// </summary>
 			void Pause();
 
-			/// <summary>
-			/// Stops and resets the timer.
-			/// </summary>
-			void Stop();
 
 			/// <summary>
 			/// Runs the timer and calculates the frame rate.
@@ -55,9 +52,15 @@ namespace CoffeeEngine
 			void Run();
 
 			/// <summary>
-			/// Returns the current frame time.
+			/// Stops and resets the timer.
 			/// </summary>
-			float GetFrameRate() { return m_fFrameRate; }
+			void Stop();
+
+			/// <summary>
+			/// Returns the elasped time in milliseconds.
+			/// TimeComplexity: O(1) for all operations.
+			/// </summary>
+			float GetElaspedTime() { return m_fElapsedTimeInMilliseconds; }
 		};
 	};
 };

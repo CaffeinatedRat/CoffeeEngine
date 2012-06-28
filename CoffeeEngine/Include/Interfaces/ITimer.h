@@ -2,6 +2,7 @@
 // Description: The system timer.
 //
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #pragma once
@@ -27,20 +28,21 @@ namespace CoffeeEngine
 			virtual void Pause() = 0;
 
 			/// <summary>
-			/// Stops and resets the timer.
-			/// </summary>
-			virtual void Stop() = 0;
-
-			/// <summary>
 			/// Runs the timer and calculates the frame rate.
 			/// This must be called at least once before GetFrameRate().
 			/// </summary>
 			virtual void Run() = 0;
 
 			/// <summary>
-			/// Returns the current frame time.
+			/// Stops and resets the timer.
 			/// </summary>
-			virtual float GetFrameRate() = 0;
+			virtual void Stop() = 0;
+
+			/// <summary>
+			/// Returns the elasped time in milliseconds.
+			/// TimeComplexity: O(1) for all operations.
+			/// </summary>
+			virtual float GetElaspedTime() = 0;
 		};
 	};
 };
