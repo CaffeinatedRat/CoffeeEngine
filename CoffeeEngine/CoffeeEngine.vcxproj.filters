@@ -178,6 +178,9 @@
     <ClInclude Include="Include\System\Win32\TimerClass.h">
       <Filter>System\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Interfaces\ITransform.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">

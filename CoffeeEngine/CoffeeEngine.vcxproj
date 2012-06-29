@@ -110,6 +110,7 @@
     <ClInclude Include="Include\Interfaces\IShader.h" />
     <ClInclude Include="Include\Interfaces\ISystem.h" />
     <ClInclude Include="Include\Interfaces\ITimer.h" />
+    <ClInclude Include="Include\Interfaces\ITransform.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\System\Linux\Linux_EntryPoint.h" />
     <ClInclude Include="Include\System\Win32\WindowsSystemClass.h" />
