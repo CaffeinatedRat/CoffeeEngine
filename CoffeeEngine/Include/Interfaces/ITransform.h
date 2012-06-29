@@ -22,17 +22,17 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Rotate the object among one or more of the 3-axises.
 			/// </summary>
-			virtual void Rotate(float x, float y, float z);
+			virtual void Rotate(float x, float y, float z) = 0;
 
 			/// <summary>
 			/// Translate the object among one or more of the 3-axises.
 			/// </summary>
-			virtual void Translate(float x, float y, float z);
+			virtual void Translate(float x, float y, float z) = 0;
 
 			/// <summary>
 			/// Scale the object among one or more of the 3-axises.
 			/// </summary>
-			virtual void Scale(float x, float y, float z);
+			virtual void Scale(float x, float y, float z) = 0;
 		};
 	};
 };

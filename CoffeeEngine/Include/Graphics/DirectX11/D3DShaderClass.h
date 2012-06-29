@@ -41,6 +41,8 @@ namespace CoffeeEngine
 				ID3D11Buffer* m_pMatrixBuffer;
 				ID3D11SamplerState* m_pSampleState;
 
+				D3DXMATRIX m_worldMatrix;
+
 			private:
 				D3DShaderClass();
 
@@ -53,6 +55,13 @@ namespace CoffeeEngine
 				virtual bool Initialize(std::string sFileName);
 				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
+
+				////////////////////////////////////////////////////////////
+				//
+				//                DirectX Specific methods
+				// 
+				////////////////////////////////////////////////////////////
+				void SetWorldMatrix(D3DXMATRIX& worldMatrix) { m_worldMatrix = worldMatrix; }
 
 			private:
 				bool SetShaderParameters(float fElapsedTime);

@@ -11,12 +11,13 @@
 
 #include "Common.h"
 #include "IShader.h"
+#include "ITransform.h"
 
 namespace CoffeeEngine
 {
 	namespace Interfaces
 	{
-		class IModel
+		class IModel : public ITransform
 		{
 		public:
 

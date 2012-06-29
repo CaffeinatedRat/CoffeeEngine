@@ -31,6 +31,8 @@ D3DShaderClass::D3DShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
 	m_pLayout = NULL;
 	m_pMatrixBuffer = NULL;
 	m_pSampleState = NULL;
+
+	D3DXMatrixIdentity(&m_worldMatrix);
 }
 
 D3DShaderClass::D3DShaderClass(const D3DShaderClass& object)
@@ -219,15 +221,15 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	if(pMasterCamera == NULL)
 		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
 
-	//Retrieve all of our matric
-	D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
+	//Retrieve all of our matrices
+	//D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
 	D3DXMATRIX viewMatrix = pMasterCamera->GetViewMatrix();
 	D3DXMATRIX projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
 	// Transpose the matrices to prepare them for the shader.
 	// Why do the matrices have to be transposed?
 	// Answer: "Also, because matrices are arranged differently in memory in C++ and HLSL, we must transpose the matrices before updating them."
-	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
+	D3DXMatrixTranspose(&m_worldMatrix, &m_worldMatrix);
 	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
 	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
 
@@ -244,7 +246,7 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	SimpleMatrixBufferType* dataPtr = (SimpleMatrixBufferType*)mappedResource.pData;
 
 	//Copy our matricies into our buffer so they can become accessible to the shader.
-	dataPtr->world = worldMatrix;
+	dataPtr->world = m_worldMatrix;
 	dataPtr->view = viewMatrix;
 	dataPtr->projection = projectionMatrix;
 

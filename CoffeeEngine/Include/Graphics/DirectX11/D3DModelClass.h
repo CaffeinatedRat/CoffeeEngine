@@ -11,11 +11,16 @@
 #define _D3D_MODEL_CLASS_H_
 
 #include "Common.h"
+
+#include "Interfaces\ITransform.h"
+
 #include "Graphics\BaseGraphicsClass.h"
 #include "Graphics\ModelClass.h"
 
 #include "Graphics\DirectX11\D3DCommon.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
+
+using namespace CoffeeEngine::Interfaces;
 
 namespace CoffeeEngine
 {
@@ -38,7 +43,8 @@ namespace CoffeeEngine
 
 				//Direct3d
 				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
-				
+				D3DXVECTOR3 m_rotate, m_scale, m_translate;
+
 				//Temporary...
 				ID3D11ShaderResourceView* m_pTexture;
 
@@ -65,6 +71,21 @@ namespace CoffeeEngine
 				/// Begins the process of cleaning up the model.
 				/// </summary>
 				void Shutdown();
+
+				/// <summary>
+				/// Rotate the object among one or more of the 3-axises.
+				/// </summary>
+				void Rotate(float x, float y, float z);
+
+				/// <summary>
+				/// Translate the object among one or more of the 3-axises.
+				/// </summary>
+				void Translate(float x, float y, float z);
+
+				/// <summary>
+				/// Scale the object among one or more of the 3-axises.
+				/// </summary>
+				void Scale(float x, float y, float z);
 			};
 		};
 	};

@@ -78,7 +78,7 @@ bool D3DCameraClass::Initialize()
 void D3DCameraClass::Render(float fElapsedTime)
 {
 	D3DXVECTOR3 up, position, lookAt;
-	float yaw, pitch, roll;
+	float yaw = 0.0f, pitch = 0.0f, roll = 0.0f;
 	D3DXMATRIX rotationMatrix;
 
 	// Setup the vector that points upwards.
@@ -96,14 +96,14 @@ void D3DCameraClass::Render(float fElapsedTime)
 	lookAt.y = 0.0f;
 	lookAt.z = 1.0f;
 
-	m_rotationX = fmod((m_rotationX + 0.001f * fElapsedTime),3.14f);
-	m_rotationY = fmod((m_rotationY + 0.001f * fElapsedTime),3.14f);
-	m_rotationZ = fmod((m_rotationZ + 0.001f * fElapsedTime),3.14f);
+	//m_rotationX = fmod((m_rotationX + 0.001f * fElapsedTime),3.14f);
+	//m_rotationY = fmod((m_rotationY + 0.001f * fElapsedTime),3.14f);
+	//m_rotationZ = fmod((m_rotationZ + 0.001f * fElapsedTime),3.14f);
 
 	// Set the yaw (Y axis), pitch (X axis), and roll (Z axis) rotations in radians.
-	pitch = m_rotationX;// * 0.0174532925f * fElapsedTime;
-	yaw   = m_rotationY;// * 0.0174532925f * fElapsedTime;
-	roll  = m_rotationZ;// * 0.0174532925f * fElapsedTime;
+	//pitch = m_rotationX;// * 0.0174532925f * fElapsedTime;
+	//yaw   = m_rotationY;// * 0.0174532925f * fElapsedTime;
+	//roll  = m_rotationZ;// * 0.0174532925f * fElapsedTime;
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, yaw, pitch, roll);

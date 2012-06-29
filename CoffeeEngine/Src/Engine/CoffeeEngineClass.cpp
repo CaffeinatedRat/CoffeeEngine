@@ -107,10 +107,22 @@ void CoffeeEngineClass::Run()
 
 void CoffeeEngineClass::Render()
 {
+	static float rotationY = 0.0f;
+	static float rotationX = 0.0f;
+	static float rotationZ = 0.0f;
+
 	m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
 
 	m_pCamera->Render(m_pTimer->GetElaspedTime());
+
+	//m_pModel->Scale(0.5f, 2.0f, 1.0f);
+	m_pModel->Rotate(rotationX, rotationY, rotationZ);
+	m_pModel->Translate(-1.0f, 1.0f, 5.0f);
 	m_pModel->Render(m_pShader, m_pTimer->GetElaspedTime());
+
+	rotationY += 0.005f;
+	rotationX += 0.01f;
+	rotationZ += 0.01f;
 
 	m_pGraphics->EndScene();
 }

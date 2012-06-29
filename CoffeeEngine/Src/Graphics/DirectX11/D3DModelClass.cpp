@@ -9,6 +9,8 @@
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
 #include "Graphics\DirectX11\D3DModelClass.h"
 
+#include "Graphics\DirectX11\D3DShaderClass.h"
+
 #include <d3d11.h>
 #include <d3dx11async.h>
 
@@ -30,6 +32,10 @@ D3DModelClass::D3DModelClass(BaseGraphicsClass* pBaseGraphicsClass)
 
 	//Temporary
 	m_pTexture = NULL;
+
+	m_rotate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	m_translate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 D3DModelClass::D3DModelClass(const D3DModelClass& object)
@@ -177,6 +183,25 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
+	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
+	if(pMasterCamera == NULL)
+		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
+
+	//Apply transformations.
+	D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
+	D3DXMATRIX scaleMatrix, translateMatrix, rotateMatrix;
+
+	//NOTE: The order of Matrix transformations matter and will result in different effects.
+	// This simple transformation does not take into account more complex transformations.
+	D3DXMatrixScaling(&scaleMatrix, m_scale.x, m_scale.y, m_scale.z);
+	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &scaleMatrix);
+	D3DXMatrixRotationYawPitchRoll(&rotateMatrix, m_rotate.y, m_rotate.x, m_rotate.z);
+	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &rotateMatrix);
+	D3DXMatrixTranslation(&translateMatrix, m_translate.x, m_translate.y, m_translate.z);
+	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &translateMatrix);
+
+	((CoffeeEngine::Graphics::DirectX11::D3DShaderClass*)pShader)->SetWorldMatrix(worldMatrix);
+
 	//Render a shader if one was provided...if not good luck!
 	if (pShader != NULL)
 		pShader->Render(fElapsedTime);
@@ -184,7 +209,7 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 	// Set vertex buffer stride and offset.
 	unsigned int stride = sizeof(SimpleVertexType); 
 	unsigned int offset = 0;
-    
+
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
 	pGraphicsClass->GetDeviceContext()->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 
@@ -211,4 +236,19 @@ void D3DModelClass::Shutdown()
 
 	m_nVertexCount = 0;
 	m_nIndexCount = 0;
+}
+
+void D3DModelClass::Rotate(float x, float y, float z)
+{
+	m_rotate = D3DXVECTOR3(x, y, z);
+}
+
+void D3DModelClass::Translate(float x, float y, float z)
+{
+	m_translate = D3DXVECTOR3(x, y, z);
+}
+
+void D3DModelClass::Scale(float x, float y, float z)
+{
+	m_scale = D3DXVECTOR3(x, y, z);
 }
