@@ -337,25 +337,6 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 			if(this->m_pCoffeeEngine != NULL)
 				this->m_pCoffeeEngine->Frame();
 		
-			//if(m_log.size() > 0)
-			//{
-			//	std::wstring wsCompiledString;
-			//	for(std::vector<std::wstring>::iterator it = m_log.begin(); it != m_log.end(); it++)
-			//	{
-			//		wsCompiledString.append(*it);
-			//		wsCompiledString.append(L"\r\n");
-			//	}
-
-			//	RECT rect;
-			//	GetClientRect (hWnd, &rect) ;
-			//	SetTextColor(hdc, 0x00000000);
-			//	SetBkMode(hdc,TRANSPARENT);
-			//	rect.left=0;
-			//	rect.top=0;
-			//	DrawText( hdc, (LPCTSTR)wsCompiledString.c_str(), -1, &rect, DT_WORDBREAK | DT_NOCLIP  ) ;
-			//	DeleteDC(hdc); 
-			//}
-
 			EndPaint(hWnd, &ps);
 		}
 		break;
