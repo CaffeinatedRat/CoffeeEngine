@@ -39,8 +39,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DEV_REPO)Glew\Win32\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DEV_REPO)Glew\Win32\lib;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,8 +59,15 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;Opengl32.lib;glew32mx.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "$(DEV_REPO)Glew\Win32\bin\*.dll" "$(SolutionDir)$(Configuration)\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -103,6 +110,9 @@
     <ClInclude Include="Include\Graphics\DirectX11\D3DGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\DirectX11\D3DModelClass.h" />
     <ClInclude Include="Include\Graphics\ModelClass.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\ShaderClass.h" />
     <ClInclude Include="Include\Interfaces\ICamera.h" />
     <ClInclude Include="Include\Interfaces\IGraphics.h" />
@@ -113,6 +123,7 @@
     <ClInclude Include="Include\Interfaces\ITransform.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\System\Linux\Linux_EntryPoint.h" />
+    <ClInclude Include="Include\System\SystemCommon.h" />
     <ClInclude Include="Include\System\Win32\WindowsSystemClass.h" />
     <ClInclude Include="Include\System\Win32\TimerClass.h" />
     <ClInclude Include="Include\System\Win32\Windows_EntryPoint.h" />
@@ -131,6 +142,8 @@
     <ClCompile Include="Src\Graphics\DirectX11\D3DModelClass.cpp" />
     <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp" />
     <ClCompile Include="Src\Graphics\ModelClass.cpp" />
+    <ClCompile Include="Src\Graphics\OpenGL\OGLGraphicsClass.cpp" />
+    <ClCompile Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.cpp" />
     <ClCompile Include="Src\Graphics\ShaderClass.cpp" />
     <ClCompile Include="Src\Global.cpp" />
     <ClCompile Include="Src\stdafx.cpp" />

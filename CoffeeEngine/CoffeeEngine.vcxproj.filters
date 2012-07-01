@@ -71,6 +71,12 @@
     <Filter Include="Utility\Src">
       <UniqueIdentifier>{1c7bbcd9-b444-4902-81be-3430557b9ab6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Base">
+      <UniqueIdentifier>{a439be72-ec2c-4839-a9a5-fa392351ab3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Base\Src">
+      <UniqueIdentifier>{60d76be1-14e3-4070-8101-3c7afb160864}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CoffeeEngine.ico">
@@ -181,6 +187,18 @@
     <ClInclude Include="Include\Interfaces\ITransform.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\System\SystemCommon.h">
+      <Filter>System\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">
@@ -234,6 +252,12 @@
     </ClCompile>
     <ClCompile Include="Src\System\Win32\TimerClass.cpp">
       <Filter>System\Win32\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\OpenGL\OGLGraphicsClass.cpp">
+      <Filter>Graphics\OpenGL\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.cpp">
+      <Filter>Graphics\OpenGL\Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
