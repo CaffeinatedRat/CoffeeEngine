@@ -68,7 +68,7 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	ID3D10Blob* pPixelShaderBuffer = NULL;
 
 	// Compile the vertex shader code.
-	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentDirectory();
+	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	std::string vertexShaderPath = rootPath;
 	
 	vertexShaderPath.append("\\Shaders\\DirectX11\\");

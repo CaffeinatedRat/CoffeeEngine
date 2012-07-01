@@ -6,6 +6,7 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#include "stdafx.h"
 #include "Global.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
 #include "Graphics\DirectX11\D3DModelClass.h"
@@ -24,7 +25,7 @@ using namespace CoffeeEngine::Graphics::DirectX11;
 // 
 ////////////////////////////////////////////////////////////
 
-D3DGraphicsClass::D3DGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem)
+D3DGraphicsClass::D3DGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "DirectX")
 {
 	m_bVsyncEnabled = false;
 	m_bFullScreen = false;
