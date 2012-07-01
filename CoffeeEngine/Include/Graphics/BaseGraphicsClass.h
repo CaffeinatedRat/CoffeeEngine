@@ -24,6 +24,7 @@ namespace CoffeeEngine
 		{
 		protected:
 			ISystem* m_pSystem;
+			std::string m_sGraphicsLibraryName;
 
 		protected:
 
@@ -31,7 +32,7 @@ namespace CoffeeEngine
 
 		public:
 
-			BaseGraphicsClass(ISystem* pSystem);
+			BaseGraphicsClass(ISystem* pSystem, std::string sGraphicsLibraryName);
 			BaseGraphicsClass(const BaseGraphicsClass& object);
 			virtual ~BaseGraphicsClass() { };
 
@@ -42,6 +43,11 @@ namespace CoffeeEngine
 			/// Returns the current operating system.
 			/// </returns>
 			inline ISystem* GetSystem() { return m_pSystem; }
+
+			/// <summary>
+			/// Returns the current graphics library.
+			/// </summary>
+			std::string GetGraphicsLibraryName() { return m_sGraphicsLibraryName; }
 		};
 	};
 };

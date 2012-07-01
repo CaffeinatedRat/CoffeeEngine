@@ -102,6 +102,11 @@ namespace CoffeeEngine
 			/// Returns a compliant list of video card information.
 			/// </returns>
 			virtual std::vector<std::string> GetVideoCardInfo() = 0;
+
+			/// <summary>
+			/// Returns the current graphics library.
+			/// </summary>
+			virtual std::string GetGraphicsLibraryName() = 0;
 		};
 	};
 };

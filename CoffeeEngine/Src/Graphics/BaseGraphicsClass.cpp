@@ -22,17 +22,20 @@ using namespace CoffeeEngine::Graphics;
 BaseGraphicsClass::BaseGraphicsClass()
 {
 	m_pSystem = NULL;
+	m_sGraphicsLibraryName = "Undefined";
 }
 
-BaseGraphicsClass::BaseGraphicsClass(ISystem* pSystem)
+BaseGraphicsClass::BaseGraphicsClass(ISystem* pSystem, std::string sGraphicsLibraryName)
 {
 	if(pSystem == NULL)
 		throw NullArgumentException("BaseGraphicsClass", "Constructor", "pSystem");
 
 	m_pSystem = pSystem;
+	m_sGraphicsLibraryName = sGraphicsLibraryName;
 }
 
 BaseGraphicsClass::BaseGraphicsClass(const BaseGraphicsClass& object)
 {
 	m_pSystem = object.m_pSystem;
+	m_sGraphicsLibraryName = object.m_sGraphicsLibraryName;
 }
