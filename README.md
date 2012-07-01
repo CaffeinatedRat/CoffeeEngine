@@ -20,9 +20,12 @@ This is an incomplete section and a pull request for this section would be accep
 
 * NOTE: All System classes must be derived from the interface (pure abstract class) 'CoffeeEngine::Interfaces::ISystem.'
 
-OpenGL
+OpenGL 
 -----------
 
-This is an incomplete section that will be developed at a later time.
+OpenGL is handled via the [GLEW] (http://glew.sourceforge.net/index.html) libraries.  For Windows development, the GLEW binaries will be enough, but for other OS development, the GLEW libraries must be built.  A link to the GLEW library is provided below.
 
-* NOTE: All Graphics classes must be derived from the interface (abstract class) 'CoffeeEngine::Graphics::BaseGraphicsClass.'
+* Windows Development: Download [GLEW] (http://glew.sourceforge.net/index.html) and add the binaries and headers to your repository.
+* Linux/Mac Development: Download [GLEW] (http://glew.sourceforge.net/index.html), build the binaries following the instructions on their site, and add the binaries and headers to your repository.
+
+* NOTE: All Graphics classes must be derived from the (abstract class) 'CoffeeEngine::Graphics::BaseGraphicsClass.'
