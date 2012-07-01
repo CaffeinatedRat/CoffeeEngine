@@ -43,7 +43,7 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Returns the root directory the executable is running in.
 			/// </summary>
-			virtual std::string GetCurrentDirectory() = 0;
+			virtual std::string GetCurrentApplicationDirectory() = 0;
 
 			/// <summary>
 			/// Create's system timer.
