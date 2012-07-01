@@ -10,7 +10,6 @@
 #ifndef _D3DGRAPHICS_CLASS_H_
 #define _D3DGRAPHICS_CLASS_H_
 
-#include "stdafx.h"
 #include "Common.h"
 #include "Interfaces\ISystem.h"
 #include "Graphics\BaseGraphicsClass.h"
