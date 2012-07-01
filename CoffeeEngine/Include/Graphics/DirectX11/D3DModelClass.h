@@ -12,15 +12,11 @@
 
 #include "Common.h"
 
-#include "Interfaces\ITransform.h"
-
 #include "Graphics\BaseGraphicsClass.h"
 #include "Graphics\ModelClass.h"
 
 #include "Graphics\DirectX11\D3DCommon.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
-
-using namespace CoffeeEngine::Interfaces;
 
 namespace CoffeeEngine
 {
