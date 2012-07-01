@@ -27,17 +27,10 @@ using namespace CoffeeEngine::Exceptions;
 #define NULL = 0
 #endif
 
-#ifndef BYTE
-#define BYTE unsigned char
-#endif
-
-#ifndef WORD
-#define WORD unsigned short
-#endif
-
-#ifndef DWORD
-#define DWORD unsigned long
-#endif
+//Define common data types that may not exist outside of the Windows Environment.
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+typedef unsigned long DWORD;
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p) if(p != NULL) { delete p; p = NULL; }
