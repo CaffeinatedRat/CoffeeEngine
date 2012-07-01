@@ -54,7 +54,7 @@ namespace CoffeeEngine
 			virtual std::string ToString()
 			{
 				std::stringstream ss;
-				ss << "[" << m_sClassName << ":" << m_sMethodName << "] " << m_sMessage;
+				ss << "[" << m_sClassName << "::" << m_sMethodName << "] " << m_sMessage;
 				return ss.str();
 			}
 
