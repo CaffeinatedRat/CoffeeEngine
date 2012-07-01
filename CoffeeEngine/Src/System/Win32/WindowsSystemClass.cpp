@@ -12,6 +12,8 @@
 #include "System\Win32\TimerClass.h"
 #include "Graphics\GraphicsCommon.h"
 #include "Graphics\DirectX11\D3DGraphicsClass.h"
+#include "Graphics\OpenGL\WinOGLGraphicsClass.h"
+#include "Utility\Logger.h"
 
 #include "Global.h"
 
@@ -20,6 +22,7 @@ using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::DirectX11;
+using namespace CoffeeEngine::Graphics::OpenGL;
 
 ////////////////////////////////////////////////////////////
 //
@@ -130,6 +133,27 @@ bool WindowsSystemClass::InitializeWindow()
 	return false;
 }
 
+std::string WindowsSystemClass::GetLastErrorMessage()
+{
+    LPVOID lpMsgBuf = NULL;
+
+    FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        GetLastError(),
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPWSTR) &lpMsgBuf,
+        0, NULL );
+
+	//const char* test = (const char*)lpMsgBuf;
+	std::wstring wstr = std::wstring((wchar_t*)lpMsgBuf);
+	
+	LocalFree(lpMsgBuf);
+
+	//Remove the CR-LF.
+	return std::string(wstr.begin(), wstr.end()-2);
+}
+
 ////////////////////////////////////////////////////////////
 //
 //                Public Methods
@@ -138,6 +162,8 @@ bool WindowsSystemClass::InitializeWindow()
 
 bool WindowsSystemClass::Initialize()
 {
+	CoffeeEngine::Utility::Logger::Write(GetLastErrorMessage());
+
 	if(!InitializeWindow())
 		return false;
 
@@ -145,7 +171,10 @@ bool WindowsSystemClass::Initialize()
 	{
 		//Attempt to create the D3DGraphics object.
 		// TO-DO: Add an option to use an OpenGLGraphicsClass.
-		if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
+		//if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
+		//	return false;
+
+		if ( (m_pGraphics = new WinOGLGraphicsClass(this)) == NULL)
 			return false;
 
 		//Attempt to create the main engine and pass a reference to the graphics and system objects.
@@ -172,7 +201,7 @@ bool WindowsSystemClass::Initialize()
 	}
 	catch(Exception& exception)
 	{
-		Logger::Write(exception.GetMessage());
+		CoffeeEngine::Utility::Logger::Write(exception.ToString());
 		return false;
 	}
 
@@ -252,10 +281,10 @@ void WindowsSystemClass::ConsoleWrite(std::string sMessage)
 	//	InvalidateRect(m_hWnd, NULL, true);
 
 	//Re-route to the logger for now.
-	Logger::Write(sMessage);
+	CoffeeEngine::Utility::Logger::Write(sMessage);
 }
 
-std::string WindowsSystemClass::GetCurrentDirectory()
+std::string WindowsSystemClass::GetCurrentApplicationDirectory()
 {
 	std::string sRootDirectory = "";
 	wchar_t* buffer = NULL;

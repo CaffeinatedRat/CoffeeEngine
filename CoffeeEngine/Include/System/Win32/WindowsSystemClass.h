@@ -15,14 +15,12 @@
 #include "Interfaces\ITimer.h"
 #include "Graphics\BaseGraphicsClass.h"
 #include "Engine\CoffeeEngineClass.h"
-#include "Utility\Logger.h"
 
 #define MAX_LOADSTRING 100
 
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Engine;
-using namespace CoffeeEngine::Utility;
 
 namespace CoffeeEngine
 {
@@ -80,7 +78,7 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Returns the root directory the executable is running in.
 			/// </summary>
-			std::string GetCurrentDirectory();
+			std::string GetCurrentApplicationDirectory();
 
 			/// <summary>
 			/// Create's system timer.
@@ -107,6 +105,11 @@ namespace CoffeeEngine
 			/// Initializes and creates the window for the Windows Operating System.
 			/// </summary>
 			bool InitializeWindow();
+
+			/// <summary>
+			/// Returns an error message for the last windows error.
+			/// </summary>
+			std::string GetLastErrorMessage();
 		};
 	};
 };
