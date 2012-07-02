@@ -6,8 +6,8 @@
 //--------------------------------------------------------------------------------------
 
 #pragma once
-#ifndef _OPENGL_CLASS_H_
-#define _OPENGL_CLASS_H_
+#ifndef _OGLGRAPHICS_CLASS_H_
+#define _OGLGRAPHICS_CLASS_H_
 
 #include "Common.h"
 #include "Interfaces\ISystem.h"
@@ -15,6 +15,7 @@
 #include "Graphics\GraphicsCommon.h"
 
 #include "Graphics\OpenGL\OGLCommon.h"
+#include "Graphics\OpenGL\OGLCameraClass.h"
 
 using namespace CoffeeEngine::Interfaces;
 
@@ -44,10 +45,8 @@ namespace CoffeeEngine
 				std::string m_videoCardDescription;
 				unsigned int m_nNumOfModes;
 
-				//Direct3d
-
 				//CoffeeEngine constructs.
-				//OGLCameraClass* m_pMasterCamera;
+				OGLCameraClass* m_pMasterCamera;
 
 			public:
 		
@@ -119,7 +118,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns an instance of the master camera.
 				/// </returns>
-				inline ICamera* GetMasterCamera() { return NULL; } //m_pMasterCamera; }
+				inline ICamera* GetMasterCamera() { return m_pMasterCamera; }
 
 				/// <summary>
 				/// Returns a block of information about the video card.

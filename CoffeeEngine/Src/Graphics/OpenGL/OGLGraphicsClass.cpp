@@ -7,6 +7,9 @@
 
 #include "Global.h"
 #include "Graphics\OpenGL\OGLGraphicsClass.h"
+#include "Graphics\OpenGL\OGLModelClass.h"
+#include "Graphics\OpenGL\OGLShaderClass.h"
+#include "Graphics\OpenGL\OGLCameraClass.h"
 
 #include "Utility\Logger.h"
 
@@ -34,7 +37,7 @@ OGLGraphicsClass::OGLGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem
 	m_bDisplayReady = false;
 
 	//By default there is no master camera.
-	//m_pMasterCamera = NULL;	
+	m_pMasterCamera = NULL;	
 
 	m_videoCardDescription = "No Information Available.";
 }
@@ -42,7 +45,7 @@ OGLGraphicsClass::OGLGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem
 OGLGraphicsClass::OGLGraphicsClass(const OGLGraphicsClass& object)
 	: BaseGraphicsClass(object)
 {
-	//m_pMasterCamera = object.m_pMasterCamera;
+	m_pMasterCamera = object.m_pMasterCamera;
 }
 
 OGLGraphicsClass::~OGLGraphicsClass()
@@ -74,6 +77,12 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 		return false;
 	}
 
+	glShadeModel(GL_SMOOTH);
+	glClearDepth(1.0f);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
 	if(!CreateModeList())
 	{
 		Shutdown();
@@ -104,9 +113,6 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 		return false;
 	}
 
-	// Create an orthographic projection matrix for 2D rendering.
-	//D3DXMatrixOrthoLH(&m_orthoMatrix, (float)m_nScreenWidth, (float)m_nScreenHeight, graphicsInitParameters.fScreenNear, graphicsInitParameters.fScreenDepth);
-
 	//We are ready to draw.
 	m_bDisplayReady = true;
 
@@ -119,14 +125,10 @@ void OGLGraphicsClass::BeginScene(float red, float green, float blue, float alph
 	if(!m_bDisplayReady)
 		return;
 
-	//Compile the clear colors (RGBA) into a single float array.
-	float color[] = { red, green, blue, alpha };
+	glClearColor(red, green, blue, alpha);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Clear the back buffer.
-	//m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, color);
-
-	// Clear the depth buffer.
-	//m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	glBegin(GL_TRIANGLES);
 }
 
 void OGLGraphicsClass::EndScene()
@@ -135,34 +137,12 @@ void OGLGraphicsClass::EndScene()
 	if(!m_bDisplayReady)
 		return;
 
-	// Present the back buffer to the screen since rendering is complete.
-	//m_pSwapChain->Present( ((m_bVsyncEnabled) ? 1 : 0), 0);
+	glEnd();
 }
 
 void OGLGraphicsClass::Shutdown()
 {
 	m_bDisplayReady = false;
-
-	// Apparently, DirectX11 and possibly DirectX10 is not capable of closing while in fullscreen, so we have to reset the swap chain to windowed mode before we can release it.
-	// According to www.DirectXTutorials.com, this is due to a implicit threading issue.
-	//if(m_pSwapChain)
-	//{
-	//	m_pSwapChain->SetFullscreenState(false, NULL);
-	//}
-
-	////Release all of our modes.
-	//SAFE_ARRAY_DELETE(m_pDisplayModeList);
-
-	////Safely release all of our dependencies.
-	//SAFE_RELEASE(m_pSwapChain);
-
-	//SAFE_RELEASE(m_pRasterState);
-	//SAFE_RELEASE(m_pDepthStencilView);
-	//SAFE_RELEASE(m_pDepthStencilState);
-	//SAFE_RELEASE(m_pDepthStencilBuffer);
-	//SAFE_RELEASE(m_pRenderTargetView);
-	//SAFE_RELEASE(m_pDevice);
-	//SAFE_RELEASE(m_pDeviceContext);
 
 	m_videoCardDescription = "No Information Available.";
 	m_nNumOfModes = 0;
@@ -170,27 +150,24 @@ void OGLGraphicsClass::Shutdown()
 
 IModel* OGLGraphicsClass::CreateModel()
 {
-	throw NotImplementedException("OGLGraphicsClass", "CreateModel");
-	//return ((IModel*)new D3DModelClass(this));
+	return ((IModel*)new OGLModelClass(this));
 }
 
 IShader* OGLGraphicsClass::CreateShader()
 {
-	throw NotImplementedException("OGLGraphicsClass", "CreateShader");
-	//return ((IShader*)new D3DShaderClass(this));
+	return ((IShader*)new OGLShaderClass(this));
 }
 
 ICamera* OGLGraphicsClass::CreateCamera()
 {
-	throw NotImplementedException("OGLGraphicsClass", "CreateCamera");
-	//return ((ICamera*)new D3DCameraClass(this));
+	return ((ICamera*)new OGLCameraClass(this));
 }
 
 void OGLGraphicsClass::SetMasterCamera(ICamera* camera)
 {
 	m_bDisplayReady = false;
 
-	//m_pMasterCamera = (D3DCameraClass*)camera;
+	m_pMasterCamera = (OGLCameraClass*)camera;
 
 	m_bDisplayReady = true;
 }
@@ -228,5 +205,6 @@ bool OGLGraphicsClass::CreateRasterState()
 
 bool OGLGraphicsClass::CreateViewPort()
 {
+	glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
 	return true;
 }

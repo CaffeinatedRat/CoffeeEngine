@@ -162,8 +162,6 @@ std::string WindowsSystemClass::GetLastErrorMessage()
 
 bool WindowsSystemClass::Initialize()
 {
-	CoffeeEngine::Utility::Logger::Write(GetLastErrorMessage());
-
 	if(!InitializeWindow())
 		return false;
 
@@ -171,11 +169,11 @@ bool WindowsSystemClass::Initialize()
 	{
 		//Attempt to create the D3DGraphics object.
 		// TO-DO: Add an option to use an OpenGLGraphicsClass.
-		//if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
-		//	return false;
-
-		if ( (m_pGraphics = new WinOGLGraphicsClass(this)) == NULL)
+		if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
 			return false;
+
+		//if ( (m_pGraphics = new WinOGLGraphicsClass(this)) == NULL)
+		//	return false;
 
 		//Attempt to create the main engine and pass a reference to the graphics and system objects.
 		if ( (m_pCoffeeEngine = new CoffeeEngineClass(this, m_pGraphics) ) == NULL )

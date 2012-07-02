@@ -9,6 +9,7 @@
 #ifndef _WIN_OPENGL_CLASS_H_
 #define _WIN_OPENGL_CLASS_H_
 
+#include "stdafx.h"
 #include "Graphics\OpenGL\OGLGraphicsClass.h"
 
 using namespace CoffeeEngine::Interfaces;
@@ -28,6 +29,8 @@ namespace CoffeeEngine
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
+				HGLRC m_renderingContext;
+				HDC m_hdc;
 
 			public:
 		
@@ -48,6 +51,21 @@ namespace CoffeeEngine
 				/// Returns true if initialization was successful.
 				/// </returns>
 				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters);
+
+				/// <summary>
+				/// Begins the rendering process.
+				/// </summary>
+				virtual void BeginScene(float, float, float, float);
+
+				/// <summary>
+				/// Ends the rendering process.
+				/// </summary>
+				virtual void EndScene();
+
+				/// <summary>
+				/// Begins the process of shutting down the graphics class and all dependencies.
+				/// </summary>
+				virtual void Shutdown();
 			};
 		};
 	};

@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;Opengl32.lib;glew32mx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;Opengl32.lib;glew32mx.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -110,8 +110,11 @@
     <ClInclude Include="Include\Graphics\DirectX11\D3DGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\DirectX11\D3DModelClass.h" />
     <ClInclude Include="Include\Graphics\ModelClass.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.h" />
     <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\OGLModelClass.h" />
+    <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.h" />
     <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\ShaderClass.h" />
     <ClInclude Include="Include\Interfaces\ICamera.h" />
@@ -142,7 +145,10 @@
     <ClCompile Include="Src\Graphics\DirectX11\D3DModelClass.cpp" />
     <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp" />
     <ClCompile Include="Src\Graphics\ModelClass.cpp" />
+    <ClCompile Include="Src\Graphics\OpenGL\OGLCameraClass.cpp" />
     <ClCompile Include="Src\Graphics\OpenGL\OGLGraphicsClass.cpp" />
+    <ClCompile Include="Src\Graphics\OpenGL\OGLModelClass.cpp" />
+    <ClCompile Include="Src\Graphics\OpenGL\OGLShaderClass.cpp" />
     <ClCompile Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.cpp" />
     <ClCompile Include="Src\Graphics\ShaderClass.cpp" />
     <ClCompile Include="Src\Global.cpp" />

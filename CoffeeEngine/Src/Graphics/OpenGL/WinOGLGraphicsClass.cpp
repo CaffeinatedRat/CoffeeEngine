@@ -6,7 +6,6 @@
 //--------------------------------------------------------------------------------------
 
 #include "Global.h"
-#include "stdafx.h"
 #include "Graphics\OpenGL\WinOGLGraphicsClass.h"
 #include "System\Win32\WindowsSystemClass.h"
 
@@ -25,11 +24,15 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 
 WinOGLGraphicsClass::WinOGLGraphicsClass(ISystem* pSystem) : OGLGraphicsClass(pSystem)
 {
+	m_renderingContext = NULL;
+	m_hdc = NULL;
 }
 
 WinOGLGraphicsClass::WinOGLGraphicsClass(const WinOGLGraphicsClass& object)
 	: OGLGraphicsClass(object)
 {
+	m_renderingContext = object.m_renderingContext;
+	m_hdc = object.m_hdc;
 }
 
 WinOGLGraphicsClass::~WinOGLGraphicsClass()
@@ -48,7 +51,8 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 
 	//Create the windows context device, which is needed in order to run OpenGL in windows.
 	PIXELFORMATDESCRIPTOR pfd;
-	memset(&pfd,0,sizeof(PIXELFORMATDESCRIPTOR));
+	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
 	pfd.nVersion = 1;
 	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
@@ -57,13 +61,14 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	pfd.cDepthBits = 16;
 	pfd.iLayerType = PFD_MAIN_PLANE;
 
-	HDC hdc = GetDC(((WindowsSystemClass*)m_pSystem)->GetHWND());
-	if(hdc == NULL)
+	m_hdc = GetDC(((WindowsSystemClass*)m_pSystem)->GetHWND());
+	if(m_hdc == NULL)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_pSystem");
 	
-	int pixelFormat = ChoosePixelFormat(hdc, &pfd);
-	SetPixelFormat(hdc, pixelFormat, &pfd);
-	wglMakeCurrent(hdc, wglCreateContext(hdc));
+	int pixelFormat = ChoosePixelFormat(m_hdc, &pfd);
+	SetPixelFormat(m_hdc, pixelFormat, &pfd);
+	m_renderingContext = wglCreateContext(m_hdc);
+	wglMakeCurrent(m_hdc, m_renderingContext);
 	
 	if(wglGetCurrentContext() != NULL)
 	{
@@ -76,4 +81,34 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	}
 	
 	return false;
+}
+
+void WinOGLGraphicsClass::BeginScene(float red, float green, float blue, float alpha)
+{
+	OGLGraphicsClass::BeginScene(red, green, blue, alpha);
+}
+
+void WinOGLGraphicsClass::EndScene()
+{
+	OGLGraphicsClass::EndScene();
+	SwapBuffers(m_hdc);
+}
+
+void WinOGLGraphicsClass::Shutdown()
+{
+	//Clean up the OpenGL Context.
+	if(m_renderingContext != NULL)
+	{
+		wglDeleteContext(m_renderingContext);
+		m_renderingContext = NULL;
+	}
+
+	//Clean up the HDC as well.
+	if(m_hdc != NULL)
+	{
+		ReleaseDC(((WindowsSystemClass*)m_pSystem)->GetHWND(), m_hdc);
+		m_hdc = NULL;
+	}
+
+	OGLGraphicsClass::Shutdown();
 }

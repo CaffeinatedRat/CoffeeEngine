@@ -199,6 +199,15 @@
     <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\OGLModelClass.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.h">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">
@@ -257,6 +266,15 @@
       <Filter>Graphics\OpenGL\Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.cpp">
+      <Filter>Graphics\OpenGL\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\OpenGL\OGLCameraClass.cpp">
+      <Filter>Graphics\OpenGL\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\OpenGL\OGLModelClass.cpp">
+      <Filter>Graphics\OpenGL\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\OpenGL\OGLShaderClass.cpp">
       <Filter>Graphics\OpenGL\Src</Filter>
     </ClCompile>
   </ItemGroup>
