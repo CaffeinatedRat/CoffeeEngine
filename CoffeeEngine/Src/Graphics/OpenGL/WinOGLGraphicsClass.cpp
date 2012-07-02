@@ -63,7 +63,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 
 	m_hdc = GetDC(((WindowsSystemClass*)m_pSystem)->GetHWND());
 	if(m_hdc == NULL)
-		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_pSystem");
+		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_hdc");
 	
 	int pixelFormat = ChoosePixelFormat(m_hdc, &pfd);
 	SetPixelFormat(m_hdc, pixelFormat, &pfd);
