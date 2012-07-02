@@ -185,7 +185,7 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == NULL)
-		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
+		throw Exception("D3DModelClass", "Render", "There is no master camera.  You need a camera to see!");
 
 	//Apply transformations.
 	D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
