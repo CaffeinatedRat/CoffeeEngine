@@ -233,7 +233,7 @@ bool D3DGraphicsClass::CreateModeList()
 				m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
 
 				// Convert the name of the video card to a character array and store it.
-				unsigned int stringLength = 0;
+				size_t stringLength = 0;
 				char tmp[128];
 				if(wcstombs_s(&stringLength, tmp, 128, adapterDesc.Description, 128) == 0)
 					m_videoCardDescription = tmp;
