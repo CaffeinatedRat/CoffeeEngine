@@ -9,8 +9,10 @@
 #ifndef _OGL_COMMON_H_
 #define _OGL_COMMON_H_
 
-#include "gl\glew.h"
-#include "gl\wglew.h"
+#define GLEW_STATIC
+
+#include "GL\glew.h"
+#include "GL\wglew.h"
 #include <gl\glu.h>
 
 namespace CoffeeEngine
