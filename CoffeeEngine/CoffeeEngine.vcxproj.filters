@@ -92,6 +92,7 @@
     <None Include="Shaders\DirectX11\Default.fx">
       <Filter>Shaders\DirectX11</Filter>
     </None>
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\Resource.h">

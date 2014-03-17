@@ -63,7 +63,7 @@
     <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\Win32;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(Repository)\GLM\;$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\x64;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="CommentTemplate.txt" />
     <None Include="Resources\CoffeeEngine.ico" />
     <None Include="Resources\favicon.ico" />
