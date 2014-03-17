@@ -6,8 +6,8 @@
 //--------------------------------------------------------------------------------------
 
 //Windows specific.
-#include "..\Resources\Resource.h"
-#include "System\Win32\TimerClass.h"
+#include "../Resources/Resource.h"
+#include "System/Win32/TimerClass.h"
 
 #include "Global.h"
 

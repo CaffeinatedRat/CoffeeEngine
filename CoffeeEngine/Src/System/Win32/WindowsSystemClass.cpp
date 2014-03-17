@@ -6,14 +6,14 @@
 //--------------------------------------------------------------------------------------
 
 //Windows specific.
-#include "..\Resources\Resource.h"
-#include "System\Win32\Windows_EntryPoint.h"
-#include "System\Win32\WindowsSystemClass.h"
-#include "System\Win32\TimerClass.h"
-#include "Graphics\GraphicsCommon.h"
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include "Graphics\OpenGL\WinOGLGraphicsClass.h"
-#include "Utility\Logger.h"
+#include "../Resources/Resource.h"
+#include "System/Win32/Windows_EntryPoint.h"
+#include "System/Win32/WindowsSystemClass.h"
+#include "System/Win32/TimerClass.h"
+#include "Graphics/GraphicsCommon.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/OpenGL/WinOGLGraphicsClass.h"
+#include "Utility/Logger.h"
 
 #include "Global.h"
 
@@ -169,6 +169,7 @@ bool WindowsSystemClass::Initialize()
 	{
 		//Attempt to create the D3DGraphics object.
 		// TO-DO: Add an option to use an OpenGLGraphicsClass.
+		// Possibly a factory or a probably just a simple if statement as there will only ever be two.
 		if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
 			return false;
 
@@ -257,11 +258,14 @@ void WindowsSystemClass::Shutdown()
 	UnregisterClass(m_szWindowClass, m_hInstance);
 
 	//Shutdown the graphics & engine objects.
+	// --- kda (3/3/14) --- Not really needed as it is done in the destructor anyways...
+	/*
 	if(m_pGraphics != NULL)
 		m_pGraphics->Shutdown();
 
 	if(m_pCoffeeEngine != NULL)
 		m_pCoffeeEngine->Shutdown();
+	*/
 
 	 SAFE_DELETE(m_pGraphics);
 	 SAFE_DELETE(m_pCoffeeEngine);

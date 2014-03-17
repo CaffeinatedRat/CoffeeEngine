@@ -6,8 +6,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include "Graphics\DirectX11\D3DCameraClass.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DCameraClass.h"
 
 #include <cmath>
 

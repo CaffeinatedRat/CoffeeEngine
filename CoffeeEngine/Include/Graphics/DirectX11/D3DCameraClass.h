@@ -11,10 +11,10 @@
 #define _D3D_CAMERA_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\CameraClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/CameraClass.h"
 
-#include "Graphics\DirectX11\D3DCommon.h"
+#include "Graphics/DirectX11/D3DCommon.h"
 
 using namespace CoffeeEngine::Graphics;
 

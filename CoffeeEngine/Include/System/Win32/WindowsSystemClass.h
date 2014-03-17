@@ -11,10 +11,10 @@
 
 #include "stdafx.h"
 #include "Common.h"
-#include "Interfaces\ISystem.h"
-#include "Interfaces\ITimer.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Engine\CoffeeEngineClass.h"
+#include "Interfaces/ISystem.h"
+#include "Interfaces/ITimer.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Engine/CoffeeEngineClass.h"
 
 #define MAX_LOADSTRING 100
 

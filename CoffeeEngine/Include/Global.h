@@ -9,7 +9,7 @@
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-#include "Interfaces\ISystem.h"
+#include "Interfaces/ISystem.h"
 
 using namespace CoffeeEngine::Interfaces;
 

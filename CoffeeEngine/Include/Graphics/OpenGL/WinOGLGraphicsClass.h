@@ -10,7 +10,7 @@
 #define _WIN_OPENGL_CLASS_H_
 
 #include "stdafx.h"
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
 
 using namespace CoffeeEngine::Interfaces;
 

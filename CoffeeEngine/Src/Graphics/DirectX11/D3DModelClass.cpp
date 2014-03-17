@@ -6,10 +6,10 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include "Graphics\DirectX11\D3DModelClass.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DModelClass.h"
 
-#include "Graphics\DirectX11\D3DShaderClass.h"
+#include "Graphics/DirectX11/D3DShaderClass.h"
 
 #include <d3d11.h>
 #include <d3dx11async.h>
@@ -74,7 +74,7 @@ bool D3DModelClass::Initialize()
 	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	std::string fileName = rootPath;
 	
-	fileName.append("\\Media\\coookeee.jpg");
+	fileName.append("/Media/coookeee.jpg");
 	std::wstring fileNameW(fileName.begin(), fileName.end());
 
 	D3DX11CreateShaderResourceViewFromFile(pDevice, fileNameW.c_str(), NULL, NULL, &m_pTexture, NULL);

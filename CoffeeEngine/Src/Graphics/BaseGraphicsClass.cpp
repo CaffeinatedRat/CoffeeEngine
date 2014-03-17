@@ -5,7 +5,7 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\BaseGraphicsClass.h"
+#include "Graphics/BaseGraphicsClass.h"
 
 #include "Common.h"
 #include "Global.h"

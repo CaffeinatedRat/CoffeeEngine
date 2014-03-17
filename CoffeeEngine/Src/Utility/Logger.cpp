@@ -9,7 +9,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 //Windows specific.
-#include "Utility\Logger.h"
+#include "Utility/Logger.h"
 #include <cstdio>
 #include <time.h>
 

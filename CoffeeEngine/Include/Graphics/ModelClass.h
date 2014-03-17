@@ -10,8 +10,8 @@
 #define _MODEL_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Interfaces\IModel.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Interfaces/IModel.h"
 
 using namespace CoffeeEngine::Interfaces;
 

@@ -5,8 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
-#include "Graphics\OpenGL\OGLCameraClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLCameraClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
@@ -68,6 +68,12 @@ bool OGLCameraClass::Initialize()
 
 	// Calculate The Aspect Ratio Of The Window
 	//gluPerspective(fieldOfView, screenAspect, screenNear, screenDepth);
+
+	const GLdouble pi = 3.1415926535897932384626433832795;
+	int fH = tanf( fieldOfView / 360 * pi ) * screenNear;
+	int fW = fH * screenAspect;
+
+	glFrustum( -fW, fW, -fH, fH, screenNear, screenDepth );
 
 	// Initialize the world matrix to the identity matrix.
 	glMatrixMode(GL_MODELVIEW);

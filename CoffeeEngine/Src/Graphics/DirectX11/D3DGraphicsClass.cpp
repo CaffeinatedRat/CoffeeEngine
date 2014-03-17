@@ -8,11 +8,11 @@
 
 #include "stdafx.h"
 #include "Global.h"
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include "Graphics\DirectX11\D3DModelClass.h"
-#include "Graphics\DirectX11\D3DShaderClass.h"
-#include "Graphics\DirectX11\D3DCameraClass.h"
-#include "System\Win32\WindowsSystemClass.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DModelClass.h"
+#include "Graphics/DirectX11/D3DShaderClass.h"
+#include "Graphics/DirectX11/D3DCameraClass.h"
+#include "System/Win32/WindowsSystemClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;
@@ -48,7 +48,7 @@ D3DGraphicsClass::D3DGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem
 	m_bDisplayReady = false;
 
 	//By default there is no master camera.
-	m_pMasterCamera = NULL;	
+	m_pMasterCamera = NULL;
 
 	m_videoCardDescription = "No Information Available.";
 }

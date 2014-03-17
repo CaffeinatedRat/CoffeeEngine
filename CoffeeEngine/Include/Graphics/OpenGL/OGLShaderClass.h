@@ -10,11 +10,11 @@
 #define _OGL_SHADER_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ShaderClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ShaderClass.h"
 
-#include "Graphics\OpenGL\OGLCommon.h"
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLCommon.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
 
 namespace CoffeeEngine
 {

@@ -6,10 +6,10 @@
 //--------------------------------------------------------------------------------------
 
 #include "Global.h"
-#include "Graphics\OpenGL\WinOGLGraphicsClass.h"
-#include "System\Win32\WindowsSystemClass.h"
+#include "Graphics/OpenGL/WinOGLGraphicsClass.h"
+#include "System/Win32/WindowsSystemClass.h"
 
-#include "Utility\Logger.h"
+#include "Utility/Logger.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;

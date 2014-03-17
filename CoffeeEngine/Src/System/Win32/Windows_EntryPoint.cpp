@@ -5,8 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "System\Win32\Windows_EntryPoint.h"
-#include "System\Win32\WindowsSystemClass.h"
+#include "System/Win32/Windows_EntryPoint.h"
+#include "System/Win32/WindowsSystemClass.h"
 #include "Global.h"
 
 using namespace CoffeeEngine;

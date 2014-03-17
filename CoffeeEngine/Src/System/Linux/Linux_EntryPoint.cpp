@@ -4,7 +4,7 @@
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
 //--------------------------------------------------------------------------------------
 
-#include "System\Linux\Linux_EntryPoint.h"
+#include "System/Linux/Linux_EntryPoint.h"
 #include "Global.h"
 
 using namespace CoffeeEngine;

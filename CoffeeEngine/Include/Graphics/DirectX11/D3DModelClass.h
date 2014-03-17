@@ -12,11 +12,11 @@
 
 #include "Common.h"
 
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ModelClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ModelClass.h"
 
-#include "Graphics\DirectX11\D3DCommon.h"
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DCommon.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
 
 namespace CoffeeEngine
 {

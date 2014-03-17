@@ -17,9 +17,9 @@
 #include <vector>
 
 // Exception classes.
-#include "Exceptions\Exception.h"
-#include "Exceptions\NullArgumentException.h"
-#include "Exceptions\NotImplementedException.h"
+#include "Exceptions/Exception.h"
+#include "Exceptions/NullArgumentException.h"
+#include "Exceptions/NotImplementedException.h"
 
 using namespace CoffeeEngine::Exceptions;
 

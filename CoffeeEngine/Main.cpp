@@ -11,7 +11,7 @@
 	// 1) Windows_EntryPoint.h -- Entry point into windows based systems.
 	/////////////////////////////////////////////////////////////////////////////////
 
-	#include "System\Win32\Windows_EntryPoint.h"
+	#include "System/Win32/Windows_EntryPoint.h"
 
 	int APIENTRY _tWinMain(HINSTANCE hInstance,
 						 HINSTANCE hPrevInstance,

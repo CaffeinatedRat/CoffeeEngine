@@ -5,9 +5,9 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
-#include "Graphics\OpenGL\OGLCameraClass.h"
-#include "Graphics\OpenGL\OGLModelClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLCameraClass.h"
+#include "Graphics/OpenGL/OGLModelClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
@@ -52,7 +52,7 @@ bool OGLModelClass::Initialize()
 	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	std::string fileName = rootPath;
 	
-	fileName.append("\\Media\\coookeee.jpg");
+	fileName.append("/Media/coookeee.jpg");
 	std::wstring fileNameW(fileName.begin(), fileName.end());
 	
 	//glTexImage2D(GL_TEXTURE_2D, 0, 3, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)screenData);

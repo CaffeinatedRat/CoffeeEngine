@@ -4,7 +4,7 @@
 // Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
-#include "Graphics\DirectX11\D3DCommon.h"
+#include "Graphics/DirectX11/D3DCommon.h"
 
 const char* CoffeeEngine::Graphics::DirectX11::VERTEX_SHADER_VERSION = "vs_4_0";
 const char* CoffeeEngine::Graphics::DirectX11::PIXEL_SHADER_VERSION = "ps_4_0";

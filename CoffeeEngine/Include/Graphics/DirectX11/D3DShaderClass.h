@@ -11,11 +11,11 @@
 #define _D3D_SHADER_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ShaderClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ShaderClass.h"
 
-#include "Graphics\DirectX11\D3DCommon.h"
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DCommon.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
 
 namespace CoffeeEngine
 {

@@ -10,8 +10,8 @@
 #define _SHADER_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Interfaces\IShader.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Interfaces/IShader.h"
 
 using namespace CoffeeEngine::Interfaces;
 

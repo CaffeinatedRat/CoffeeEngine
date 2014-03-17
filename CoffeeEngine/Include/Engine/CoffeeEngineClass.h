@@ -12,10 +12,10 @@
 #include "stdafx.h"
 #include "Common.h"
 
-#include "Interfaces\ISystem.h"
-#include "Interfaces\ITimer.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ModelClass.h"
+#include "Interfaces/ISystem.h"
+#include "Interfaces/ITimer.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ModelClass.h"
 
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Graphics;

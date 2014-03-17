@@ -5,8 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
-#include "Graphics\OpenGL\OGLShaderClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLShaderClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
@@ -52,7 +52,7 @@ bool OGLShaderClass::Initialize(std::string sFileName)
 	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	std::string vertexShaderPath = rootPath;
 	
-	vertexShaderPath.append("\\Shaders\\DirectX11\\");
+	vertexShaderPath.append("/Shaders/DirectX11/");
 	vertexShaderPath.append(sFileName);
 	std::wstring vertexShaderPathW(vertexShaderPath.begin(), vertexShaderPath.end());
 

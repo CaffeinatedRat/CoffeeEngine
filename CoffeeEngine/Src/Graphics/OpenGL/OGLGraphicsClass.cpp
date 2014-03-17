@@ -6,15 +6,14 @@
 //--------------------------------------------------------------------------------------
 
 #include "Global.h"
-#include "Graphics\OpenGL\OGLGraphicsClass.h"
-#include "Graphics\OpenGL\OGLModelClass.h"
-#include "Graphics\OpenGL\OGLShaderClass.h"
-#include "Graphics\OpenGL\OGLCameraClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLModelClass.h"
+#include "Graphics/OpenGL/OGLShaderClass.h"
+#include "Graphics/OpenGL/OGLCameraClass.h"
 
-#include "Utility\Logger.h"
+#include "Utility/Logger.h"
 
 using namespace CoffeeEngine;
-//using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
 

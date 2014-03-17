@@ -6,8 +6,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\DirectX11\D3DGraphicsClass.h"
-#include "Graphics\DirectX11\D3DShaderClass.h"
+#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/DirectX11/D3DShaderClass.h"
 
 #include <d3d11.h>
 #include <d3dx11async.h>
@@ -71,7 +71,7 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	std::string vertexShaderPath = rootPath;
 	
-	vertexShaderPath.append("\\Shaders\\DirectX11\\");
+	vertexShaderPath.append("/Shaders/DirectX11/");
 	vertexShaderPath.append(sFileName);
 	std::wstring vertexShaderPathW(vertexShaderPath.begin(), vertexShaderPath.end());
 

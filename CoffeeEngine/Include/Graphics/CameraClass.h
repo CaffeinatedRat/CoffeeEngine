@@ -10,8 +10,8 @@
 #define _CAMERA_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Interfaces\ICamera.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Interfaces/ICamera.h"
 
 using namespace CoffeeEngine::Interfaces;
 

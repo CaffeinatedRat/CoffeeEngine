@@ -11,7 +11,7 @@
 
 #include "stdafx.h"
 #include "Common.h"
-#include "Interfaces\ITimer.h"
+#include "Interfaces/ITimer.h"
 
 using namespace CoffeeEngine::Interfaces;
 

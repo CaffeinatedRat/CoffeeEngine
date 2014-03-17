@@ -5,7 +5,7 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\CameraClass.h"
+#include "Graphics/CameraClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

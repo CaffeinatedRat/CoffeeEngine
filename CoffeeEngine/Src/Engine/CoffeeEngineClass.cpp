@@ -5,12 +5,12 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Engine\CoffeeEngineClass.h"
+#include "Engine/CoffeeEngineClass.h"
 
 #include "Global.h"
-#include "Interfaces\ISystem.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ModelClass.h"
+#include "Interfaces/ISystem.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ModelClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Interfaces;
@@ -68,12 +68,6 @@ CoffeeEngineClass::~CoffeeEngineClass()
 
 bool CoffeeEngineClass::Initialize()
 {
-	if(m_pSystem == NULL)
-		throw NullArgumentException("CoffeeEngineClass", "Initialize", "m_pSystem");
-
-	if(m_pGraphics == NULL)
-		throw NullArgumentException("CoffeeEngineClass", "Initialize", "m_pGraphics");
-
 	//Create the system timer.
 	m_pTimer = m_pSystem->CreateTimer();
 	if(!m_pTimer->Start())

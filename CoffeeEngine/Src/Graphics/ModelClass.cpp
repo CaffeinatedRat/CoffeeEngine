@@ -5,7 +5,7 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics\ModelClass.h"
+#include "Graphics/ModelClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

@@ -10,12 +10,12 @@
 #define _OGLGRAPHICS_CLASS_H_
 
 #include "Common.h"
-#include "Interfaces\ISystem.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\GraphicsCommon.h"
+#include "Interfaces/ISystem.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/GraphicsCommon.h"
 
-#include "Graphics\OpenGL\OGLCommon.h"
-#include "Graphics\OpenGL\OGLCameraClass.h"
+#include "Graphics/OpenGL/OGLCommon.h"
+#include "Graphics/OpenGL/OGLCameraClass.h"
 
 using namespace CoffeeEngine::Interfaces;
 

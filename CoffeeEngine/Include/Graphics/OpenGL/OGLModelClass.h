@@ -11,10 +11,10 @@
 
 #include "Common.h"
 
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\ModelClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/ModelClass.h"
 
-#include "Graphics\OpenGL\OGLCommon.h"
+#include "Graphics/OpenGL/OGLCommon.h"
 
 namespace CoffeeEngine
 {

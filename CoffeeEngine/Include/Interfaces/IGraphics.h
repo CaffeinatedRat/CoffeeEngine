@@ -10,11 +10,11 @@
 #define _IGRAPHICS_INTERFACE_H_
 
 #include "Common.h"
-#include "Interfaces\IModel.h"
-#include "Interfaces\ICamera.h"
-#include "Interfaces\IShader.h"
-#include "Interfaces\ISystem.h"
-#include "Graphics\GraphicsCommon.h"
+#include "Interfaces/IModel.h"
+#include "Interfaces/ICamera.h"
+#include "Interfaces/IShader.h"
+#include "Interfaces/ISystem.h"
+#include "Graphics/GraphicsCommon.h"
 
 namespace CoffeeEngine
 {

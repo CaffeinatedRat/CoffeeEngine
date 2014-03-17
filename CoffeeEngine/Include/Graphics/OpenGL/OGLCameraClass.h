@@ -10,10 +10,10 @@
 #define _OGL_CAMERA_CLASS_H_
 
 #include "Common.h"
-#include "Graphics\BaseGraphicsClass.h"
-#include "Graphics\CameraClass.h"
+#include "Graphics/BaseGraphicsClass.h"
+#include "Graphics/CameraClass.h"
 
-#include "Graphics\OpenGL\OGLCommon.h"
+#include "Graphics/OpenGL/OGLCommon.h"
 
 using namespace CoffeeEngine::Graphics;
 
@@ -58,6 +58,7 @@ namespace CoffeeEngine
 
 			protected:
 				void OGLMatrixPerspectiveFovLH(float *m, float fov, float aspect, float znear, float zfar);
+
 			};
 		}
 	};
