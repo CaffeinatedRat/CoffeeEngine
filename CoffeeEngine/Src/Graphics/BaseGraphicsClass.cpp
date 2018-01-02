@@ -1,14 +1,12 @@
 //--------------------------------------------------------------------------------------
 // Description: The base graphics class.  Used to provide a a foundation for all the graphics classes that should be created.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics/BaseGraphicsClass.h"
-
 #include "Common.h"
-#include "Global.h"
+#include "Graphics/BaseGraphicsClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
@@ -18,23 +16,16 @@ using namespace CoffeeEngine::Graphics;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-BaseGraphicsClass::BaseGraphicsClass()
-{
-	m_pSystem = NULL;
-	m_sGraphicsLibraryName = "Undefined";
-}
-
 BaseGraphicsClass::BaseGraphicsClass(ISystem* pSystem, std::string sGraphicsLibraryName)
 {
-	if(pSystem == NULL)
+	if(pSystem == nullptr)
 		throw NullArgumentException("BaseGraphicsClass", "Constructor", "pSystem");
 
 	m_pSystem = pSystem;
 	m_sGraphicsLibraryName = sGraphicsLibraryName;
 }
 
-BaseGraphicsClass::BaseGraphicsClass(const BaseGraphicsClass& object)
+BaseGraphicsClass::BaseGraphicsClass(const BaseGraphicsClass& object) noexcept
 {
 	m_pSystem = object.m_pSystem;
 	m_sGraphicsLibraryName = object.m_sGraphicsLibraryName;

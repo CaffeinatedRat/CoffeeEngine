@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Defines the LINUX entry point for the application.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 //--------------------------------------------------------------------------------------
 
 #include "System/Linux/Linux_EntryPoint.h"

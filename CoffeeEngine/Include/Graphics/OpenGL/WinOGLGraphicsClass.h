@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The Windows version of OpenGL
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _WIN_OPENGL_CLASS_H_
 #define _WIN_OPENGL_CLASS_H_
+
+#pragma once
 
 #include "stdafx.h"
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
@@ -29,8 +30,8 @@ namespace CoffeeEngine
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
-				HGLRC m_renderingContext;
-				HDC m_hdc;
+				HGLRC m_renderingContext = nullptr;
+				HDC m_hdc = nullptr;
 
 			public:
 		
@@ -40,7 +41,8 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
-				WinOGLGraphicsClass(ISystem* pSystem);
+				WinOGLGraphicsClass() = delete;
+				WinOGLGraphicsClass(ISystem* pSystem) : OGLGraphicsClass(pSystem) {}
 				WinOGLGraphicsClass(const WinOGLGraphicsClass& object);
 				virtual ~WinOGLGraphicsClass();
 

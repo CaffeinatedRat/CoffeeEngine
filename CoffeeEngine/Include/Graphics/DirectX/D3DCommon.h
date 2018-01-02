@@ -1,46 +1,53 @@
 //--------------------------------------------------------------------------------------
 // Description: Specific global variables, functions, and definitions for DirectX.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
+
+#ifdef _WIN32
 
 #pragma once
 #ifndef _D3D_COMMON_H_
 #define _D3D_COMMON_H_
 
-#include <dxgi.h>
-#include <d3dcommon.h>
+//#include <dxgi.h>
+//#include <d3dcommon.h>
 #include <d3d11.h>
-#include <d3dx10math.h>
+#include <d3dcompiler.h>
+#include <directxmath.h>
 
-#define SAFE_RELEASE(p) if (p != NULL) { p->Release(); p = NULL; }
+using namespace DirectX;
+
+#define SAFE_RELEASE(p) if (p != nullptr) { p->Release(); p = nullptr; }
 
 namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		namespace DirectX11
+		namespace DirectX
 		{
 			extern const char* VERTEX_SHADER_VERSION;
 			extern const char* PIXEL_SHADER_VERSION;
 
 			typedef struct SimpleMatrixBufferType
 			{
-				D3DXMATRIX world;
-				D3DXMATRIX view;
-				D3DXMATRIX projection;
+				XMMATRIX world;
+				XMMATRIX view;
+				XMMATRIX projection;
 			} SimpleMatrixBufferType;
 
 			typedef struct SimpleVertexType
 			{
-				D3DXVECTOR3 position;
-				D3DXVECTOR4 color;
-				D3DXVECTOR2 texture;
+				XMFLOAT3 position;
+				XMFLOAT4 color;
+				XMFLOAT2 texture;
 				//D3DXVECTOR3 normal;
 			} SimpleVertexType;
 		}
 	}
 }
+
+#endif
 
 #endif

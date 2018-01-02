@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -22,25 +22,29 @@
     <ProjectGuid>{35C83B17-0388-4E37-BBB0-B06485ECBF86}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CoffeeEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.10069.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -54,25 +58,33 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\Win32;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(Repository)\glew\lib\Win32;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\Win32;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(Repository)\GLM\;$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\x64;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(Repository)\Glew\glew-1.10.0\include\;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(Repository)\GLEW\glew-1.10.0\lib\Release\x64;$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(Repository)\glew\lib\x64;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -80,20 +92,21 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Resources;Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dcompiler.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(Repository)\GLEW\glew-1.10.0\lib\Release\Win32\*.dll" "$(SolutionDir)$(Configuration)\"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,24 +118,29 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>Resources;Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Resources;Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <Optimization>Disabled</Optimization>
+      <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dcompiler.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,9 +148,10 @@
       <AdditionalIncludeDirectories>Resources;Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -153,12 +172,13 @@
     <ClInclude Include="Include\Global.h" />
     <ClInclude Include="Include\Graphics\BaseGraphicsClass.h" />
     <ClInclude Include="Include\Graphics\CameraClass.h" />
-    <ClInclude Include="Include\Graphics\DirectX11\D3DShaderClass.h" />
+    <ClInclude Include="Include\Graphics\DirectX\D3DCameraClass.h" />
+    <ClInclude Include="Include\Graphics\DirectX\D3DCommon.h" />
+    <ClInclude Include="Include\Graphics\DirectX\D3DGraphicsClass.h" />
+    <ClInclude Include="Include\Graphics\DirectX\D3DModelClass.h" />
+    <ClInclude Include="Include\Graphics\DirectX\D3DShaderClass.h" />
     <ClInclude Include="Include\Graphics\GraphicsCommon.h" />
-    <ClInclude Include="Include\Graphics\DirectX11\D3DCameraClass.h" />
-    <ClInclude Include="Include\Graphics\DirectX11\D3DCommon.h" />
-    <ClInclude Include="Include\Graphics\DirectX11\D3DGraphicsClass.h" />
-    <ClInclude Include="Include\Graphics\DirectX11\D3DModelClass.h" />
+    <ClInclude Include="Include\Graphics\GraphicsUtility.h" />
     <ClInclude Include="Include\Graphics\ModelClass.h" />
     <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.h" />
     <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.h" />
@@ -181,19 +201,26 @@
     <ClInclude Include="Include\System\Win32\TimerClass.h" />
     <ClInclude Include="Include\System\Win32\Windows_EntryPoint.h" />
     <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Include\Interfaces\ISystemListener.h" />
     <ClInclude Include="Include\Utility\Logger.h" />
+    <ClInclude Include="Include\Utility\LoggingTypes.h" />
+    <ClInclude Include="Include\Utility\UtilMath.h" />
     <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="Include\Utility\UtilTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Include\Exceptions\NotSupportedException.h" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Src\Common.cpp" />
     <ClCompile Include="Src\Engine\CoffeeEngineClass.cpp" />
+    <ClCompile Include="Src\Graphics\GraphicFactory.cpp" />
     <ClCompile Include="Src\Graphics\BaseGraphicsClass.cpp" />
     <ClCompile Include="Src\Graphics\CameraClass.cpp" />
-    <ClCompile Include="Src\Graphics\DirectX11\D3DCameraClass.cpp" />
-    <ClCompile Include="Src\Graphics\DirectX11\D3DCommon.cpp" />
-    <ClCompile Include="Src\Graphics\DirectX11\D3DGraphicsClass.cpp" />
-    <ClCompile Include="Src\Graphics\DirectX11\D3DModelClass.cpp" />
-    <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp" />
+    <ClCompile Include="Src\Graphics\DirectX\D3DCameraClass.cpp" />
+    <ClCompile Include="Src\Graphics\DirectX\D3DCommon.cpp" />
+    <ClCompile Include="Src\Graphics\DirectX\D3DGraphicsClass.cpp" />
+    <ClCompile Include="Src\Graphics\DirectX\D3DModelClass.cpp" />
+    <ClCompile Include="Src\Graphics\DirectX\D3DShaderClass.cpp" />
     <ClCompile Include="Src\Graphics\ModelClass.cpp" />
     <ClCompile Include="Src\Graphics\OpenGL\OGLCameraClass.cpp" />
     <ClCompile Include="Src\Graphics\OpenGL\OGLGraphicsClass.cpp" />
@@ -208,6 +235,7 @@
     <ClCompile Include="Src\System\Win32\WindowsSystemClass.cpp" />
     <ClCompile Include="Src\System\Win32\Windows_EntryPoint.cpp" />
     <ClCompile Include="Src\Utility\Logger.cpp" />
+    <ClCompile Include="Src\Utility\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\CoffeeEngine.rc" />

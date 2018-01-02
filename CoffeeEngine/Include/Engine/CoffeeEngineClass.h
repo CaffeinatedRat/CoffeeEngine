@@ -1,55 +1,66 @@
 //--------------------------------------------------------------------------------------
 // Description: The main engine.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _COFFEEENGINE_CLASS_H_
 #define _COFFEEENGINE_CLASS_H_
 
-#include "stdafx.h"
-#include "Common.h"
+#pragma once
 
-#include "Interfaces/ISystem.h"
+//#include "stdafx.h"
+//#include "Common.h"
+
+#include <memory>
+
+#include "Utility/Logger.h"
+#include "Utility/LoggingTypes.h"
 #include "Interfaces/ITimer.h"
+#include "Interfaces/ISystem.h"
+#include "Interfaces/ISystemListener.h"
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/ModelClass.h"
-
-using namespace CoffeeEngine::Interfaces;
-using namespace CoffeeEngine::Graphics;
 
 namespace CoffeeEngine
 {
 	namespace Engine
 	{
-		class CoffeeEngineClass
+		//Restricting namespace scoping to within the class.
+		using BaseGraphicsClass = CoffeeEngine::Graphics::BaseGraphicsClass;
+		using Logger = CoffeeEngine::Utility::Logging::Logger;
+		using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
+
+		class CoffeeEngineClass : public Interfaces::ISystemListener
 		{
-		private:
-			BaseGraphicsClass* m_pGraphics;
-
-			ISystem* m_pSystem;
-			ICamera* m_pCamera;
-			ITimer* m_pTimer;
-
-			//Temporary for testing.
-			IModel* m_pModel;
-			IShader* m_pShader;
-
-			bool m_bReady;
-
 		public:
-		
-			CoffeeEngineClass();
-			CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraphics);
-			~CoffeeEngineClass();
+
+			CoffeeEngineClass() = default;
+			CoffeeEngineClass(Interfaces::ISystem* pSystem);
+			virtual ~CoffeeEngineClass();
 
 			bool Initialize();
 			void Run();
 			void Render();
-			bool Frame();
+			virtual void OnFrame(bool) override;
 			void Shutdown();
+
+		private:
+			//Reference pointers.
+			Interfaces::ISystem* m_pSystem = nullptr;
+			Logger *m_pLogger = nullptr;
+
+			std::unique_ptr<BaseGraphicsClass> m_upGraphics = nullptr;
+
+			Interfaces::ICamera* m_pCamera = nullptr;
+			Interfaces::ITimer* m_pTimer = nullptr;
+
+			//Temporary for testing.
+			Interfaces::IModel* m_pModel = nullptr;
+			Interfaces::IShader* m_pShader = nullptr;
+
+			bool m_bReady = false;
 		};
 	};
 };

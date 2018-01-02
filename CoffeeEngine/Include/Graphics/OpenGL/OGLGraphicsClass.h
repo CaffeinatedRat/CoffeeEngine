@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL Graphics class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _OGLGRAPHICS_CLASS_H_
 #define _OGLGRAPHICS_CLASS_H_
+
+#pragma once
 
 #include "Common.h"
 #include "Interfaces/ISystem.h"
@@ -27,27 +28,6 @@ namespace CoffeeEngine
 		{
 			class OGLGraphicsClass : public BaseGraphicsClass
 			{
-			protected:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				bool m_bFullScreen;
-				bool m_bDisplayReady;
-				bool m_bVsyncEnabled;
-				int m_nScreenWidth;
-				int m_nScreenHeight;
-				int m_videoCardMemory;
-				std::string m_videoCardDescription;
-				unsigned int m_nNumOfModes;
-
-				//CoffeeEngine constructs.
-				OGLCameraClass* m_pMasterCamera;
-
 			public:
 		
 				////////////////////////////////////////////////////////////
@@ -56,7 +36,8 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
-				OGLGraphicsClass(ISystem* pSystem);
+				OGLGraphicsClass() = delete;
+				OGLGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "OpenGL") {};
 				OGLGraphicsClass(const OGLGraphicsClass& object);
 				virtual ~OGLGraphicsClass();
 
@@ -118,7 +99,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns an instance of the master camera.
 				/// </returns>
-				inline ICamera* GetMasterCamera() { return m_pMasterCamera; }
+				inline ICamera* GetMasterCamera() const override { return m_pMasterCamera; }
 
 				/// <summary>
 				/// Returns a block of information about the video card.
@@ -126,7 +107,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns a compliant list of video card information.
 				/// </returns>
-				std::vector<std::string> GetVideoCardInfo();
+				std::vector<std::string> GetVideoCardInfo() const override;
 
 				////////////////////////////////////////////////////////////
 				//
@@ -192,6 +173,28 @@ namespace CoffeeEngine
 				/// True if the viewport was successfully created.
 				/// </returns>
 				bool CreateViewPort();
+
+			protected:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				bool m_bGlewInitialized = false;
+				bool m_bFullScreen = false;
+				bool m_bDisplayReady = false;
+				bool m_bVsyncEnabled = false;
+				int m_nScreenWidth = 0;
+				int m_nScreenHeight = 0;
+				int m_videoCardMemory = 0;
+				unsigned int m_nNumOfModes = 0;
+
+				std::string m_videoCardDescription = "No Information Available.";
+
+				//By default there is no master camera.
+				OGLCameraClass *m_pMasterCamera = nullptr;
 			};
 		};
 	};

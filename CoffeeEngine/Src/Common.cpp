@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------
-// Description: Provides a global set of variables that exist through out the lifetime of the application.
+// Description: Provides a common set of helper functions.
 //
 // Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Global.h"
+//Disable the security warnings created by Windows, so that we can increase portability.
+#define _CRT_SECURE_NO_WARNINGS
 
-using namespace CoffeeEngine::Interfaces;
+#include "Common.h"

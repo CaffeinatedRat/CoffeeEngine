@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The base camera class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -15,15 +15,9 @@ using namespace CoffeeEngine::Graphics;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-CameraClass::CameraClass()
+CameraClass::CameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 {
-	m_pGraphicsClass = NULL;
-}
-
-CameraClass::CameraClass(BaseGraphicsClass* pBaseGraphicsClass)
-{
-	if(pBaseGraphicsClass == NULL)
+	if(pBaseGraphicsClass == nullptr)
 		throw NullArgumentException("CameraClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;

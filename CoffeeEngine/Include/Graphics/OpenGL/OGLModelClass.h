@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL model class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -9,11 +9,8 @@
 #ifndef _OGL_MODEL_CLASS_H_
 #define _OGL_MODEL_CLASS_H_
 
-#include "Common.h"
-
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/ModelClass.h"
-
 #include "Graphics/OpenGL/OGLCommon.h"
 
 namespace CoffeeEngine
@@ -40,7 +37,7 @@ namespace CoffeeEngine
 
 			public:
 			
-				OGLModelClass(BaseGraphicsClass* pBaseGraphicsClass);
+				OGLModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLModelClass(const OGLModelClass& object);
 				virtual ~OGLModelClass();
 

@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The base shader class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _SHADER_CLASS_H_
 #define _SHADER_CLASS_H_
+
+#pragma once
 
 #include "Common.h"
 #include "Graphics/BaseGraphicsClass.h"
@@ -22,14 +23,11 @@ namespace CoffeeEngine
 		class ShaderClass : public IShader
 		{
 		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
-
-		private:
-			ShaderClass();
+			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
 
 		public:
-			
-			ShaderClass(BaseGraphicsClass* pBaseGraphicsClass);
+			ShaderClass() = delete;
+			ShaderClass(const BaseGraphicsClass* pBaseGraphicsClass);
 			ShaderClass(const ShaderClass& object);
 			virtual ~ShaderClass() { };
 		};

@@ -1,15 +1,13 @@
 //--------------------------------------------------------------------------------------
 // Description: Manages the windows operating system.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 //Windows specific.
 #include "../Resources/Resource.h"
 #include "System/Win32/TimerClass.h"
-
-#include "Global.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;
@@ -19,17 +17,6 @@ using namespace CoffeeEngine::System;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-TimerClass::TimerClass()
-{
-	m_fElapsedTimeInMilliseconds = 0.0f;
-	m_fTicksPerMilliseconds = 0.0f;
-	m_nFrequency = 0;
-	m_nTickStart = 0;
-
-	m_bRun = false;
-}
-
 TimerClass::TimerClass(const TimerClass& object)
 {
 	m_bRun = object.m_bRun;
@@ -86,7 +73,7 @@ void TimerClass::Run()
 {
 	if(m_bRun)
 	{
-		INT64 nCurrentNumberOfTicks;
+		INT64 nCurrentNumberOfTicks = 0;
 
 		//Retrieve the current number of ticks.
 		QueryPerformanceCounter((LARGE_INTEGER*)&nCurrentNumberOfTicks);

@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL model class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#include "Common.h"
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
 #include "Graphics/OpenGL/OGLCameraClass.h"
 #include "Graphics/OpenGL/OGLModelClass.h"
@@ -19,7 +20,7 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 // 
 ////////////////////////////////////////////////////////////
 
-OGLModelClass::OGLModelClass(BaseGraphicsClass* pBaseGraphicsClass)
+OGLModelClass::OGLModelClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	: ModelClass(pBaseGraphicsClass)
 {
 
@@ -44,7 +45,7 @@ OGLModelClass::~OGLModelClass()
 
 bool OGLModelClass::Initialize()
 {
-	if(m_pGraphicsClass == NULL)
+	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLModelClass", "Initialize", "m_pGraphicsClass");
 
 	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
@@ -62,34 +63,35 @@ bool OGLModelClass::Initialize()
 
 void OGLModelClass::Render(IShader* pShader, float fElapsedTime)
 {
-	if(m_pGraphicsClass == NULL)
+	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLModelClass", "Render", "m_pGraphicsClass");
 
 	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
 
 	OGLCameraClass* pMasterCamera = (OGLCameraClass*)pGraphicsClass->GetMasterCamera();
-	if(pMasterCamera == NULL)
+	if(pMasterCamera == nullptr)
 		throw Exception("OGLModelClass", "Render", "There is no master camera.  You need a camera to see!");
 
 	//Render a shader if one was provided...if not good luck!
-	if (pShader != NULL)
+	if (pShader != nullptr)
 		pShader->Render(fElapsedTime);
 
-	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -10.0f);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-	glVertex3f(-3.0f, 3.0f, 0.0f);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glVertex3f(3.0f, 3.0f, 0.0f);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glVertex3f(-3.0f, -3.0f, 0.0f);
+	//GL COMMENTED OUT FOR BUILD.
+	//glLoadIdentity();
+	//glTranslatef(0.0f, 0.0f, -10.0f);
+	//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	//glVertex3f(-3.0f, 3.0f, 0.0f);
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glVertex3f(3.0f, 3.0f, 0.0f);
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glVertex3f(-3.0f, -3.0f, 0.0f);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glVertex3f(3.0f, 3.0f, 0.0f); 
-	glColor4f(1.0f, 1.0f, 1.0f, 0.2f);
-	glVertex3f(3.0f, -3.0f, 0.0f); 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glVertex3f(-3.0f, -3.0f, 0.0f); 
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glVertex3f(3.0f, 3.0f, 0.0f); 
+	//glColor4f(1.0f, 1.0f, 1.0f, 0.2f);
+	//glVertex3f(3.0f, -3.0f, 0.0f); 
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	//glVertex3f(-3.0f, -3.0f, 0.0f); 
 }
 
 void OGLModelClass::Shutdown()

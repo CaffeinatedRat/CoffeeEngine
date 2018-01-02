@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a global set of variables that exist through out the lifetime of the application.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -12,7 +12,5 @@
 #include "Interfaces/ISystem.h"
 
 using namespace CoffeeEngine::Interfaces;
-
-extern "C" ISystem* g_pSystem;
 
 #endif

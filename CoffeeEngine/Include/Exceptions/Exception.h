@@ -1,15 +1,15 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a light-weight base exception.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _EXCEPTION_EXCEPTION_H_
 #define _EXCEPTION_EXCEPTION_H_
 
-#include "Common.h"
+#pragma once
+
 #include <sstream>
 
 namespace CoffeeEngine
@@ -20,26 +20,13 @@ namespace CoffeeEngine
 		{
 		public:
 		
-			Exception()
-			{
-				m_sMessage = "An undefined exception has occured.";
-				m_sClassName = "Undefined";
-				m_sMethodName = "Undefined";
-			}
+			Exception() = default;
 
-			Exception(std::string sClassName, std::string sMethodName)
-			{
-				m_sMessage = "An undefined exception has occured.";
-				m_sClassName = sClassName;
-				m_sMethodName = sMethodName;
-			}
+			Exception(const std::string& sClassName, const std::string& sMethodName) 
+				: m_sClassName(sClassName), m_sMethodName(sMethodName) {}
 
-			Exception(std::string sClassName, std::string sMethodName, std::string sMessage)
-			{
-				m_sMessage = sMessage;
-				m_sClassName = sClassName;
-				m_sMethodName = sMethodName;
-			}
+			Exception(const std::string& sClassName, const std::string& sMethodName, const std::string& sMessage)
+				: Exception(sClassName, sMethodName) { m_sMessage = sMessage; }
 
 			Exception(const Exception& exception)
 			{
@@ -48,10 +35,10 @@ namespace CoffeeEngine
 				m_sMethodName = exception.m_sMethodName;
 			}
 
-			virtual std::string GetMessage() { return m_sMessage; }
-			virtual std::string GetClass() { return m_sClassName; }
-			virtual std::string GetMethod() { return m_sMethodName; }
-			virtual std::string ToString()
+			virtual std::string GetMessage() const noexcept { return m_sMessage; }
+			virtual std::string GetClass() const noexcept { return m_sClassName; }
+			virtual std::string GetMethod() const noexcept { return m_sMethodName; }
+			virtual std::string ToString() noexcept
 			{
 				std::stringstream ss;
 				ss << "[" << m_sClassName << "::" << m_sMethodName << "] " << m_sMessage;
@@ -59,9 +46,9 @@ namespace CoffeeEngine
 			}
 
 		protected:
-			std::string m_sMessage;
-			std::string m_sClassName;
-			std::string m_sMethodName;
+			std::string m_sMessage = "An undefined exception has occured.";
+			std::string m_sClassName = "Undefined";
+			std::string m_sMethodName = "Undefined";
 		};
 	};
 };

@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL shader class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#include "Common.h"
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
 #include "Graphics/OpenGL/OGLShaderClass.h"
 
@@ -18,7 +19,7 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 // 
 ////////////////////////////////////////////////////////////
 
-OGLShaderClass::OGLShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
+OGLShaderClass::OGLShaderClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	: ShaderClass(pBaseGraphicsClass)
 {
 
@@ -40,7 +41,7 @@ OGLShaderClass::~OGLShaderClass()
 // 
 ////////////////////////////////////////////////////////////
 
-bool OGLShaderClass::Initialize(std::string sFileName)
+bool OGLShaderClass::Initialize(const std::string& sFileName)
 {
 	if(sFileName.length() == 0)
 		throw NullArgumentException("OGLShaderClass", "Initialize", "sFileName");

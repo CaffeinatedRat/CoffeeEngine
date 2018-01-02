@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The system timer.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _ITIMER_INTERFACE_H_
 #define _ITIMER_INTERFACE_H_
+
+#pragma once
 
 namespace CoffeeEngine
 {
@@ -42,7 +43,7 @@ namespace CoffeeEngine
 			/// Returns the elasped time in milliseconds.
 			/// TimeComplexity: O(1) for all operations.
 			/// </summary>
-			virtual float GetElaspedTime() = 0;
+			virtual float GetElaspedTime() const = 0;
 		};
 	};
 };

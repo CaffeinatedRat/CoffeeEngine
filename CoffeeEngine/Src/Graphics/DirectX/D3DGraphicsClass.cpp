@@ -2,57 +2,30 @@
 // Description: The Direct3d Graphics class.
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 #include "stdafx.h"
-#include "Global.h"
-#include "Graphics/DirectX11/D3DGraphicsClass.h"
-#include "Graphics/DirectX11/D3DModelClass.h"
-#include "Graphics/DirectX11/D3DShaderClass.h"
-#include "Graphics/DirectX11/D3DCameraClass.h"
+#include "Common.h"
+#include "Graphics/DirectX/D3DGraphicsClass.h"
+#include "Graphics/DirectX/D3DModelClass.h"
+#include "Graphics/DirectX/D3DShaderClass.h"
+#include "Graphics/DirectX/D3DCameraClass.h"
 #include "System/Win32/WindowsSystemClass.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Graphics;
-using namespace CoffeeEngine::Graphics::DirectX11;
+using namespace CoffeeEngine::Graphics::DirectX;
 
 ////////////////////////////////////////////////////////////
 //
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-D3DGraphicsClass::D3DGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "DirectX")
-{
-	m_bVsyncEnabled = false;
-	m_bFullScreen = false;
-	m_nNumOfModes = 0;
-	m_nScreenWidth = 0;
-	m_nScreenHeight = 0;
-	m_videoCardMemory = 0;
-
-	m_pDisplayModeList = NULL;
-	m_pSwapChain = NULL;
-	m_pDevice = NULL;
-	m_pDeviceContext = NULL;
-	m_pRenderTargetView = NULL;
-	m_pDepthStencilBuffer = NULL;
-	m_pDepthStencilState = NULL;
-	m_pDepthStencilView = NULL;
-	m_pRasterState = NULL;
-
-	//We are not ready to draw until initialization is complete.
-	m_bDisplayReady = false;
-
-	//By default there is no master camera.
-	m_pMasterCamera = NULL;
-
-	m_videoCardDescription = "No Information Available.";
-}
-
 D3DGraphicsClass::D3DGraphicsClass(const D3DGraphicsClass& object)
 	: BaseGraphicsClass(object)
 {
@@ -72,7 +45,7 @@ D3DGraphicsClass::~D3DGraphicsClass()
 
 bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
 {
-	if(m_pSystem == NULL)
+	if(m_pSystem == nullptr)
 		throw NullArgumentException("D3DGraphicsClass", "Initialize", "m_pSystem");
 
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
@@ -111,7 +84,7 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	}
 
 	// Create an orthographic projection matrix for 2D rendering.
-	D3DXMatrixOrthoLH(&m_orthoMatrix, (float)m_nScreenWidth, (float)m_nScreenHeight, graphicsInitParameters.fScreenNear, graphicsInitParameters.fScreenDepth);
+	m_orthoMatrix = XMMatrixOrthographicLH((float)m_nScreenWidth, (float)m_nScreenHeight, graphicsInitParameters.fScreenNear, graphicsInitParameters.fScreenDepth);
 
 	//We are ready to draw.
 	m_bDisplayReady = true;
@@ -198,7 +171,7 @@ void D3DGraphicsClass::SetMasterCamera(ICamera* camera)
 	m_bDisplayReady = true;
 }
 
-std::vector<std::string> D3DGraphicsClass::GetVideoCardInfo()
+std::vector<std::string> D3DGraphicsClass::GetVideoCardInfo() const
 {
 	throw NotImplementedException("D3DGraphicsClass", "GetVideoCardInfo");
 }
@@ -214,10 +187,10 @@ bool D3DGraphicsClass::CreateModeList()
 	//Locals.
 	HRESULT result;
 	bool status = false;
-	IDXGIFactory* factory;
-	IDXGIAdapter* adapter;
+	IDXGIFactory* factory = nullptr;
+	IDXGIAdapter* adapter = nullptr;
 	DXGI_ADAPTER_DESC adapterDesc;
-	IDXGIOutput* adapterOutput;
+	IDXGIOutput* adapterOutput = nullptr;
 
 	// Create a DirectX graphics interface factory.
 	//NOTE: This is a more advanced method than created the IDirect3d9 interface, such as d3d = Direct3DCreate9(D3D_SDK_VERSION), by granting us access to the DirectX Graphics Interface.
@@ -247,7 +220,7 @@ bool D3DGraphicsClass::CreateModeList()
 					if(SUCCEEDED(adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_nNumOfModes, NULL)))
 					{
 						// Allocate memory for our list of modes.
-						if ((m_pDisplayModeList = new DXGI_MODE_DESC[m_nNumOfModes]) != NULL )
+						if ((m_pDisplayModeList = new DXGI_MODE_DESC[m_nNumOfModes]) != nullptr)
 						{
 							status = SUCCEEDED(adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_nNumOfModes, m_pDisplayModeList));
 						}
@@ -278,7 +251,7 @@ bool D3DGraphicsClass::CreateSwapChain()
 	bool status = false;
 	DXGI_RATIONAL refreshRate;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ID3D11Texture2D* backBufferPtr;
+	ID3D11Texture2D* backBufferPtr = nullptr;
 
 	//Initialize the refresh rate to zero.
 	refreshRate.Denominator = 1;
@@ -287,7 +260,7 @@ bool D3DGraphicsClass::CreateSwapChain()
 	//If VSync is enabled, search for the matching refresh rate 
 	if(m_bVsyncEnabled)
 	{
-		for(unsigned int i=0; (i < m_nNumOfModes && m_pDisplayModeList != NULL); i++)
+		for(unsigned int i=0; (i < m_nNumOfModes && m_pDisplayModeList != nullptr); i++)
 			if (m_pDisplayModeList[i].Width == (unsigned int)m_nScreenWidth)
 				if (m_pDisplayModeList[i].Height == (unsigned int)m_nScreenHeight)
 					refreshRate = m_pDisplayModeList[i].RefreshRate;
@@ -487,3 +460,5 @@ bool D3DGraphicsClass::CreateViewPort()
 
 	return true;
 }
+
+#endif

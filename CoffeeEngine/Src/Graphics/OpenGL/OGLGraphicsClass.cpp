@@ -1,19 +1,22 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL Graphics class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Global.h"
+#include "Common.h"
+#include "Utility/Logger.h"
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
 #include "Graphics/OpenGL/OGLModelClass.h"
 #include "Graphics/OpenGL/OGLShaderClass.h"
 #include "Graphics/OpenGL/OGLCameraClass.h"
 
-#include "Utility/Logger.h"
+#include <gl/glew.h>
 
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Utility;
+using namespace CoffeeEngine::Utility::Logging;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
 
@@ -22,25 +25,6 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-OGLGraphicsClass::OGLGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "OpenGL")
-{
-	m_bVsyncEnabled = false;
-	m_bFullScreen = false;
-	m_nNumOfModes = 0;
-	m_nScreenWidth = 0;
-	m_nScreenHeight = 0;
-	m_videoCardMemory = 0;
-
-	//We are not ready to draw until initialization is complete.
-	m_bDisplayReady = false;
-
-	//By default there is no master camera.
-	m_pMasterCamera = NULL;	
-
-	m_videoCardDescription = "No Information Available.";
-}
-
 OGLGraphicsClass::OGLGraphicsClass(const OGLGraphicsClass& object)
 	: BaseGraphicsClass(object)
 {
@@ -60,7 +44,7 @@ OGLGraphicsClass::~OGLGraphicsClass()
 
 bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
 {
-	if(m_pSystem == NULL)
+	if(m_pSystem == nullptr)
 		throw NullArgumentException("OGLGraphicsClass", "Initialize", "m_pSystem");
 
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
@@ -69,18 +53,17 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	m_bFullScreen = graphicsInitParameters.bFullscreen;
 
 	GLenum err = glewInit();
-
 	if(err != GLEW_OK)
 	{
-		CoffeeEngine::Utility::Logger::Write((const char*)glewGetErrorString(err));
+		m_pSystem->WriteToLog((const char*)glewGetErrorString(err), LogLevelType::Error);
 		return false;
 	}
 
-	glShadeModel(GL_SMOOTH);
-	glClearDepth(1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	//glShadeModel(GL_SMOOTH);
+	//glClearDepth(1.0f);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LEQUAL);
+	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	if(!CreateModeList())
 	{
@@ -124,10 +107,12 @@ void OGLGraphicsClass::BeginScene(float red, float green, float blue, float alph
 	if(!m_bDisplayReady)
 		return;
 
-	glClearColor(red, green, blue, alpha);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//GL COMMENTED OUT FOR BUILD.
 
-	glBegin(GL_TRIANGLES);
+	//glClearColor(red, green, blue, alpha);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//glBegin(GL_TRIANGLES);
 }
 
 void OGLGraphicsClass::EndScene()
@@ -136,7 +121,8 @@ void OGLGraphicsClass::EndScene()
 	if(!m_bDisplayReady)
 		return;
 
-	glEnd();
+	//GL COMMENTED OUT FOR BUILD.
+	//glEnd();
 }
 
 void OGLGraphicsClass::Shutdown()
@@ -171,7 +157,7 @@ void OGLGraphicsClass::SetMasterCamera(ICamera* camera)
 	m_bDisplayReady = true;
 }
 
-std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo()
+std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
 {
 	throw NotImplementedException("OGLGraphicsClass", "GetVideoCardInfo");
 }
@@ -204,6 +190,7 @@ bool OGLGraphicsClass::CreateRasterState()
 
 bool OGLGraphicsClass::CreateViewPort()
 {
-	glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
+	//GL COMMENTED OUT FOR BUILD.
+	//glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
 	return true;
 }

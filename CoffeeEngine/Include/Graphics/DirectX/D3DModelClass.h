@@ -2,27 +2,29 @@
 // Description: The D3D model class.
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
+
+#ifdef _WIN32
 
 #pragma once
 #ifndef _D3D_MODEL_CLASS_H_
 #define _D3D_MODEL_CLASS_H_
 
-#include "Common.h"
+//#include "Common.h"
 
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/ModelClass.h"
 
-#include "Graphics/DirectX11/D3DCommon.h"
-#include "Graphics/DirectX11/D3DGraphicsClass.h"
+#include "Graphics/DirectX/D3DCommon.h"
+#include "Graphics/DirectX/D3DGraphicsClass.h"
 
 namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		namespace DirectX11
+		namespace DirectX
 		{
 			class D3DModelClass : public ModelClass
 			{
@@ -39,7 +41,7 @@ namespace CoffeeEngine
 
 				//Direct3d
 				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
-				D3DXVECTOR3 m_rotate, m_scale, m_translate;
+				XMFLOAT3 m_rotate, m_scale, m_translate;
 
 				//Temporary...
 				ID3D11ShaderResourceView* m_pTexture;
@@ -86,5 +88,7 @@ namespace CoffeeEngine
 		};
 	};
 };
+
+#endif
 
 #endif

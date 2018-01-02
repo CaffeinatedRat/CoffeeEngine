@@ -1,26 +1,27 @@
 //--------------------------------------------------------------------------------------
 // Description: Manages the windows operating system.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _WINDOWS_SYSTEM_CLASS_H_
 #define _WINDOWS_SYSTEM_CLASS_H_
 
+#pragma once
+
 #include "stdafx.h"
 #include "Common.h"
+#include <memory>
+
+#include "Utility/Logger.h"
 #include "Interfaces/ISystem.h"
+#include "Interfaces/ISystemListener.h"
 #include "Interfaces/ITimer.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Engine/CoffeeEngineClass.h"
 
 #define MAX_LOADSTRING 100
 
-using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Interfaces;
-using namespace CoffeeEngine::Engine;
 
 namespace CoffeeEngine
 {
@@ -28,63 +29,49 @@ namespace CoffeeEngine
 	{
 		class WindowsSystemClass : public ISystem
 		{
-		private:
-
-			//Windows specific member variables
-			HINSTANCE m_hInstance;
-			HWND m_hWnd;
-			TCHAR m_szTitle[MAX_LOADSTRING];
-			TCHAR m_szWindowClass[MAX_LOADSTRING];
-
-			int m_nScreenWidth, m_nScreenHeight;
-
-			bool m_bIsIdle;
-			BaseGraphicsClass* m_pGraphics;
-			CoffeeEngineClass* m_pCoffeeEngine;
-
-			std::vector<std::wstring> m_log;
+			using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
+			using Logger = CoffeeEngine::Utility::Logging::Logger;
 
 		public:
-		
-			WindowsSystemClass();
+
+			WindowsSystemClass() = default;
+			WindowsSystemClass(Logger *pLogger);
+			//WindowsSystemClass::WindowsSystemClass(std::unique_ptr<Logger>* pLogger);
 			WindowsSystemClass(const WindowsSystemClass&);
-			~WindowsSystemClass();
+			virtual ~WindowsSystemClass() noexcept override;
 
 			/// <summary>
-			/// Attempts to initialize the operating system object, as well as all internal systems such as the graphics engine and main game engine.
+			/// Attempts to initialize the operating system object with a provided listener.
 			/// </summary>
-			bool Initialize();
+			bool Initialize(ISystemListener* listener) override;
 
 			/// <summary>
 			/// Begins running the operating system object once the system has been successfully initialized.
 			/// </summary>
-			void Run();
-		
-			/// <summary>
-			/// Performs an individual frame render.
-			/// </summary>		
-			bool Frame();
+			void Run() override;
 
 			/// <summary>
 			/// Begins the process of shutting down the operating system class and all dependencies.
 			/// </summary>
-			void Shutdown();
+			void Shutdown() override;
 
 			/// <summary>
-			/// Writes a message to the OSes console.
+			/// Writes to the event log.
 			/// </summary>
-			void ConsoleWrite(std::string sMessage);
+			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(Exception&) noexcept override;
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.
 			/// </summary>
-			std::string GetCurrentApplicationDirectory();
+			std::string GetCurrentApplicationDirectory() const;
 
 			/// <summary>
 			/// Create's system timer.
 			/// NOTE: This creates a new instance of the object.  It is your responsibility to delete this instance when done with it.
 			/// </summary>
-			ITimer* CreateTimer();
+			ITimer* CreateTimer() override;
 
 			////////////////////////////////////////////////////////////
 			//
@@ -93,11 +80,11 @@ namespace CoffeeEngine
 			////////////////////////////////////////////////////////////
 
 			LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
-			
+
 			/// <summary>
 			/// Returns the windows handle.
 			/// </summary>
-			inline HWND GetHWND() { return m_hWnd; }
+			inline const HWND& GetHWND() const { return m_hWnd; }
 
 		protected:
 
@@ -109,7 +96,29 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Returns an error message for the last windows error.
 			/// </summary>
-			std::string GetLastErrorMessage();
+			std::string GetLastErrorMessage() const;
+
+		private:
+
+			//Windows specific member variables
+			HINSTANCE m_hInstance = nullptr;
+			HWND m_hWnd = nullptr;
+
+			//Windows specific strings.
+			TCHAR m_szTitle[MAX_LOADSTRING];
+			TCHAR m_szWindowClass[MAX_LOADSTRING];
+
+			//Internal system variables.
+			int m_nScreenWidth = 0, m_nScreenHeight = 0;
+			bool m_bIsIdle = false;
+
+			//Allows the Shutdown method to be idempotent.
+			bool m_bHasShutdown = false;
+
+			//BaseGraphicsClass *m_pGraphics = nullptr;
+			ISystemListener *m_pListener = nullptr;
+			Logger* m_plogger = nullptr;
+			//std::unique_ptr<Logger> *m_plogger = nullptr;
 		};
 	};
 };

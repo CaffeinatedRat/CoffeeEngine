@@ -2,19 +2,23 @@
 // Description: The D3D shader class.
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Graphics/DirectX11/D3DGraphicsClass.h"
-#include "Graphics/DirectX11/D3DShaderClass.h"
+#ifdef _WIN32
 
-#include <d3d11.h>
-#include <d3dx11async.h>
+#include "Common.h"
+#include "Graphics/DirectX/D3DGraphicsClass.h"
+#include "Graphics/DirectX/D3DShaderClass.h"
+
+//#include <d3d11.h>
+//#include <D3Dcompiler.h>
+//#include <d3dx11async.h>
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
-using namespace CoffeeEngine::Graphics::DirectX11;
+using namespace CoffeeEngine::Graphics::DirectX;
 
 ////////////////////////////////////////////////////////////
 //
@@ -25,14 +29,7 @@ using namespace CoffeeEngine::Graphics::DirectX11;
 D3DShaderClass::D3DShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
 	: ShaderClass(pBaseGraphicsClass)
 {
-	m_pVertexShader = NULL;
-	m_pPixelShader = NULL;
-
-	m_pLayout = NULL;
-	m_pMatrixBuffer = NULL;
-	m_pSampleState = NULL;
-
-	D3DXMatrixIdentity(&m_worldMatrix);
+	m_worldMatrix = XMMatrixIdentity();
 }
 
 D3DShaderClass::D3DShaderClass(const D3DShaderClass& object)
@@ -51,7 +48,7 @@ D3DShaderClass::~D3DShaderClass()
 // 
 ////////////////////////////////////////////////////////////
 
-bool D3DShaderClass::Initialize(std::string sFileName)
+bool D3DShaderClass::Initialize(const std::string& sFileName)
 {
 	if(sFileName.length() == 0)
 		throw NullArgumentException("D3DShaderClass", "Initialize", "sFileName");
@@ -63,9 +60,9 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	//Locals
 	bool bStatus = false;
 	HRESULT result;
-	ID3D10Blob* pErrorMessage = NULL;
-	ID3D10Blob* pVertexShaderBuffer = NULL;
-	ID3D10Blob* pPixelShaderBuffer = NULL;
+	ID3D10Blob* pErrorMessage = nullptr;
+	ID3D10Blob* pVertexShaderBuffer = nullptr;
+	ID3D10Blob* pPixelShaderBuffer = nullptr;
 
 	// Compile the vertex shader code.
 	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
@@ -76,13 +73,13 @@ bool D3DShaderClass::Initialize(std::string sFileName)
 	std::wstring vertexShaderPathW(vertexShaderPath.begin(), vertexShaderPath.end());
 
 	//Attempt to load and compile the vertex shader.
-	result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultVertexShader", VERTEX_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pVertexShaderBuffer, &pErrorMessage, NULL);
+	result = D3DCompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultVertexShader", VERTEX_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pVertexShaderBuffer, &pErrorMessage);
 	if(SUCCEEDED(result))
 	{
 		SAFE_RELEASE(pErrorMessage);
 
 		//Attempt to load and compile the pixel shader, which uses the same file as the vertex shader.
-		result = D3DX11CompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultPixelShader", PIXEL_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL, &pPixelShaderBuffer, &pErrorMessage, NULL);
+		result = D3DCompileFromFile(vertexShaderPathW.c_str(), NULL, NULL, "DefaultPixelShader", PIXEL_SHADER_VERSION, D3D10_SHADER_ENABLE_STRICTNESS, 0, &pPixelShaderBuffer, &pErrorMessage);
 		if(SUCCEEDED(result))
 		{
 			//Attempt to create the VertexShaderBuffer.
@@ -218,20 +215,20 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
-	if(pMasterCamera == NULL)
+	if(pMasterCamera == nullptr)
 		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
 
 	//Retrieve all of our matrices
 	//D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
-	D3DXMATRIX viewMatrix = pMasterCamera->GetViewMatrix();
-	D3DXMATRIX projectionMatrix = pMasterCamera->GetProjectionMatrix();
+	XMMATRIX viewMatrix = pMasterCamera->GetViewMatrix();
+	XMMATRIX projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
 	// Transpose the matrices to prepare them for the shader.
 	// Why do the matrices have to be transposed?
 	// Answer: "Also, because matrices are arranged differently in memory in C++ and HLSL, we must transpose the matrices before updating them."
-	D3DXMatrixTranspose(&m_worldMatrix, &m_worldMatrix);
-	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
-	D3DXMatrixTranspose(&projectionMatrix, &projectionMatrix);
+	m_worldMatrix = XMMatrixTranspose(m_worldMatrix);
+	viewMatrix = XMMatrixTranspose(viewMatrix);
+	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 	// Lock the buffer to prevent the Readers-Writers synchronization issue.
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -289,3 +286,5 @@ void D3DShaderClass::Shutdown()
 	SAFE_RELEASE(m_pLayout);
 	SAFE_RELEASE(m_pSampleState);
 }
+
+#endif

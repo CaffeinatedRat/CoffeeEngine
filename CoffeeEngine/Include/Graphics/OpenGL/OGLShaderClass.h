@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL shader class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _OGL_SHADER_CLASS_H_
 #define _OGL_SHADER_CLASS_H_
+
+#pragma once
 
 #include "Common.h"
 #include "Graphics/BaseGraphicsClass.h"
@@ -37,11 +38,11 @@ namespace CoffeeEngine
 
 			public:
 			
-				OGLShaderClass(BaseGraphicsClass* pBaseGraphicsClass);
+				OGLShaderClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLShaderClass(const OGLShaderClass& object);
 				virtual ~OGLShaderClass();
 
-				virtual bool Initialize(std::string sFileName);
+				virtual bool Initialize(const std::string& sFileName);
 				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
 

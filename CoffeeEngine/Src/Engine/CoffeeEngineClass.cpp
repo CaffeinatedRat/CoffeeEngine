@@ -1,18 +1,23 @@
 //--------------------------------------------------------------------------------------
 // Description: The main engine.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 #include "Engine/CoffeeEngineClass.h"
 
-#include "Global.h"
+#include "Common.h"
+#include "Utility/Logger.h"
 #include "Interfaces/ISystem.h"
+#include "Graphics/GraphicsUtility.h"
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/ModelClass.h"
 
+
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Utility;
+using namespace CoffeeEngine::Utility::Logging;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Engine;
@@ -22,37 +27,12 @@ using namespace CoffeeEngine::Engine;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-CoffeeEngineClass::CoffeeEngineClass()
+CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem)
 {
-	m_pSystem = NULL;
-	m_pTimer = NULL;
-
-	m_pGraphics = NULL;
-	m_pCamera = NULL;
-	m_pModel = NULL;
-	m_pShader = NULL;
-
-	m_bReady = false;
-}
-
-CoffeeEngineClass::CoffeeEngineClass(ISystem* pSystem, BaseGraphicsClass* pGraphics)
-{
-	if(pSystem == NULL)
+	if (pSystem == nullptr)
 		throw NullArgumentException("CoffeeEngineClass", "Constructor", "pSystem");
 
-	if(pGraphics == NULL)
-		throw NullArgumentException("CoffeeEngineClass", "Constructor", "pGraphics");
-
 	m_pSystem = pSystem;
-	m_pTimer = NULL;
-	
-	m_pGraphics = pGraphics;
-	m_pCamera = NULL;
-	m_pModel = NULL;
-	m_pShader = NULL;
-
-	m_bReady = false;
 }
 
 CoffeeEngineClass::~CoffeeEngineClass()
@@ -68,22 +48,47 @@ CoffeeEngineClass::~CoffeeEngineClass()
 
 bool CoffeeEngineClass::Initialize()
 {
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing...", LogLevelType::Informational);
+
+	if (!m_pSystem->Initialize(this))
+		return false;
+
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Attempting to create the graphics device.", LogLevelType::Informational);
+
+	assert(m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::OPENGL, m_pSystem));
+	if (!m_upGraphics)
+		return false;
+
+	//Parameterize the graphics settings into a structure to reduce the overhead produced by methods with an extremely long number of parameters.
+	//NOTE: Temporary initialization...
+	GRAPHICS_INITIALIZATION_PARAMETERS graphicsInitParams;
+	graphicsInitParams.bFullscreen = false;
+	graphicsInitParams.bVsync = true;
+	graphicsInitParams.fScreenDepth = 1000.0f;
+	graphicsInitParams.fScreenNear = 0.1f;
+	graphicsInitParams.nScreenHeight = 480;
+	graphicsInitParams.nScreenWidth = 640;
+
+	//Initialize the graphics object first.
+	if (!m_upGraphics->Initialize(graphicsInitParams))
+		return false;
+
 	//Create the system timer.
 	m_pTimer = m_pSystem->CreateTimer();
 	if(!m_pTimer->Start())
 		return false;
 
-	m_pCamera = m_pGraphics->CreateCamera();
+	m_pCamera = m_upGraphics->CreateCamera();
 	if(!m_pCamera->Initialize())
 		return false;
 
-	m_pGraphics->SetMasterCamera(m_pCamera);
+	m_upGraphics->SetMasterCamera(m_pCamera);
 
-	m_pModel = m_pGraphics->CreateModel();
+	m_pModel = m_upGraphics->CreateModel();
 	if(!m_pModel->Initialize())
 		return false;
 
-	m_pShader = m_pGraphics->CreateShader();
+	m_pShader = m_upGraphics->CreateShader();
 	if(!m_pShader->Initialize("Default.fx"))
 		return false;
 
@@ -92,20 +97,25 @@ bool CoffeeEngineClass::Initialize()
 
 void CoffeeEngineClass::Run()
 {
-	if(m_bReady)
-	{
-		m_pTimer->Run();
-		this->Render();
-	}
+	//Begin the system's message pump.
+	m_pSystem->Run();
+
+	//if(m_bReady)
+	//{
+	//	m_pTimer->Run();
+	//	Frame();
+	//}
 }
 
 void CoffeeEngineClass::Render()
 {
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] Begin Render", LogLevelType::Diagnostic);
+
 	static float rotationY = 0.0f;
 	static float rotationX = 0.0f;
 	static float rotationZ = 0.0f;
 
-	m_pGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
+	m_upGraphics->BeginScene(0.0f, 0.3f, 0.7f, 0.5f);
 
 	m_pCamera->Render(m_pTimer->GetElaspedTime());
 
@@ -118,17 +128,26 @@ void CoffeeEngineClass::Render()
 	rotationX += 0.01f;
 	rotationZ += 0.01f;
 
-	m_pGraphics->EndScene();
+	m_upGraphics->EndScene();
+
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] End Render", LogLevelType::Diagnostic);
 }
 
-bool CoffeeEngineClass::Frame()
+void CoffeeEngineClass::OnFrame(bool onIdle)
 {
-	this->Render();
-	return true;
+	if (m_bReady)
+	{
+		m_pTimer->Run();
+		Render();
+	}
+
+	return;
 }
 
 void CoffeeEngineClass::Shutdown()
 {
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Shutting down...", LogLevelType::Informational);
+
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pModel);
 	SAFE_DELETE(m_pShader);

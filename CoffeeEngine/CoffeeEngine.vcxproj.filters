@@ -41,12 +41,6 @@
     <Filter Include="System\Win32\Src">
       <UniqueIdentifier>{582f78df-ff06-4027-8739-eaea858ddf64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\DirectX11">
-      <UniqueIdentifier>{9ceeb97d-d32b-4278-bea0-db2eb2c4058f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\DirectX11\Src">
-      <UniqueIdentifier>{0662bb3d-611a-4b54-9c2c-900d72265b5d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{add1b3a3-37d7-4939-a696-372a02dfd63a}</UniqueIdentifier>
     </Filter>
@@ -76,6 +70,12 @@
     </Filter>
     <Filter Include="System\Base\Src">
       <UniqueIdentifier>{60d76be1-14e3-4070-8101-3c7afb160864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\DirectX">
+      <UniqueIdentifier>{9ceeb97d-d32b-4278-bea0-db2eb2c4058f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\DirectX\Src">
+      <UniqueIdentifier>{0662bb3d-611a-4b54-9c2c-900d72265b5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -131,17 +131,11 @@
     <ClInclude Include="Include\System\Win32\WindowsSystemClass.h">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX11\D3DGraphicsClass.h">
-      <Filter>Graphics\DirectX11</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Engine\CoffeeEngineClass.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\ModelClass.h">
       <Filter>Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX11\D3DModelClass.h">
-      <Filter>Graphics\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Include\Interfaces\IModel.h">
       <Filter>Interfaces</Filter>
@@ -151,12 +145,6 @@
     </ClInclude>
     <ClInclude Include="Include\Graphics\CameraClass.h">
       <Filter>Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX11\D3DCameraClass.h">
-      <Filter>Graphics\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX11\D3DCommon.h">
-      <Filter>Graphics\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GraphicsCommon.h">
       <Filter>Graphics\Base</Filter>
@@ -169,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="Include\Graphics\ShaderClass.h">
       <Filter>Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX11\D3DShaderClass.h">
-      <Filter>Graphics\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Include\Exceptions\NotImplementedException.h">
       <Filter>Exceptions</Filter>
@@ -209,6 +194,36 @@
     <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.h">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Utility\UtilTypes.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Interfaces\ISystemListener.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GraphicsUtility.h">
+      <Filter>Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\D3DCameraClass.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\D3DCommon.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\D3DGraphicsClass.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\D3DModelClass.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\D3DShaderClass.h">
+      <Filter>Graphics\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Utility\LoggingTypes.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Utility\UtilMath.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\stdafx.cpp">
@@ -226,35 +241,20 @@
     <ClCompile Include="Src\System\Win32\WindowsSystemClass.cpp">
       <Filter>System\Win32\Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Graphics\DirectX11\D3DGraphicsClass.cpp">
-      <Filter>Graphics\DirectX11\Src</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Engine\CoffeeEngineClass.cpp">
       <Filter>GameEngine\Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\Graphics\ModelClass.cpp">
       <Filter>Graphics\Base\Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Graphics\DirectX11\D3DModelClass.cpp">
-      <Filter>Graphics\DirectX11\Src</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Graphics\CameraClass.cpp">
       <Filter>Graphics\Base\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Graphics\DirectX11\D3DCameraClass.cpp">
-      <Filter>Graphics\DirectX11\Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\System\Linux\Linux_EntryPoint.cpp">
       <Filter>System\Linux\Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\Graphics\ShaderClass.cpp">
       <Filter>Graphics\Base\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Graphics\DirectX11\D3DShaderClass.cpp">
-      <Filter>Graphics\DirectX11\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Graphics\DirectX11\D3DCommon.cpp">
-      <Filter>Graphics\DirectX11\Src</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Src\Utility\Logger.cpp">
@@ -277,6 +277,33 @@
     </ClCompile>
     <ClCompile Include="Src\Graphics\OpenGL\OGLShaderClass.cpp">
       <Filter>Graphics\OpenGL\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Common.cpp">
+      <Filter>Globals\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utility\Util.cpp">
+      <Filter>Utility\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\GraphicFactory.cpp">
+      <Filter>Graphics\Base\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\D3DCameraClass.cpp">
+      <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\D3DCommon.cpp">
+      <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\D3DGraphicsClass.cpp">
+      <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\D3DModelClass.cpp">
+      <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\D3DShaderClass.cpp">
+      <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Exceptions\NotSupportedException.h">
+      <Filter>Exceptions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,13 +1,14 @@
 //--------------------------------------------------------------------------------------
 // Description: The graphics interface.  Used to provide a light-weight skeleton of how the other graphics classes should be created.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _IGRAPHICS_INTERFACE_H_
 #define _IGRAPHICS_INTERFACE_H_
+
+#pragma once
 
 #include "Common.h"
 #include "Interfaces/IModel.h"
@@ -30,7 +31,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns true if initialization was successful.
 			/// </returns>
-			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) = 0;
+			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS&) = 0;
 
 			/// <summary>
 			/// Begins the rendering process.
@@ -53,7 +54,8 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns the current operating system.
 			/// </returns>
-			virtual ISystem* GetSystem() = 0;
+			virtual const ISystem* GetSystem() const noexcept = 0;
+
 
 			/// <summary>
 			/// Creates a new model for the specific graphics engine.
@@ -93,7 +95,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns an instance of the master camera.
 			/// </returns>
-			virtual ICamera* GetMasterCamera() = 0;
+			virtual ICamera* GetMasterCamera() const = 0;
 
 			/// <summary>
 			/// Returns a block of information about the video card.
@@ -101,12 +103,12 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns a compliant list of video card information.
 			/// </returns>
-			virtual std::vector<std::string> GetVideoCardInfo() = 0;
+			virtual std::vector<std::string> GetVideoCardInfo() const = 0;
 
 			/// <summary>
 			/// Returns the current graphics library.
 			/// </summary>
-			virtual std::string GetGraphicsLibraryName() = 0;
+			virtual std::string GetGraphicsLibraryName() const = 0;
 		};
 	};
 };

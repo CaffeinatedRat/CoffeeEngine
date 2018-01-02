@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------
 // Description: The base shader class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#include "Common.h"
 #include "Graphics/ShaderClass.h"
 
 using namespace CoffeeEngine;
@@ -15,15 +16,9 @@ using namespace CoffeeEngine::Graphics;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-ShaderClass::ShaderClass()
+ShaderClass::ShaderClass(const BaseGraphicsClass* pBaseGraphicsClass)
 {
-	m_pGraphicsClass = NULL;
-}
-
-ShaderClass::ShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
-{
-	if(pBaseGraphicsClass == NULL)
+	if(pBaseGraphicsClass == nullptr)
 		throw NullArgumentException("ShaderClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;

@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL camera class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#include "Common.h"
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
 #include "Graphics/OpenGL/OGLCameraClass.h"
 
@@ -18,16 +19,9 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 // 
 ////////////////////////////////////////////////////////////
 
-OGLCameraClass::OGLCameraClass(BaseGraphicsClass* pBaseGraphicsClass)
+OGLCameraClass::OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	: CameraClass(pBaseGraphicsClass)
 {
-	m_positionX = 0.0f;
-	m_positionY = 0.0f;
-	m_positionZ = 0.0f;
-
-	m_rotationX = 0.0f;
-	m_rotationY = 0.0f;
-	m_rotationZ = 0.0f;
 }
 
 OGLCameraClass::OGLCameraClass(const OGLCameraClass& object)
@@ -48,7 +42,7 @@ OGLCameraClass::~OGLCameraClass()
 
 bool OGLCameraClass::Initialize()
 {
-	if(m_pGraphicsClass == NULL)
+	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLCameraClass", "Initialize", "m_pGraphicsClass");
 
 	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
@@ -56,8 +50,9 @@ bool OGLCameraClass::Initialize()
 	int nScreenWidth, nScreenHeight;
 	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
 
-	glMatrixMode(GL_PROJECTION); 
-	glLoadIdentity();
+	//GL COMMENTED OUT FOR BUILD.
+	//glMatrixMode(GL_PROJECTION); 
+	//glLoadIdentity();
 
 	float screenDepth = 1000.0f;
 	float screenNear = 0.1f;
@@ -66,25 +61,22 @@ bool OGLCameraClass::Initialize()
 	float fieldOfView = (float)OGL_PI / 4.0f;
 	float screenAspect = (float)nScreenWidth / (float)nScreenHeight;
 
-	// Calculate The Aspect Ratio Of The Window
-	//gluPerspective(fieldOfView, screenAspect, screenNear, screenDepth);
+	//GL COMMENTED OUT FOR BUILD.
+	// Create the projection matrix for 3D rendering.
+	//glm::mat4 Projection = glm::perspective(fieldOfView, screenAspect, screenNear, screenDepth);
 
-	const GLdouble pi = 3.1415926535897932384626433832795;
-	int fH = tanf( fieldOfView / 360 * pi ) * screenNear;
-	int fW = fH * screenAspect;
-
-	glFrustum( -fW, fW, -fH, fH, screenNear, screenDepth );
-
+	//GL COMMENTED OUT FOR BUILD.
 	// Initialize the world matrix to the identity matrix.
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
 
 	return true;
 }
 
 void OGLCameraClass::Render(float fElapsedTime)
 {
-	glLoadIdentity();
+	//GL COMMENTED OUT FOR BUILD.
+	//glLoadIdentity();
 	return;
 }
 

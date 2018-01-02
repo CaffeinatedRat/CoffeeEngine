@@ -1,15 +1,15 @@
 //--------------------------------------------------------------------------------------
 // Description: The base model class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _MODEL_CLASS_H_
 #define _MODEL_CLASS_H_
 
-#include "Common.h"
+#pragma once
+
 #include "Graphics/BaseGraphicsClass.h"
 #include "Interfaces/IModel.h"
 
@@ -22,14 +22,11 @@ namespace CoffeeEngine
 		class ModelClass : public IModel
 		{
 		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
+			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
 
-		private:
-			ModelClass();
-
-		public:
-			
-			ModelClass(BaseGraphicsClass* pBaseGraphicsClass);
+		public:		
+			ModelClass() = delete;
+			ModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
 			ModelClass(const ModelClass& object);
 			virtual ~ModelClass() { };
 		};

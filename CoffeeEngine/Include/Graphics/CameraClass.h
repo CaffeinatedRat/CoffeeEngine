@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The base camera class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -22,14 +22,12 @@ namespace CoffeeEngine
 		class CameraClass : public ICamera
 		{
 		protected:
-			BaseGraphicsClass* m_pGraphicsClass;
-
-		private:
-			CameraClass();
+			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
 
 		public:
 			
-			CameraClass(BaseGraphicsClass* pBaseGraphicsClass);
+			CameraClass() = delete;
+			CameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
 			CameraClass(const CameraClass& object);
 			virtual ~CameraClass() { };
 		};

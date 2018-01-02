@@ -1,15 +1,16 @@
 //--------------------------------------------------------------------------------------
 // Description: The camera interface.  Used to provide a light-weight skeleton for the camera.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _ICAMERA_INTERFACE_H_
 #define _ICAMERA_INTERFACE_H_
 
-#include "Common.h"
+#pragma once
+
+//#include "Common.h"
 
 namespace CoffeeEngine
 {
@@ -27,7 +28,7 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Begin rendering the camera.
 			/// </summary>
-			virtual void Render(float fElapsedTime) = 0;
+			virtual void Render(float) = 0;
 
 			/// <summary>
 			/// Begins the process of cleaning up the model.

@@ -1,10 +1,12 @@
 //--------------------------------------------------------------------------------------
 // Description: The base model class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+
+#include "Common.h"
 #include "Graphics/ModelClass.h"
 
 using namespace CoffeeEngine;
@@ -15,15 +17,9 @@ using namespace CoffeeEngine::Graphics;
 //                Constructors
 // 
 ////////////////////////////////////////////////////////////
-
-ModelClass::ModelClass()
+ModelClass::ModelClass(const BaseGraphicsClass* pBaseGraphicsClass)
 {
-	m_pGraphicsClass = NULL;
-}
-
-ModelClass::ModelClass(BaseGraphicsClass* pBaseGraphicsClass)
-{
-	if(pBaseGraphicsClass == NULL)
+	if(pBaseGraphicsClass == nullptr)
 		throw NullArgumentException("ModelClass", "Constructor", "pBaseGraphicsClass");
 
 	m_pGraphicsClass = pBaseGraphicsClass;

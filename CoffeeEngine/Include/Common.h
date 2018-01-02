@@ -1,43 +1,46 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a common set of includes and definitions that are used globally that are not OS specific.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#pragma once
+
 // C RunTime Header Files
-#include <stdlib.h>
-#include <malloc.h>
-#include <memory.h>
+//#include <stdlib.h>
+//#include <malloc.h>
+//#include <memory.h>
+
+//STD libraries.
 #include <string>
 #include <vector>
+#include <cassert>
 
 // Exception classes.
 #include "Exceptions/Exception.h"
 #include "Exceptions/NullArgumentException.h"
 #include "Exceptions/NotImplementedException.h"
+#include "Exceptions/NotSupportedException.h"
 
 using namespace CoffeeEngine::Exceptions;
-
-#ifndef NULL
-#define NULL = 0
-#endif
 
 //Define common data types that may not exist outside of the Windows Environment.
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 typedef unsigned long DWORD;
 
+typedef unsigned int uint;
+
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p) if(p != NULL) { delete p; p = NULL; }
+#define SAFE_DELETE(p) if(p != nullptr) { delete p; p = nullptr; }
 #endif
 
 #ifndef SAFE_ARRAY_DELETE
-#define SAFE_ARRAY_DELETE(p) if(p != NULL) { delete[] p; p = NULL; }
+#define SAFE_ARRAY_DELETE(p) if(p != nullptr) { delete[] p; p = nullptr; }
 #endif
 
 #endif

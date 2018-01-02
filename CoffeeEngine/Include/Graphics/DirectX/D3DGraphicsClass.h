@@ -2,9 +2,11 @@
 // Description: The Direct3d Graphics class.
 // Reference: Thanks to RasterTek (www.rastertek.com) for the DirectX11 samples that served as the foundation and framework for some of these D3DClasses.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
+
+#ifdef _WIN32
 
 #pragma once
 #ifndef _D3DGRAPHICS_CLASS_H_
@@ -15,8 +17,8 @@
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/GraphicsCommon.h"
 
-#include "Graphics/DirectX11/D3DCommon.h"
-#include "Graphics/DirectX11/D3DCameraClass.h"
+#include "Graphics/DirectX/D3DCommon.h"
+#include "Graphics/DirectX/D3DCameraClass.h"
 
 using namespace CoffeeEngine::Interfaces;
 
@@ -24,7 +26,7 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		namespace DirectX11
+		namespace DirectX
 		{
 			class D3DGraphicsClass : public BaseGraphicsClass
 			{
@@ -37,30 +39,31 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 
 				//Primitives
-				bool m_bFullScreen;
-				bool m_bDisplayReady;
-				bool m_bVsyncEnabled;
-				int m_nScreenWidth;
-				int m_nScreenHeight;
-				int m_videoCardMemory;
-				std::string m_videoCardDescription;
-				unsigned int m_nNumOfModes;
+				bool m_bFullScreen = false;
+				bool m_bDisplayReady = false;
+				bool m_bVsyncEnabled = false;
+				int m_nScreenWidth = 0;
+				int m_nScreenHeight = 0;
+				int m_videoCardMemory = 0;
+				unsigned int m_nNumOfModes = 0;
+
+				std::string m_videoCardDescription = "No Information Available.";
 
 				//Direct3d
-				DXGI_MODE_DESC* m_pDisplayModeList;
-				IDXGISwapChain* m_pSwapChain;
-				ID3D11Device* m_pDevice;
-				ID3D11DeviceContext* m_pDeviceContext;
-				ID3D11RenderTargetView* m_pRenderTargetView;
-				ID3D11Texture2D* m_pDepthStencilBuffer;
-				ID3D11DepthStencilState* m_pDepthStencilState;
-				ID3D11DepthStencilView* m_pDepthStencilView;
-				ID3D11RasterizerState* m_pRasterState;
+				DXGI_MODE_DESC* m_pDisplayModeList = nullptr;
+				IDXGISwapChain* m_pSwapChain = nullptr;
+				ID3D11Device* m_pDevice = nullptr;
+				ID3D11DeviceContext* m_pDeviceContext = nullptr;
+				ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
+				ID3D11Texture2D* m_pDepthStencilBuffer = nullptr;
+				ID3D11DepthStencilState* m_pDepthStencilState = nullptr;
+				ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
+				ID3D11RasterizerState* m_pRasterState = nullptr;
 
-				D3DXMATRIX m_orthoMatrix;
+				XMMATRIX m_orthoMatrix;
 
-				//CoffeeEngine constructs.
-				D3DCameraClass* m_pMasterCamera;
+				//By default there is no master camera.
+				D3DCameraClass* m_pMasterCamera = nullptr;
 
 			public:
 		
@@ -70,7 +73,8 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
-				D3DGraphicsClass(ISystem* pSystem);
+				D3DGraphicsClass() = delete;
+				D3DGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "DirectX") {};
 				D3DGraphicsClass(const D3DGraphicsClass& object);
 				virtual ~D3DGraphicsClass();
 
@@ -132,7 +136,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns an instance of the master camera.
 				/// </returns>
-				inline ICamera* GetMasterCamera() { return m_pMasterCamera; }
+				inline ICamera* GetMasterCamera() const { return m_pMasterCamera; }
 
 				/// <summary>
 				/// Returns a block of information about the video card.
@@ -140,7 +144,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns a compliant list of video card information.
 				/// </returns>
-				std::vector<std::string> GetVideoCardInfo();
+				std::vector<std::string> GetVideoCardInfo() const;
 
 				////////////////////////////////////////////////////////////
 				//
@@ -160,10 +164,10 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 			public:
-				inline ID3D11Device* GetDevice() { return m_pDevice; }
+				inline ID3D11Device* GetDevice() const { return m_pDevice; }
 				inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; }
 
-				inline D3DXMATRIX& GetOrthoMatrix() { return m_orthoMatrix; }
+				inline XMMATRIX& GetOrthoMatrix() { return m_orthoMatrix; }
 
 			private:
 				
@@ -210,5 +214,7 @@ namespace CoffeeEngine
 		};
 	};
 };
+
+#endif
 
 #endif

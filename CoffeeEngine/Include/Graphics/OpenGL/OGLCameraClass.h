@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The OpenGL camera class.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -9,7 +9,6 @@
 #ifndef _OGL_CAMERA_CLASS_H_
 #define _OGL_CAMERA_CLASS_H_
 
-#include "Common.h"
 #include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/CameraClass.h"
 
@@ -34,8 +33,8 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 
 				//Primitives
-				float m_positionX, m_positionY, m_positionZ;
-				float m_rotationX, m_rotationY, m_rotationZ;
+				float m_positionX = 0.0f, m_positionY = 0.0f, m_positionZ = 0.0f;
+				float m_rotationX = 0.0f, m_rotationY = 0.0f, m_rotationZ = 0.0f;
 				
 			private:
 				OGLCameraClass();
@@ -48,7 +47,7 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
-				OGLCameraClass(BaseGraphicsClass* pBaseGraphicsClass);
+				OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLCameraClass(const OGLCameraClass& object);
 				virtual ~OGLCameraClass();
 

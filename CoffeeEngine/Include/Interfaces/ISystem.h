@@ -1,16 +1,20 @@
 //--------------------------------------------------------------------------------------
-// Description: The operating system interface.  Used to provide a light-weight skeleton of how the other operating system classes should be created.
+// Description: The operating system interface.
+// Used to provide a light-weight skeleton of how the other operating system classes should be created.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#pragma once
 #ifndef _ISYSTEM_INTERFACE_H_
 #define _ISYSTEM_INTERFACE_H_
 
-#include <iostream>
+#pragma once
+
+#include "Common.h"
+#include "Utility/Logger.h"
 #include "Interfaces/ITimer.h"
+#include "Interfaces/ISystemListener.h"
 
 namespace CoffeeEngine
 {
@@ -19,11 +23,15 @@ namespace CoffeeEngine
 		class ISystem
 		{
 		public:
+
+			ISystem() = default;
+			//NOTE: Very important, otherwise if we don't add a virtual destructor all of our inherited classes will never have their destructor invoked.
+			virtual ~ISystem() = default;
 		
 			/// <summary>
 			/// Attempts to initialize the operating system object, as well as all internal systems such as the graphics engine and main game engine.
 			/// </summary>
-			virtual bool Initialize() = 0;
+			virtual bool Initialize(ISystemListener* listener) = 0;
 			
 			/// <summary>
 			/// Begins running the operating system object once the system has been successfully initialized.
@@ -36,14 +44,16 @@ namespace CoffeeEngine
 			virtual void Shutdown() = 0;
 
 			/// <summary>
-			/// Writes a message to the OSes console.
+			/// Writes to the event log.
 			/// </summary>
-			virtual void ConsoleWrite(std::string sMessage) = 0;
+			virtual void WriteToLog(const std::string&, Utility::Logging::LogLevelType) noexcept = 0;
+			virtual void WriteToLog(char const*, Utility::Logging::LogLevelType) noexcept = 0;
+			virtual void WriteToLog(Exception&) noexcept = 0;
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.
 			/// </summary>
-			virtual std::string GetCurrentApplicationDirectory() = 0;
+			virtual std::string GetCurrentApplicationDirectory() const = 0;
 
 			/// <summary>
 			/// Create's system timer.

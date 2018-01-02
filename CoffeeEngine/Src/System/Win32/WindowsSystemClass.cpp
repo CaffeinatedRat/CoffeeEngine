@@ -1,28 +1,27 @@
 //--------------------------------------------------------------------------------------
 // Description: Manages the windows operating system.
 //
-// Copyright (c) 2012 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
 //Windows specific.
 #include "../Resources/Resource.h"
+
+#include "Common.h"
+#include "Utility/Logger.h"
+
 #include "System/Win32/Windows_EntryPoint.h"
 #include "System/Win32/WindowsSystemClass.h"
 #include "System/Win32/TimerClass.h"
 #include "Graphics/GraphicsCommon.h"
-#include "Graphics/DirectX11/D3DGraphicsClass.h"
-#include "Graphics/OpenGL/WinOGLGraphicsClass.h"
-#include "Utility/Logger.h"
-
-#include "Global.h"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Graphics;
-using namespace CoffeeEngine::Graphics::DirectX11;
-using namespace CoffeeEngine::Graphics::OpenGL;
+using namespace CoffeeEngine::Utility;
+using namespace CoffeeEngine::Utility::Logging;
 
 ////////////////////////////////////////////////////////////
 //
@@ -30,32 +29,22 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 // 
 ////////////////////////////////////////////////////////////
 
-WindowsSystemClass::WindowsSystemClass()
-{
-	m_hInstance = NULL;
-	m_hWnd = NULL;
-	m_bIsIdle = false;
-
-	m_pGraphics = NULL;
-	m_pCoffeeEngine = NULL;
-}
-
 WindowsSystemClass::WindowsSystemClass(const WindowsSystemClass& systemClass)
 {
 	m_hInstance = systemClass.m_hInstance;
 	m_hWnd = systemClass.m_hWnd;
 	m_bIsIdle = systemClass.m_bIsIdle;
+}
 
-	SAFE_DELETE(m_pGraphics);
-	SAFE_DELETE(m_pCoffeeEngine);
-	
-	//When copying the system class we need to create a new instance of graphics object.
-	if((m_pGraphics = new D3DGraphicsClass(this)) == NULL)
-		throw Exception("WindowsSystemClass", "Constructor", "Unable to copy the D3DGraphicsClass");
+WindowsSystemClass::WindowsSystemClass(Logger *pLogger)
+//WindowsSystemClass::WindowsSystemClass(std::unique_ptr<Logger>* pLogger)
+{
+	if (pLogger == nullptr)
+		throw NullArgumentException("WindowsSystemClass", "Constructor", "pLogger");
 
-	//When copying the system class we also need a new copy of the main game engine.
-	if ((m_pCoffeeEngine = new CoffeeEngineClass(this, m_pGraphics)) == NULL)
-		throw Exception("WindowsSystemClass", "Constructor", "Unable to copy the CoffeeEngineClass");
+	//m_plogger = pLogger;
+
+	m_plogger = pLogger;
 }
 
 WindowsSystemClass::~WindowsSystemClass()
@@ -71,12 +60,16 @@ WindowsSystemClass::~WindowsSystemClass()
 
 bool WindowsSystemClass::InitializeWindow()
 {
+	WriteToLog("[WindowsSystemClass::InitializeWindow] Attempting to create a window.", LogLevelType::Diagnostic);
+
 	// Get the instance of this application.
-	m_hInstance = GetModuleHandle(NULL);
+	m_hInstance = GetModuleHandle(nullptr);
 
 	//We're screwed if this happens.
-	if(m_hInstance == NULL)
+	if (m_hInstance == nullptr)
+	{
 		throw NullArgumentException("WindowsSystemClass", "InitializeWindow", "m_hInstance");
+	}
 
 	// Initialize global strings
 	LoadString(m_hInstance, IDS_APP_TITLE, m_szTitle, MAX_LOADSTRING);
@@ -86,22 +79,22 @@ bool WindowsSystemClass::InitializeWindow()
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= m_hInstance;
-	wcex.hIcon			= LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
-	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_COFFEEENGINE);
-	wcex.lpszClassName	= m_szWindowClass;
-	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = WndProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = m_hInstance;
+	wcex.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.lpszMenuName = MAKEINTRESOURCE(IDC_COFFEEENGINE);
+	wcex.lpszClassName = m_szWindowClass;
+	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 	RegisterClassEx(&wcex);
 
 	//Create a window half the size of the desktop.
-	m_nScreenWidth  = GetSystemMetrics(SM_CXSCREEN) / 2;
+	m_nScreenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
 	m_nScreenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
 
 	//Center the window.
@@ -110,15 +103,15 @@ bool WindowsSystemClass::InitializeWindow()
 
 	//Create a window with the following parameters.
 	m_hWnd = CreateWindowEx(WS_EX_WINDOWEDGE,			//The Extended Style of the window.
-							m_szWindowClass,			//The name of the class.
-							m_szTitle,					//The name of the window.
-							WS_OVERLAPPEDWINDOW,		//The style of the window.
-							xPos,						//The x coordinate of the window.
-							yPos,						//The y coordinate of the window.
-							m_nScreenWidth,				//The width of the window.
-							m_nScreenHeight,			//The height of the window.
-							NULL, NULL,					//The handle to the parent & menu.
-							m_hInstance, NULL);			//The instance of the window program & child info.
+		m_szWindowClass,			//The name of the class.
+		m_szTitle,					//The name of the window.
+		WS_OVERLAPPEDWINDOW,		//The style of the window.
+		xPos,						//The x coordinate of the window.
+		yPos,						//The y coordinate of the window.
+		m_nScreenWidth,				//The width of the window.
+		m_nScreenHeight,			//The height of the window.
+		nullptr, nullptr,			//The handle to the parent & menu.
+		m_hInstance, nullptr);		//The instance of the window program & child info.
 
 	if (m_hWnd)
 	{
@@ -130,28 +123,29 @@ bool WindowsSystemClass::InitializeWindow()
 		return true;
 	}
 
+	WriteToLog("[WindowsSystemClass::InitializeWindow] Window creation failed!", LogLevelType::Error);
 	return false;
 }
 
-std::string WindowsSystemClass::GetLastErrorMessage()
+std::string WindowsSystemClass::GetLastErrorMessage() const
 {
-    LPVOID lpMsgBuf = NULL;
+	LPVOID lpMsgBuf = nullptr;
 
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPWSTR) &lpMsgBuf,
-        0, NULL );
+	FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr,
+		GetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(LPWSTR)&lpMsgBuf,
+		0, nullptr);
 
 	//const char* test = (const char*)lpMsgBuf;
 	std::wstring wstr = std::wstring((wchar_t*)lpMsgBuf);
-	
+
 	LocalFree(lpMsgBuf);
 
 	//Remove the CR-LF.
-	return std::string(wstr.begin(), wstr.end()-2);
+	return std::string(wstr.begin(), wstr.end() - 2);
 }
 
 ////////////////////////////////////////////////////////////
@@ -160,55 +154,32 @@ std::string WindowsSystemClass::GetLastErrorMessage()
 // 
 ////////////////////////////////////////////////////////////
 
-bool WindowsSystemClass::Initialize()
+bool WindowsSystemClass::Initialize(ISystemListener* listener)
 {
-	if(!InitializeWindow())
-		return false;
-
-	try
+	if (listener == nullptr)
 	{
-		//Attempt to create the D3DGraphics object.
-		// TO-DO: Add an option to use an OpenGLGraphicsClass.
-		// Possibly a factory or a probably just a simple if statement as there will only ever be two.
-		if ( (m_pGraphics = new D3DGraphicsClass(this)) == NULL)
-			return false;
-
-		//if ( (m_pGraphics = new WinOGLGraphicsClass(this)) == NULL)
-		//	return false;
-
-		//Attempt to create the main engine and pass a reference to the graphics and system objects.
-		if ( (m_pCoffeeEngine = new CoffeeEngineClass(this, m_pGraphics) ) == NULL )
-			return false;
-
-		//Parameterize the graphics settings into a structure to reduce the overhead produced by methods with an extremely long number of parameters.
-		//NOTE: Temporary initialization...
-		GRAPHICS_INITIALIZATION_PARAMETERS graphicsInitParams;
-		graphicsInitParams.bFullscreen = false;
-		graphicsInitParams.bVsync = true;
-		graphicsInitParams.fScreenDepth = 1000.0f;
-		graphicsInitParams.fScreenNear = 0.1f;
-		graphicsInitParams.nScreenHeight = 480;
-		graphicsInitParams.nScreenWidth = 640;
-
-		//Initialize the graphics object first.
-		if(!m_pGraphics->Initialize(graphicsInitParams))
-			return false;
-
-		//Then initialize the CoffeeEngine, as the graphics object should be available and ready at this time.
-		if(!m_pCoffeeEngine->Initialize())
-			return false;
-	}
-	catch(Exception& exception)
-	{
-		CoffeeEngine::Utility::Logger::Write(exception.ToString());
-		return false;
+		//Add the heavy action of an exception but increase diag when necessary.
+		throw NullArgumentException("WindowsSystemClass", "Initialize", "listener");
 	}
 
-	return true;
+	//Assign the listener.
+	//Technically we could make this an array of multiple listeners if necessary.
+	m_pListener = listener;
+
+	WriteToLog("[WindowsSystemClass::Initialize] Initializing...", LogLevelType::Informational);
+
+	if (InitializeWindow())
+		return true;
+
+	WriteToLog("[WindowsSystemClass::Initialize] Initializing failed!", LogLevelType::Error);
+
+	return false;
 }
 
 void WindowsSystemClass::Run()
 {
+	WriteToLog("[WindowsSystemClass::Run] Beginning the message pump.", LogLevelType::Informational);
+
 	//Begin the windows message pump.
 	MSG msg;
 	HACCEL hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDC_COFFEEENGINE));
@@ -216,10 +187,10 @@ void WindowsSystemClass::Run()
 	ZeroMemory(&msg, sizeof(MSG));
 
 	//Fetch early message for quit check, and do not remove it from the message pump.
-	PeekMessage(&msg, NULL, 0U, 0U, PM_NOREMOVE);
-	
+	PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
+
 	// Begin the main message loop.
-	while(msg.message != WM_QUIT)
+	while (msg.message != WM_QUIT)
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
@@ -228,98 +199,108 @@ void WindowsSystemClass::Run()
 		}
 
 		//Determine if the application is idling and if it is then use the GetMessage API rather than the PeekMessage to prevent CPU pegging.
-		if(!m_bIsIdle)
+		if (!m_bIsIdle)
 		{
-			m_pCoffeeEngine->Run();
-			PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+			if (m_pListener != nullptr)
+				m_pListener->OnFrame(true);
+
+			PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
 		}
 		else
 		{
-			GetMessage(&msg, NULL, 0, 0);
+			GetMessage(&msg, nullptr, 0, 0);
 		}
 	}
-}
 
-bool WindowsSystemClass::Frame()
-{
-	if(m_pCoffeeEngine != NULL)
-		if(!m_pCoffeeEngine->Frame())
-			return false;
-
-	return true;
+	WriteToLog("[WindowsSystemClass::Run] Ending the message pump.", LogLevelType::Informational);
 }
 
 void WindowsSystemClass::Shutdown()
 {
-	//Clean up the window.
-	DestroyWindow(m_hWnd);
-	m_hWnd = NULL;
+	if (!m_bHasShutdown)
+	{
+		WriteToLog("[WindowsSystemClass::Shutdown] Shutting down...", LogLevelType::Informational);
 
-	UnregisterClass(m_szWindowClass, m_hInstance);
+		//Clean up the window.
+		DestroyWindow(m_hWnd);
+		m_hWnd = nullptr;
 
-	//Shutdown the graphics & engine objects.
-	// --- kda (3/3/14) --- Not really needed as it is done in the destructor anyways...
-	/*
-	if(m_pGraphics != NULL)
-		m_pGraphics->Shutdown();
+		UnregisterClass(m_szWindowClass, m_hInstance);
 
-	if(m_pCoffeeEngine != NULL)
-		m_pCoffeeEngine->Shutdown();
-	*/
+		m_bHasShutdown = true;
+	}
+}
 
-	 SAFE_DELETE(m_pGraphics);
-	 SAFE_DELETE(m_pCoffeeEngine);
+////////////////////////////////////////////////////////////
+//
+//                Utility Methods
+// 
+////////////////////////////////////////////////////////////
+
+/// <summary>
+/// Writes a const character string as an error event to the log.
+/// </summary>
+/// <param name="szEvent">Event to write to the log.</param>
+void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventType) noexcept
+{
+	if (m_plogger != nullptr)
+		m_plogger->Write(szEvent, logEventType);
 }
 
 /// <summary>
-/// Writes a message to the OS's console.
+/// Writes an event to the event log.
 /// </summary>
-void WindowsSystemClass::ConsoleWrite(std::string sMessage)
+/// <param name="sEvent">Event to write to the log.</param>
+/// <param name="logEventType">Type of log event.</param>
+void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logEventType) noexcept
 {
-	//std::wstring temp(sMessage.begin(), sMessage.end());
-	//m_log.push_back(temp);
-
-	//if(m_hWnd != NULL)
-	//	InvalidateRect(m_hWnd, NULL, true);
-
-	//Re-route to the logger for now.
-	CoffeeEngine::Utility::Logger::Write(sMessage);
+	if (m_plogger != nullptr)
+		m_plogger->Write(sEvent, logEventType);
 }
 
-std::string WindowsSystemClass::GetCurrentApplicationDirectory()
+/// <summary>
+/// Writes an exception as an error event to the log.
+/// </summary>
+/// <param name="exception">Exception to write to the log as an error.</param>
+void WindowsSystemClass::WriteToLog(Exception& exception) noexcept
+{
+	WriteToLog(exception.ToString(), LogLevelType::Error);
+}
+
+std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
 {
 	std::string sRootDirectory = "";
-	wchar_t* buffer = NULL;
-	char* convertedString = NULL;
+	wchar_t* buffer = nullptr;
+	char* convertedString = nullptr;
 
 	try
 	{
 		//Calculate the need size of the buffer.
-		DWORD dwBufferSize = ::GetCurrentDirectory(0, NULL);
+		DWORD dwBufferSize = ::GetCurrentDirectory(0, nullptr);
 
 		//Allocate memory for the wide character string and return an empty string if no memory could be allocated.
-		if ( (buffer = new wchar_t[dwBufferSize]) != NULL)
+		if ((buffer = new wchar_t[dwBufferSize]) != nullptr)
 		{
 			//Get the current directory.
 			//NOTE: This will be returned as a wide character string.
 			DWORD dwStatus = ::GetCurrentDirectory(dwBufferSize, buffer);
-			if(dwStatus > 0)
+			if (dwStatus > 0)
 			{
 				//Attempt to convert the wide character string to a single character string.
 				size_t bufferSize = wcslen(buffer) + 1;
-				if ( (convertedString = new char[bufferSize]) != NULL)
+				if ((convertedString = new char[bufferSize]) != nullptr)
 				{
 					size_t convertedChars = 0;
 					wcstombs_s(&convertedChars, convertedString, bufferSize, buffer, _TRUNCATE);
 					sRootDirectory = std::string(convertedString);
 				}
-				//END OF if ( (convertedString = new char[bufferSize]) != NULL)..
+				//END OF if ( (convertedString = new char[bufferSize]) != nullptr)..
 			}
 			//END OF if(dwStatus > 0)...
 		}
-		//END OF if ( (buffer = new wchar_t[dwBufferSize]) != NULL)...
+		//END OF if ( (buffer = new wchar_t[dwBufferSize]) != nullptr)...
 	}
-	catch(...){}
+	catch (...) {}
 
 	SAFE_DELETE(buffer);
 	SAFE_DELETE(convertedString);
@@ -343,44 +324,51 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 	switch (message)
 	{
 	case WM_COMMAND:
-		{
-			int wmId    = LOWORD(wParam);
-			int wmEvent = HIWORD(wParam);
-			
-			// Parse the menu selections:
-			switch (wmId)
-			{
-			case IDM_EXIT:
-				DestroyWindow(hWnd);
-				break;
+	{
+		int wmId = LOWORD(wParam);
+		int wmEvent = HIWORD(wParam);
 
-			default:
-				return DefWindowProc(hWnd, message, wParam, lParam);
-			}
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case IDM_EXIT:
+			WriteToLog("[WindowsSystemClass::MessageHandler] Exit command event received.", LogLevelType::Diagnostic);
+			DestroyWindow(hWnd);
+			break;
+
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
-		break;
+	}
+	break;
 
 	case WM_PAINT:
-		{
-			PAINTSTRUCT ps;
-			HDC hdc = BeginPaint(hWnd, &ps);
-		
-			if(this->m_pCoffeeEngine != NULL)
-				this->m_pCoffeeEngine->Frame();
-		
-			EndPaint(hWnd, &ps);
-		}
-		break;
+	{
+		WriteToLog("[WindowsSystemClass::MessageHandler] Begin Paint.", LogLevelType::Diagnostic);
+
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
+
+		if (m_pListener != nullptr)
+			m_pListener->OnFrame(false);
+
+		EndPaint(hWnd, &ps);
+
+		WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::Diagnostic);
+	}
+	break;
 
 	case WM_ACTIVATEAPP:
-		m_bIsIdle = !(BOOL)wParam;
+		m_bIsIdle = !(bool)wParam;
 		break;
 
 	case WM_CLOSE:
+		WriteToLog("[WindowsSystemClass::MessageHandler] Close event received.", LogLevelType::Diagnostic);
 		PostQuitMessage(0);
 		break;
 
 	case WM_DESTROY:
+		WriteToLog("[WindowsSystemClass::MessageHandler] Destroy event received.", LogLevelType::Diagnostic);
 		PostQuitMessage(0);
 		break;
 
