@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 #include "Common.h"
 #include "Utility/Logger.h"
 #include "Graphics/OpenGL/WinOGLGraphicsClass.h"
@@ -121,3 +123,5 @@ void WinOGLGraphicsClass::Shutdown()
 
 	OGLGraphicsClass::Shutdown();
 }
+
+#endif
