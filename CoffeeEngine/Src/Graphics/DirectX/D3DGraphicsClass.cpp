@@ -52,6 +52,8 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
 	m_bVsyncEnabled = graphicsInitParameters.bVsync;
 	m_bFullScreen = graphicsInitParameters.bFullscreen;
+	m_version.nMajor = graphicsInitParameters.version.nMajor;
+	m_version.nMinor = graphicsInitParameters.version.nMinor;
 
 	if(!CreateModeList())
 	{
@@ -126,7 +128,7 @@ void D3DGraphicsClass::Shutdown()
 	// According to www.DirectXTutorials.com, this is due to a implicit threading issue.
 	if(m_pSwapChain)
 	{
-		m_pSwapChain->SetFullscreenState(false, NULL);
+		m_pSwapChain->SetFullscreenState(false, nullptr);
 	}
 
 	//Release all of our modes.
@@ -270,7 +272,7 @@ bool D3DGraphicsClass::CreateSwapChain()
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
 
 	// We will only use one backbuffer at this time.
-	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferCount = 2;
 
 	// Set the various backbuffer properties.
 	swapChainDesc.BufferDesc.Width = m_nScreenWidth;
@@ -354,9 +356,12 @@ bool D3DGraphicsClass::CreateDepthBuffer()
 	depthBufferDesc.Height = m_nScreenHeight;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
+	//Enable a 32-bit z-buffer with 24-bits for depth & 8-bits for stencil.
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//Disable multi-sampling (No AA)
 	depthBufferDesc.SampleDesc.Count = 1;
 	depthBufferDesc.SampleDesc.Quality = 0;
+	//Determines if the CPU & GPU have access to this resource (currently the GPU has full access).
 	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
@@ -437,15 +442,15 @@ bool D3DGraphicsClass::CreateRasterState()
 	if(FAILED(m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState)))
 		return false;
 
+	// Now set the rasterizer state.
+	m_pDeviceContext->RSSetState(m_pRasterState);
+
 	return true;
 }
 
 bool D3DGraphicsClass::CreateViewPort()
 {
 	D3D11_VIEWPORT viewport;
-
-	// Now set the rasterizer state.
-	m_pDeviceContext->RSSetState(m_pRasterState);
 
 	// Setup the viewport for rendering.
 	viewport.Width = (float)m_nScreenWidth;

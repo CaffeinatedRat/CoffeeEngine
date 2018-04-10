@@ -23,7 +23,10 @@ namespace CoffeeEngine
 			//NOTE: Very important, otherwise if we don't add a virtual destructor all of our inherited classes will never have their destructor invoked.
 			virtual ~ISystemListener() = default;
 
-			virtual void OnFrame(bool) = 0;
+			/// <summary>
+			/// This event is usually triggered when the OS's message loop is idling and no events are occuring.
+			/// </summary>
+			virtual void OnIdle(bool) = 0;
 		};
 	};
 };

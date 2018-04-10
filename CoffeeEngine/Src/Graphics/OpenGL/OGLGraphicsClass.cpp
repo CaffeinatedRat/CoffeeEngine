@@ -12,7 +12,12 @@
 #include "Graphics/OpenGL/OGLShaderClass.h"
 #include "Graphics/OpenGL/OGLCameraClass.h"
 
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
+
 #include <gl/glew.h>
+#include <gl/wglew.h>
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Utility;
@@ -47,15 +52,18 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	if(m_pSystem == nullptr)
 		throw NullArgumentException("OGLGraphicsClass", "Initialize", "m_pSystem");
 
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Beginning initialization.");
+
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
 	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
 	m_bVsyncEnabled = graphicsInitParameters.bVsync;
 	m_bFullScreen = graphicsInitParameters.bFullscreen;
+	m_version.nMajor = graphicsInitParameters.version.nMajor;
+	m_version.nMinor = graphicsInitParameters.version.nMinor;
 
-	GLenum err = glewInit();
-	if(err != GLEW_OK)
+	//Initialize Glew only once.
+	if (!OGLGraphicsClass::InitializeGlew())
 	{
-		m_pSystem->WriteToLog((const char*)glewGetErrorString(err), LogLevelType::Error);
 		return false;
 	}
 
@@ -98,6 +106,8 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	//We are ready to draw.
 	m_bDisplayReady = true;
 
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Ending initialization.");
+
 	return true;
 }
 
@@ -107,12 +117,8 @@ void OGLGraphicsClass::BeginScene(float red, float green, float blue, float alph
 	if(!m_bDisplayReady)
 		return;
 
-	//GL COMMENTED OUT FOR BUILD.
-
-	//glClearColor(red, green, blue, alpha);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//glBegin(GL_TRIANGLES);
+	glClearColor(red, green, blue, alpha);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void OGLGraphicsClass::EndScene()
@@ -120,9 +126,6 @@ void OGLGraphicsClass::EndScene()
 	//Prevent scene drawing until initialization is complete.
 	if(!m_bDisplayReady)
 		return;
-
-	//GL COMMENTED OUT FOR BUILD.
-	//glEnd();
 }
 
 void OGLGraphicsClass::Shutdown()
@@ -160,6 +163,32 @@ void OGLGraphicsClass::SetMasterCamera(ICamera* camera)
 std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
 {
 	throw NotImplementedException("OGLGraphicsClass", "GetVideoCardInfo");
+}
+
+////////////////////////////////////////////////////////////
+//
+//                Protected Methods
+// 
+////////////////////////////////////////////////////////////
+bool OGLGraphicsClass::InitializeGlew()
+{
+	if (!m_bGlewInitialized)
+	{
+		GLenum err = glewInit();
+		if (err != GLEW_OK)
+		{
+			m_pSystem->WriteToLog((const char*)glewGetErrorString(err), LogLevelType::Error);
+			return false;
+		}
+		m_bGlewInitialized = true;
+	}
+
+	return true;
+}
+
+void OGLGraphicsClass::InitializeGLContext()
+{
+
 }
 
 ////////////////////////////////////////////////////////////

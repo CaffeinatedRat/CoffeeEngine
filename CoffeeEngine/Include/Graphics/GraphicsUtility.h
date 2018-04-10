@@ -12,6 +12,7 @@
 
 #include "Common.h"
 #include "Interfaces/ISystem.h"
+#include "Graphics/GraphicsCommon.h"
 #include "Graphics/BaseGraphicsClass.h"
 
 #include <memory>
@@ -20,12 +21,6 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		enum class GraphicsFactoryTypes
-		{
-			DIRECTX,
-			OPENGL
-		};
-
 		struct GraphicsFactory
 		{
 			using ISystem = CoffeeEngine::Interfaces::ISystem;

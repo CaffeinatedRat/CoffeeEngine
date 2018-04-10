@@ -13,15 +13,30 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		typedef struct GRAPHICS_INITIALIZATION_PARAMETERS
+		enum class GraphicsFactoryTypes
 		{
-			int nScreenHeight;
-			int nScreenWidth;
-			bool bVsync;
+			DIRECTX,
+			OPENGL
+		};
+
+		struct GRAPHICS_VERSION
+		{
+			int nMajor = 0;
+			int nMinor = 0;
+		};
+
+		struct GRAPHICS_INITIALIZATION_PARAMETERS
+		{
+			int nScreenHeight = 640;
+			int nScreenWidth = 480;
+			int nColorBits = 32;
+			int nDepthBits = 32;
+			bool bVsync = false;
 			float fScreenDepth;
 			float fScreenNear;
-			bool bFullscreen;
-		} GRAPHICS_INITIALIZATION_PARAMETERS;
+			bool bFullscreen = false;
+			GRAPHICS_VERSION version;
+		};
 	}
 }
 

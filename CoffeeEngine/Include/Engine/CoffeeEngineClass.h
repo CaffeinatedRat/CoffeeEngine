@@ -37,13 +37,21 @@ namespace CoffeeEngine
 		public:
 
 			CoffeeEngineClass() = default;
-			CoffeeEngineClass(Interfaces::ISystem* pSystem);
+			CoffeeEngineClass(Interfaces::ISystem*);
 			virtual ~CoffeeEngineClass();
 
 			bool Initialize();
 			void Run();
 			void Render();
-			virtual void OnFrame(bool) override;
+
+			/// <summary>
+			/// This event is usually triggered when the OS's message loop is idling and no events are occuring.
+			/// </summary>
+			virtual void OnIdle(bool) override;
+
+			/// <summary>
+			/// This method will shutdown the engine, clean up and release any resources.
+			/// </summary>
 			void Shutdown();
 
 		private:

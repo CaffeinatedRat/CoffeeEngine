@@ -45,7 +45,6 @@ namespace CoffeeEngine
 			/// </summary>
 			void Pause();
 
-
 			/// <summary>
 			/// Runs the timer and calculates the frame rate.
 			/// This must be called at least once before GetFrameRate().

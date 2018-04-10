@@ -50,7 +50,7 @@ namespace CoffeeEngine
 					"Diagnostic"
 				};
 
-				auto logLevelIntegral = PrecomputeLog2Byte(static_cast<unsigned>(logLevelType));
+				auto logLevelIntegral = PrecomputeLog2Byte(static_cast<uint16_t>(logLevelType));
 				return (logLevelIntegral < std::size(LogLevelTypeNames)) ? LogLevelTypeNames[logLevelIntegral] : "Undefined";
 			}
 

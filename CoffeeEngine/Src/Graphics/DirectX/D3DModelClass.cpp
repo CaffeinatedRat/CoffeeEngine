@@ -12,6 +12,7 @@
 #include "Graphics/DirectX/D3DGraphicsClass.h"
 #include "Graphics/DirectX/D3DModelClass.h"
 #include "Graphics/DirectX/D3DShaderClass.h"
+#include "Graphics/DirectX/WICTextureLoader.h"
 
 #include <d3d11.h>
 //#include <d3dx11async.h>
@@ -29,15 +30,6 @@ using namespace CoffeeEngine::Graphics::DirectX;
 D3DModelClass::D3DModelClass(BaseGraphicsClass* pBaseGraphicsClass)
 	: ModelClass(pBaseGraphicsClass)
 {
-	m_pVertexBuffer = nullptr;
-	m_pIndexBuffer = nullptr;
-
-	//Temporary
-	m_pTexture = nullptr;
-
-	m_rotate = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
-	m_translate = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 D3DModelClass::D3DModelClass(const D3DModelClass& object)
@@ -62,7 +54,7 @@ bool D3DModelClass::Initialize()
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Initialize", "m_pGraphicsClass");
 
-	const D3DGraphicsClass *pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
 
 	//Locals
 	bool bStatus = false;
@@ -79,6 +71,8 @@ bool D3DModelClass::Initialize()
 	fileName.append("/Media/coookeee.jpg");
 	std::wstring fileNameW(fileName.begin(), fileName.end());
 
+
+	HRESULT results = CreateWICTextureFromFile(pDevice, fileNameW.c_str(), nullptr, &m_pTexture);
 	//D3DCreateShaderResourceViewFromFile(pDevice, fileNameW.c_str(), NULL, NULL, &m_pTexture, NULL);
 
 	// Set the number of vertices in the vertex array.
@@ -183,7 +177,7 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Render", "m_pGraphicsClass");
 
-	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == nullptr)

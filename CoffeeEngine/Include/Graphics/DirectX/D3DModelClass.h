@@ -28,29 +28,9 @@ namespace CoffeeEngine
 		{
 			class D3DModelClass : public ModelClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				int m_nVertexCount, m_nIndexCount;
-
-				//Direct3d
-				ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;
-				XMFLOAT3 m_rotate, m_scale, m_translate;
-
-				//Temporary...
-				ID3D11ShaderResourceView* m_pTexture;
-
-			private:
-				D3DModelClass();
-
 			public:
 			
+				D3DModelClass() = delete;
 				D3DModelClass(BaseGraphicsClass* pBaseGraphicsClass);
 				D3DModelClass(const D3DModelClass& object);
 				virtual ~D3DModelClass();
@@ -84,6 +64,27 @@ namespace CoffeeEngine
 				/// Scale the object among one or more of the 3-axises.
 				/// </summary>
 				void Scale(float x, float y, float z);
+
+			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				//Primitives
+				int m_nVertexCount = 0, m_nIndexCount = 0;
+
+				//Direct3d
+				ID3D11Buffer *m_pVertexBuffer = nullptr;
+				ID3D11Buffer *m_pIndexBuffer = nullptr;
+				XMFLOAT3 m_rotate = XMFLOAT3(0.0f, 0.0f, 0.0f);
+				XMFLOAT3 m_scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+				XMFLOAT3 m_translate = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
+				//Temporary...
+				ID3D11ShaderResourceView* m_pTexture = nullptr;
 			};
 		};
 	};

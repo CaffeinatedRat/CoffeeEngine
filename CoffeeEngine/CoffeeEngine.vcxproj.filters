@@ -224,11 +224,9 @@
     <ClInclude Include="Include\Utility\UtilMath.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\DirectX\WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\stdafx.cpp">
-      <Filter>System\Win32</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Global.cpp">
       <Filter>Globals\Src</Filter>
     </ClCompile>
@@ -305,6 +303,10 @@
     <ClCompile Include="Include\Exceptions\NotSupportedException.h">
       <Filter>Exceptions</Filter>
     </ClCompile>
+    <ClCompile Include="Src\stdafx.cpp">
+      <Filter>System\Win32\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics\DirectX\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\CoffeeEngine.rc">

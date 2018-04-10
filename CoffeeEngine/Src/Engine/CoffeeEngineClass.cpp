@@ -48,14 +48,14 @@ CoffeeEngineClass::~CoffeeEngineClass()
 
 bool CoffeeEngineClass::Initialize()
 {
-	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing...", LogLevelType::Informational);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing...");
 
 	if (!m_pSystem->Initialize(this))
 		return false;
 
-	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Attempting to create the graphics device.", LogLevelType::Informational);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Attempting to create the graphics device.");
 
-	assert(m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::OPENGL, m_pSystem));
+	assert(m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::DIRECTX, m_pSystem));
 	if (!m_upGraphics)
 		return false;
 
@@ -66,8 +66,12 @@ bool CoffeeEngineClass::Initialize()
 	graphicsInitParams.bVsync = true;
 	graphicsInitParams.fScreenDepth = 1000.0f;
 	graphicsInitParams.fScreenNear = 0.1f;
+	graphicsInitParams.nColorBits = 32;
+	graphicsInitParams.nDepthBits = 32;
 	graphicsInitParams.nScreenHeight = 480;
 	graphicsInitParams.nScreenWidth = 640;
+	graphicsInitParams.version.nMajor = 3;
+	graphicsInitParams.version.nMinor = 1;
 
 	//Initialize the graphics object first.
 	if (!m_upGraphics->Initialize(graphicsInitParams))
@@ -133,20 +137,24 @@ void CoffeeEngineClass::Render()
 	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] End Render", LogLevelType::Diagnostic);
 }
 
-void CoffeeEngineClass::OnFrame(bool onIdle)
+/// <summary>
+/// This event is usually triggered when the OS's message loop is idling and no events are occuring.
+/// </summary>
+/// <param name="isActive">
+/// This parameter indicates if the application is active or running in the background.
+/// </param>
+void CoffeeEngineClass::OnIdle(bool isActive)
 {
 	if (m_bReady)
 	{
 		m_pTimer->Run();
 		Render();
 	}
-
-	return;
 }
 
 void CoffeeEngineClass::Shutdown()
 {
-	m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Shutting down...", LogLevelType::Informational);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Shutting down...");
 
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pModel);

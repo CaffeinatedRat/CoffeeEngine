@@ -44,6 +44,16 @@ namespace CoffeeEngine
 		protected:
 			ISystem *m_pSystem = nullptr;
 			std::string m_sGraphicsLibraryName = "Undefined";
+
+			//Primitives
+			bool m_bFullScreen = false;
+			bool m_bDisplayReady = false;
+			bool m_bVsyncEnabled = false;
+			int m_nScreenWidth = 0;
+			int m_nScreenHeight = 0;
+			int m_videoCardMemory = 0;
+			unsigned int m_nNumOfModes = 0;
+			GRAPHICS_VERSION m_version;
 		};
 	};
 };

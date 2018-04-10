@@ -27,6 +27,13 @@ namespace CoffeeEngine
 {
 	namespace System
 	{
+		enum class WindowsOSState
+		{
+			UNKNOWN,
+			INITIALIZED,
+			SHUTDOWN
+		};
+
 		class WindowsSystemClass : public ISystem
 		{
 			using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
@@ -36,7 +43,6 @@ namespace CoffeeEngine
 
 			WindowsSystemClass() = default;
 			WindowsSystemClass(Logger *pLogger);
-			//WindowsSystemClass::WindowsSystemClass(std::unique_ptr<Logger>* pLogger);
 			WindowsSystemClass(const WindowsSystemClass&);
 			virtual ~WindowsSystemClass() noexcept override;
 
@@ -71,7 +77,7 @@ namespace CoffeeEngine
 			/// Create's system timer.
 			/// NOTE: This creates a new instance of the object.  It is your responsibility to delete this instance when done with it.
 			/// </summary>
-			ITimer* CreateTimer() override;
+			inline ITimer* CreateTimer() override;
 
 			////////////////////////////////////////////////////////////
 			//
@@ -86,6 +92,11 @@ namespace CoffeeEngine
 			/// </summary>
 			inline const HWND& GetHWND() const { return m_hWnd; }
 
+			/// <summary>
+			/// Returns the windows instance handle..
+			/// </summary>
+			inline const HINSTANCE& GetHInstance() const { return m_hInstance; }
+
 		protected:
 
 			/// <summary>
@@ -99,6 +110,12 @@ namespace CoffeeEngine
 			std::string GetLastErrorMessage() const;
 
 		private:
+			/// <summary>
+			/// Registers the core windows class.
+			/// </summary>
+			void RegisterWindowsClass(HINSTANCE hInstance);
+
+		private:
 
 			//Windows specific member variables
 			HINSTANCE m_hInstance = nullptr;
@@ -110,15 +127,23 @@ namespace CoffeeEngine
 
 			//Internal system variables.
 			int m_nScreenWidth = 0, m_nScreenHeight = 0;
-			bool m_bIsIdle = false;
+			bool m_bIdleInBackground = false;
+			//bool m_bClassRegistered = false;
+
+			//Internal states
+			//We are active by default.
+			bool m_bIsActive = false;
+
+			//We are not idling.
+			bool m_bIsIdiling = false;
+
+			WindowsOSState m_bCurrentState = WindowsOSState::UNKNOWN;
 
 			//Allows the Shutdown method to be idempotent.
-			bool m_bHasShutdown = false;
+			//bool m_bHasShutdown = false;
 
-			//BaseGraphicsClass *m_pGraphics = nullptr;
 			ISystemListener *m_pListener = nullptr;
 			Logger* m_plogger = nullptr;
-			//std::unique_ptr<Logger> *m_plogger = nullptr;
 		};
 	};
 };

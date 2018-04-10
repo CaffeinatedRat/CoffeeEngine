@@ -49,6 +49,8 @@ This version is an updated, refactored engine that contains the following change
 * Attempts to utilize C++11 & C++14 constructs.
 * Rework so that the engine invokes the OS and Graphics device rather than the OS invoking everything else.
 * Refactoring of a majority of the code to hopefully, properly use the const keyword on getter methods and implementing constant pointers where necessary.
+* Upgraded some of the DX11 constructs and included the WICTextureLoader.h/.cpp from the Microsoft github account to load textures.
+* Added more logic to get OpenGL running to some extent.
 
 #### 0.0.1
 This version is an initial stab at an engine it in 2012.

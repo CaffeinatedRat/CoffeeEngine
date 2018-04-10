@@ -14,30 +14,30 @@ namespace CoffeeEngine
 {
 	namespace Utility
 	{
-		inline unsigned int PrecomputeLog2Byte(unsigned int value)
+		inline uint8_t PrecomputeLog2Byte(uint16_t value)
 		{
 			switch (value)
 			{
 			case 1:
-				return 0;
+				return 0U;
 			case 2:
-				return 1;
+				return 1U;
 			case 4:
-				return 2;
+				return 2U;
 			case 8:
-				return 3;
+				return 3U;
 			case 16:
-				return 4;
+				return 4U;
 			case 32:
-				return 5;
+				return 5U;
 			case 64:
-				return 6;
+				return 6U;
 			case 128:
-				return 7;
+				return 7U;
 			case 256:
-				return 8;
+				return 8U;
 			default:
-				return 0;
+				return 0U;
 			}
 		};
 	}

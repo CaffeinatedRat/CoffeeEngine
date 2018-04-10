@@ -30,41 +30,6 @@ namespace CoffeeEngine
 		{
 			class D3DGraphicsClass : public BaseGraphicsClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				bool m_bFullScreen = false;
-				bool m_bDisplayReady = false;
-				bool m_bVsyncEnabled = false;
-				int m_nScreenWidth = 0;
-				int m_nScreenHeight = 0;
-				int m_videoCardMemory = 0;
-				unsigned int m_nNumOfModes = 0;
-
-				std::string m_videoCardDescription = "No Information Available.";
-
-				//Direct3d
-				DXGI_MODE_DESC* m_pDisplayModeList = nullptr;
-				IDXGISwapChain* m_pSwapChain = nullptr;
-				ID3D11Device* m_pDevice = nullptr;
-				ID3D11DeviceContext* m_pDeviceContext = nullptr;
-				ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
-				ID3D11Texture2D* m_pDepthStencilBuffer = nullptr;
-				ID3D11DepthStencilState* m_pDepthStencilState = nullptr;
-				ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
-				ID3D11RasterizerState* m_pRasterState = nullptr;
-
-				XMMATRIX m_orthoMatrix;
-
-				//By default there is no master camera.
-				D3DCameraClass* m_pMasterCamera = nullptr;
-
 			public:
 		
 				////////////////////////////////////////////////////////////
@@ -165,7 +130,7 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 			public:
 				inline ID3D11Device* GetDevice() const { return m_pDevice; }
-				inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; }
+				inline ID3D11DeviceContext* GetDeviceContext() const { return m_pDeviceContext; }
 
 				inline XMMATRIX& GetOrthoMatrix() { return m_orthoMatrix; }
 
@@ -210,6 +175,33 @@ namespace CoffeeEngine
 				/// True if the viewport was successfully created.
 				/// </returns>
 				bool CreateViewPort();
+
+			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				//Primitives
+				std::string m_videoCardDescription = "No Information Available.";
+
+				//Direct3d
+				DXGI_MODE_DESC* m_pDisplayModeList = nullptr;
+				IDXGISwapChain* m_pSwapChain = nullptr;
+				ID3D11Device* m_pDevice = nullptr;
+				ID3D11DeviceContext* m_pDeviceContext = nullptr;
+				ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
+				ID3D11Texture2D* m_pDepthStencilBuffer = nullptr;
+				ID3D11DepthStencilState* m_pDepthStencilState = nullptr;
+				ID3D11DepthStencilView* m_pDepthStencilView = nullptr;
+				ID3D11RasterizerState* m_pRasterState = nullptr;
+
+				XMMATRIX m_orthoMatrix;
+
+				//By default there is no master camera.
+				D3DCameraClass* m_pMasterCamera = nullptr;
 			};
 		};
 	};

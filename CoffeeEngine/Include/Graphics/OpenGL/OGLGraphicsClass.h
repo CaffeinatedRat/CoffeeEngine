@@ -12,8 +12,8 @@
 
 #include "Common.h"
 #include "Interfaces/ISystem.h"
-#include "Graphics/BaseGraphicsClass.h"
 #include "Graphics/GraphicsCommon.h"
+#include "Graphics/BaseGraphicsClass.h"
 
 #include "Graphics/OpenGL/OGLCommon.h"
 #include "Graphics/OpenGL/OGLCameraClass.h"
@@ -39,7 +39,7 @@ namespace CoffeeEngine
 				OGLGraphicsClass() = delete;
 				OGLGraphicsClass(ISystem* pSystem) : BaseGraphicsClass(pSystem, "OpenGL") {};
 				OGLGraphicsClass(const OGLGraphicsClass& object);
-				virtual ~OGLGraphicsClass();
+				virtual ~OGLGraphicsClass() = 0;
 
 				/// <summary>
 				/// Attempts to initialize the graphics object.
@@ -47,12 +47,12 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters);
+				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) = 0;
 
 				/// <summary>
 				/// Begins the rendering process.
 				/// </summary>
-				void BeginScene(float, float, float, float);
+				void BeginScene(float, float, float, float) = 0;
 
 				/// <summary>
 				/// Ends the rendering process.
@@ -123,7 +123,7 @@ namespace CoffeeEngine
 
 				////////////////////////////////////////////////////////////
 				//
-				//                DirectX Specific methods
+				//                OpenGL Specific methods
 				// 
 				////////////////////////////////////////////////////////////
 			public:
@@ -131,6 +131,17 @@ namespace CoffeeEngine
 				//inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; }
 
 				//inline D3DXMATRIX& GetOrthoMatrix() { return m_orthoMatrix; }
+
+			protected:
+				/// <summary>
+				/// Safely initializes the Glew context once.
+				/// </summary>
+				virtual bool InitializeGlew();
+
+				/// <summary>
+				/// Performs the main GLContext logic.
+				/// </summary>
+				virtual void InitializeGLContext();
 
 			private:
 				
@@ -183,14 +194,6 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 
 				bool m_bGlewInitialized = false;
-				bool m_bFullScreen = false;
-				bool m_bDisplayReady = false;
-				bool m_bVsyncEnabled = false;
-				int m_nScreenWidth = 0;
-				int m_nScreenHeight = 0;
-				int m_videoCardMemory = 0;
-				unsigned int m_nNumOfModes = 0;
-
 				std::string m_videoCardDescription = "No Information Available.";
 
 				//By default there is no master camera.

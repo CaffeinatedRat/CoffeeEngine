@@ -25,16 +25,6 @@ namespace CoffeeEngine
 		{
 			class WinOGLGraphicsClass : public OGLGraphicsClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-				HGLRC m_renderingContext = nullptr;
-				HDC m_hdc = nullptr;
-
 			public:
 		
 				////////////////////////////////////////////////////////////
@@ -54,7 +44,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters);
+				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
 
 				/// <summary>
 				/// Begins the rendering process.
@@ -70,10 +60,41 @@ namespace CoffeeEngine
 				/// Begins the process of shutting down the graphics class and all dependencies.
 				/// </summary>
 				virtual void Shutdown();
+
+				/// <summary>
+				/// Windows Message Handler for Glew
+				/// </summary>
+				//LRESULT CALLBACK MessageHandlerGlew(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+			protected:
+				/// <summary>
+				/// Safely initializes the Glew context once.
+				/// </summary>
+				virtual bool InitializeGlew() override;
+
+			private:
+				/// <summary>
+				/// Registers the Glew specific windows class.
+				/// </summary>
+				void RegisterGlewClass(HINSTANCE hInstance);
+
+				const TCHAR* GLEW_CLASS_NAME = _T("GLEW_WINDOW");
+				const TCHAR* GLEW_WINDOW_TITLE = _T("GLEW WINDOW");
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+				HGLRC m_renderingContext = nullptr;
+				HDC m_hdc = nullptr;
+				bool m_bGlewClassRegistered = false;
 			};
 		};
 	};
 };
+
+
 
 #endif
 
