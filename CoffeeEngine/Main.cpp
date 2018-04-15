@@ -11,7 +11,7 @@
 	// 1) Windows_EntryPoint.h -- Entry point into windows based systems.
 	/////////////////////////////////////////////////////////////////////////////////
 
-	#include "System/Win32/Windows_EntryPoint.h"
+	#include "System/Win32/Windows_EntryPoint.hpp"
 
 	int APIENTRY _tWinMain(HINSTANCE hInstance,
 						 HINSTANCE hPrevInstance,
@@ -27,7 +27,7 @@
 	// Header file's required:
 	// 1) linux_entrypoint.h -- Entry point into linux & linux based systems.
 	/////////////////////////////////////////////////////////////////////////////////
-	#include "System/Linux/Linux_EntryPoint.h"
+	#include "System/Linux/Linux_EntryPoint.hpp"
 
 	int main(int argc, char *argv[])
 	{

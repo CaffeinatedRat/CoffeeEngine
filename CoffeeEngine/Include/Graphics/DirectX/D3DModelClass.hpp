@@ -12,13 +12,13 @@
 #ifndef _D3D_MODEL_CLASS_H_
 #define _D3D_MODEL_CLASS_H_
 
-//#include "Common.h"
+//#include "Common.hpp"
 
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ModelClass.h"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ModelClass.hpp"
 
-#include "Graphics/DirectX/D3DCommon.h"
-#include "Graphics/DirectX/D3DGraphicsClass.h"
+#include "Graphics/DirectX/D3DCommon.hpp"
+#include "Graphics/DirectX/D3DGraphicsClass.hpp"
 
 namespace CoffeeEngine
 {

@@ -13,8 +13,8 @@
 #pragma once
 
 #include "stdafx.h"
-#include "Common.h"
-#include "Interfaces/ITimer.h"
+#include "Common.hpp"
+#include "Interfaces/ITimer.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

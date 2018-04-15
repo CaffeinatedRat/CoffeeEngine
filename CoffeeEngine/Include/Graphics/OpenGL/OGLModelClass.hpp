@@ -9,9 +9,9 @@
 #ifndef _OGL_MODEL_CLASS_H_
 #define _OGL_MODEL_CLASS_H_
 
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ModelClass.h"
-#include "Graphics/OpenGL/OGLCommon.h"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ModelClass.hpp"
+#include "Graphics/OpenGL/OGLCommon.hpp"
 
 namespace CoffeeEngine
 {

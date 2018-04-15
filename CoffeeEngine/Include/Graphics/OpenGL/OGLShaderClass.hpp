@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ShaderClass.h"
+#include "Common.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ShaderClass.hpp"
 
-#include "Graphics/OpenGL/OGLCommon.h"
-#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLCommon.hpp"
+#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
 
 namespace CoffeeEngine
 {

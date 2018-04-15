@@ -5,14 +5,14 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Engine/CoffeeEngineClass.h"
+#include "Engine/CoffeeEngineClass.hpp"
 
-#include "Common.h"
-#include "Utility/Logger.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/GraphicsUtility.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ModelClass.h"
+#include "Common.hpp"
+#include "Utility/Logger.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/GraphicsUtility.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ModelClass.hpp"
 
 
 using namespace CoffeeEngine;

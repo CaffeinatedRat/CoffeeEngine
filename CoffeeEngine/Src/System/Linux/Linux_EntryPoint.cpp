@@ -6,8 +6,8 @@
 
 #ifdef __linux__
 
-#include "System/Linux/Linux_EntryPoint.h"
-#include "Global.h"
+#include "System/Linux/Linux_EntryPoint.hpp"
+#include "Global.hpp"
 
 using namespace CoffeeEngine;
 //using namespace CoffeeEngine::System;

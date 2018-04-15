@@ -8,10 +8,10 @@
 #ifdef _WIN32
 
 #include <memory>
-#include "Common.h"
-#include "System/Win32/Windows_EntryPoint.h"
-#include "System/Win32/WindowsSystemClass.h"
-#include "Engine/CoffeeEngineClass.h"
+#include "Common.hpp"
+#include "System/Win32/Windows_EntryPoint.hpp"
+#include "System/Win32/WindowsSystemClass.hpp"
+#include "Engine/CoffeeEngineClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Utility::Logging;

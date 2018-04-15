@@ -12,12 +12,12 @@
 #ifndef _D3D_SHADER_CLASS_H_
 #define _D3D_SHADER_CLASS_H_
 
-#include "Common.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ShaderClass.h"
+#include "Common.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ShaderClass.hpp"
 
-#include "Graphics/DirectX/D3DCommon.h"
-#include "Graphics/DirectX/D3DGraphicsClass.h"
+#include "Graphics/DirectX/D3DCommon.hpp"
+#include "Graphics/DirectX/D3DGraphicsClass.hpp"
 
 namespace CoffeeEngine
 {

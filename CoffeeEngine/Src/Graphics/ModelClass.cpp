@@ -6,8 +6,8 @@
 //--------------------------------------------------------------------------------------
 
 
-#include "Common.h"
-#include "Graphics/ModelClass.h"
+#include "Common.hpp"
+#include "Graphics/ModelClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

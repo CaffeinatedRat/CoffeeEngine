@@ -10,9 +10,9 @@
 
 #pragma once
 
-//#include "Common.h"
-#include "IShader.h"
-#include "ITransform.h"
+//#include "Common.hpp"
+#include "IShader.hpp"
+#include "ITransform.hpp"
 
 namespace CoffeeEngine
 {

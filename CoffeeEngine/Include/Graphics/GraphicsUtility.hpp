@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/GraphicsCommon.h"
-#include "Graphics/BaseGraphicsClass.h"
+#include "Common.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/GraphicsCommon.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
 
 #include <memory>
 

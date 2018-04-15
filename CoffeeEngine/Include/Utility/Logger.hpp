@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "Common.h"
-#include "UtilTypes.h"
-#include "LoggingTypes.h"
+#include "Common.hpp"
+#include "UtilTypes.hpp"
+#include "LoggingTypes.hpp"
 #include <atomic>
 
 namespace CoffeeEngine

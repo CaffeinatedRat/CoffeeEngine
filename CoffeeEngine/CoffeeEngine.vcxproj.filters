@@ -98,10 +98,10 @@
     <ClInclude Include="Resources\Resource.h">
       <Filter>System\Win32\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Global.h">
+    <ClInclude Include="Include\Global.hpp">
       <Filter>Globals</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Common.h">
+    <ClInclude Include="Include\Common.hpp">
       <Filter>Globals</Filter>
     </ClInclude>
     <ClInclude Include="Include\stdafx.h">
@@ -110,121 +110,121 @@
     <ClInclude Include="Include\targetver.h">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Exceptions\Exception.h">
+    <ClInclude Include="Include\Exceptions\Exception.hpp">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Exceptions\NullArgumentException.h">
+    <ClInclude Include="Include\Exceptions\NullArgumentException.hpp">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\IGraphics.h">
+    <ClInclude Include="Include\Interfaces\IGraphics.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\ISystem.h">
+    <ClInclude Include="Include\Interfaces\ISystem.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\BaseGraphicsClass.h">
+    <ClInclude Include="Include\Graphics\BaseGraphicsClass.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\Win32\Windows_EntryPoint.h">
+    <ClInclude Include="Include\System\Win32\Windows_EntryPoint.hpp">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\Win32\WindowsSystemClass.h">
+    <ClInclude Include="Include\System\Win32\WindowsSystemClass.hpp">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Engine\CoffeeEngineClass.h">
+    <ClInclude Include="Include\Engine\CoffeeEngineClass.hpp">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\ModelClass.h">
+    <ClInclude Include="Include\Graphics\ModelClass.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\IModel.h">
+    <ClInclude Include="Include\Interfaces\IModel.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\ICamera.h">
+    <ClInclude Include="Include\Interfaces\ICamera.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\CameraClass.h">
+    <ClInclude Include="Include\Graphics\CameraClass.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\GraphicsCommon.h">
+    <ClInclude Include="Include\Graphics\GraphicsCommon.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\Linux\Linux_EntryPoint.h">
+    <ClInclude Include="Include\System\Linux\Linux_EntryPoint.hpp">
       <Filter>System\Linux</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\IShader.h">
+    <ClInclude Include="Include\Interfaces\IShader.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\ShaderClass.h">
+    <ClInclude Include="Include\Graphics\ShaderClass.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Exceptions\NotImplementedException.h">
+    <ClInclude Include="Include\Exceptions\NotImplementedException.hpp">
       <Filter>Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Utility\Logger.h">
+    <ClInclude Include="Include\Utility\Logger.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\ITimer.h">
+    <ClInclude Include="Include\Interfaces\ITimer.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\Win32\TimerClass.h">
+    <ClInclude Include="Include\System\Win32\TimerClass.hpp">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\ITransform.h">
+    <ClInclude Include="Include\Interfaces\ITransform.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.h">
+    <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.h">
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\System\SystemCommon.h">
+    <ClInclude Include="Include\System\SystemCommon.hpp">
       <Filter>System\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.h">
+    <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\OGLModelClass.h">
+    <ClInclude Include="Include\Graphics\OpenGL\OGLModelClass.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.h">
+    <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.h">
+    <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Utility\UtilTypes.h">
+    <ClInclude Include="Include\Utility\UtilTypes.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Interfaces\ISystemListener.h">
+    <ClInclude Include="Include\Interfaces\ISystemListener.hpp">
       <Filter>Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\GraphicsUtility.h">
+    <ClInclude Include="Include\Graphics\GraphicsUtility.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\D3DCameraClass.h">
+    <ClInclude Include="Include\Graphics\DirectX\D3DCameraClass.hpp">
       <Filter>Graphics\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\D3DCommon.h">
+    <ClInclude Include="Include\Graphics\DirectX\D3DCommon.hpp">
       <Filter>Graphics\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\D3DGraphicsClass.h">
+    <ClInclude Include="Include\Graphics\DirectX\D3DGraphicsClass.hpp">
       <Filter>Graphics\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\D3DModelClass.h">
+    <ClInclude Include="Include\Graphics\DirectX\D3DModelClass.hpp">
       <Filter>Graphics\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\D3DShaderClass.h">
+    <ClInclude Include="Include\Graphics\DirectX\D3DShaderClass.hpp">
       <Filter>Graphics\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Utility\LoggingTypes.h">
+    <ClInclude Include="Include\Utility\LoggingTypes.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Utility\UtilMath.h">
+    <ClInclude Include="Include\Utility\UtilMath.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DirectX\WICTextureLoader.h" />
+    <ClInclude Include="Include\Graphics\DirectX\WICTextureLoader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Global.cpp">
@@ -300,7 +300,7 @@
     <ClCompile Include="Src\Graphics\DirectX\D3DShaderClass.cpp">
       <Filter>Graphics\DirectX\Src</Filter>
     </ClCompile>
-    <ClCompile Include="Include\Exceptions\NotSupportedException.h">
+    <ClCompile Include="Include\Exceptions\NotSupportedException.hpp">
       <Filter>Exceptions</Filter>
     </ClCompile>
     <ClCompile Include="Src\stdafx.cpp">

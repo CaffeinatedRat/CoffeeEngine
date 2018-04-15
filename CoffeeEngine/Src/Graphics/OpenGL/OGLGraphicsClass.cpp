@@ -5,12 +5,12 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Common.h"
-#include "Utility/Logger.h"
-#include "Graphics/OpenGL/OGLGraphicsClass.h"
-#include "Graphics/OpenGL/OGLModelClass.h"
-#include "Graphics/OpenGL/OGLShaderClass.h"
-#include "Graphics/OpenGL/OGLCameraClass.h"
+#include "Common.hpp"
+#include "Utility/Logger.hpp"
+#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
+#include "Graphics/OpenGL/OGLModelClass.hpp"
+#include "Graphics/OpenGL/OGLShaderClass.hpp"
+#include "Graphics/OpenGL/OGLCameraClass.hpp"
 
 #ifndef GLEW_STATIC
 #define GLEW_STATIC

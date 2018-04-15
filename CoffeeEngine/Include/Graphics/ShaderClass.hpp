@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Interfaces/IShader.h"
+#include "Common.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Interfaces/IShader.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

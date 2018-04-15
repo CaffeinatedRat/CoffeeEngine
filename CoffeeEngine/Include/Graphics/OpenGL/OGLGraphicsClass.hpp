@@ -10,13 +10,13 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/GraphicsCommon.h"
-#include "Graphics/BaseGraphicsClass.h"
+#include "Common.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/GraphicsCommon.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
 
-#include "Graphics/OpenGL/OGLCommon.h"
-#include "Graphics/OpenGL/OGLCameraClass.h"
+#include "Graphics/OpenGL/OGLCommon.hpp"
+#include "Graphics/OpenGL/OGLCameraClass.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

@@ -21,10 +21,10 @@
 #include <cassert>
 
 // Exception classes.
-#include "Exceptions/Exception.h"
-#include "Exceptions/NullArgumentException.h"
-#include "Exceptions/NotImplementedException.h"
-#include "Exceptions/NotSupportedException.h"
+#include "Exceptions/Exception.hpp"
+#include "Exceptions/NullArgumentException.hpp"
+#include "Exceptions/NotImplementedException.hpp"
+#include "Exceptions/NotSupportedException.hpp"
 
 using namespace CoffeeEngine::Exceptions;
 

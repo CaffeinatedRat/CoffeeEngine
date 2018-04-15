@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "Common.h"
-#include "UtilMath.h"
+#include "Common.hpp"
+#include "UtilMath.hpp"
 #include <type_traits>
 
 namespace CoffeeEngine

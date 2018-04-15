@@ -10,12 +10,12 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Interfaces/IModel.h"
-#include "Interfaces/ICamera.h"
-#include "Interfaces/IShader.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/GraphicsCommon.h"
+#include "Common.hpp"
+#include "Interfaces/IModel.hpp"
+#include "Interfaces/ICamera.hpp"
+#include "Interfaces/IShader.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/GraphicsCommon.hpp"
 
 namespace CoffeeEngine
 {

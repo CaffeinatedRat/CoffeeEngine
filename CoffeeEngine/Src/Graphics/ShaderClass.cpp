@@ -5,8 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Common.h"
-#include "Graphics/ShaderClass.h"
+#include "Common.hpp"
+#include "Graphics/ShaderClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

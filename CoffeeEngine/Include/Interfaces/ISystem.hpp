@@ -11,10 +11,10 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Utility/Logger.h"
-#include "Interfaces/ITimer.h"
-#include "Interfaces/ISystemListener.h"
+#include "Common.hpp"
+#include "Utility/Logger.hpp"
+#include "Interfaces/ITimer.hpp"
+#include "Interfaces/ISystemListener.hpp"
 
 namespace CoffeeEngine
 {

@@ -10,12 +10,12 @@
 //Windows specific.
 #include "../Resources/Resource.h"
 
-#include "Common.h"
-#include "Utility/Logger.h"
+#include "Common.hpp"
+#include "Utility/Logger.hpp"
 
-#include "System/Win32/Windows_EntryPoint.h"
-#include "System/Win32/WindowsSystemClass.h"
-#include "System/Win32/TimerClass.h"
+#include "System/Win32/Windows_EntryPoint.hpp"
+#include "System/Win32/WindowsSystemClass.hpp"
+#include "System/Win32/TimerClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;

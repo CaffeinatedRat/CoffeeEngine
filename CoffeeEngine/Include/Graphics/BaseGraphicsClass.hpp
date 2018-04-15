@@ -9,9 +9,9 @@
 #ifndef _BASE_GRAPHICS_CLASS_H_
 #define _BASE_GRAPHICS_CLASS_H_
 
-#include "Common.h"
-#include "Interfaces/ISystem.h"
-#include "Interfaces/IGraphics.h"
+#include "Common.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Interfaces/IGraphics.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

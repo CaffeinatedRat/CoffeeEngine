@@ -5,6 +5,6 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Global.h"
+#include "Global.hpp"
 
 using namespace CoffeeEngine::Interfaces;

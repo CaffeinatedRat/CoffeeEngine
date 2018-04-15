@@ -9,12 +9,12 @@
 #ifdef _WIN32
 
 #include "stdafx.h"
-#include "Common.h"
-#include "Graphics/DirectX/D3DGraphicsClass.h"
-#include "Graphics/DirectX/D3DModelClass.h"
-#include "Graphics/DirectX/D3DShaderClass.h"
-#include "Graphics/DirectX/D3DCameraClass.h"
-#include "System/Win32/WindowsSystemClass.h"
+#include "Common.hpp"
+#include "Graphics/DirectX/D3DGraphicsClass.hpp"
+#include "Graphics/DirectX/D3DModelClass.hpp"
+#include "Graphics/DirectX/D3DShaderClass.hpp"
+#include "Graphics/DirectX/D3DCameraClass.hpp"
+#include "System/Win32/WindowsSystemClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;

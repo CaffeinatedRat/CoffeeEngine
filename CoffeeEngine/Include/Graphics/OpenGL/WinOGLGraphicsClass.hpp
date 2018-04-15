@@ -13,7 +13,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

@@ -8,7 +8,7 @@
 //Disable the security warnings created by Windows, so that we can increase portability.
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "Utility/UtilTypes.h"
+#include "Utility/UtilTypes.hpp"
 
 using namespace CoffeeEngine::Utility;
 

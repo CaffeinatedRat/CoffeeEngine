@@ -26,7 +26,7 @@
 
 #ifdef _WIN32
 
-#include "Graphics/DirectX/WICTextureLoader.h"
+#include "Graphics/DirectX/WICTextureLoader.hpp"
 
 #include <dxgiformat.h>
 #include <assert.h>

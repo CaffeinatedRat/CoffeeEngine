@@ -9,10 +9,10 @@
 #ifndef _OGL_CAMERA_CLASS_H_
 #define _OGL_CAMERA_CLASS_H_
 
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/CameraClass.h"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/CameraClass.hpp"
 
-#include "Graphics/OpenGL/OGLCommon.h"
+#include "Graphics/OpenGL/OGLCommon.hpp"
 
 using namespace CoffeeEngine::Graphics;
 

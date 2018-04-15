@@ -9,8 +9,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 //Windows specific.
-#include "Common.h"
-#include "Utility/Logger.h"
+#include "Common.hpp"
+#include "Utility/Logger.hpp"
 #include <time.h>
 #include <atomic>
 #include <cassert>

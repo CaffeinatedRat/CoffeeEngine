@@ -12,13 +12,13 @@
 #ifndef _D3DGRAPHICS_CLASS_H_
 #define _D3DGRAPHICS_CLASS_H_
 
-#include "Common.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/GraphicsCommon.h"
+#include "Common.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/GraphicsCommon.hpp"
 
-#include "Graphics/DirectX/D3DCommon.h"
-#include "Graphics/DirectX/D3DCameraClass.h"
+#include "Graphics/DirectX/D3DCommon.hpp"
+#include "Graphics/DirectX/D3DCameraClass.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

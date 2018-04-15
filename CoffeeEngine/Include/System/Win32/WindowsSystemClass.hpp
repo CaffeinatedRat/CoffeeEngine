@@ -13,13 +13,13 @@
 #pragma once
 
 #include "stdafx.h"
-#include "Common.h"
+#include "Common.hpp"
 #include <memory>
 
-#include "Utility/Logger.h"
-#include "Interfaces/ISystem.h"
-#include "Interfaces/ISystemListener.h"
-#include "Interfaces/ITimer.h"
+#include "Utility/Logger.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Interfaces/ISystemListener.hpp"
+#include "Interfaces/ITimer.hpp"
 
 #define MAX_LOADSTRING 100
 

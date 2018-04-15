@@ -5,10 +5,10 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Interfaces/IGraphics.h"
-#include "Interfaces/ISystem.h"
-#include "Graphics/GraphicsUtility.h"
-#include "Graphics/BaseGraphicsClass.h"
+#include "Interfaces/IGraphics.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Graphics/GraphicsUtility.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
 #include <memory>
 
 using namespace CoffeeEngine;
@@ -16,12 +16,12 @@ using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Interfaces;
 
 #ifdef _WIN32
-#include "Graphics/DirectX/D3DGraphicsClass.h"
-#include "Graphics/OpenGL/WinOGLGraphicsClass.h"
+#include "Graphics/DirectX/D3DGraphicsClass.hpp"
+#include "Graphics/OpenGL/WinOGLGraphicsClass.hpp"
 using namespace CoffeeEngine::Graphics::DirectX;
 using namespace CoffeeEngine::Graphics::OpenGL;
 #else
-#include "Graphics/OpenGL/OGLGraphicsClass.h"
+#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
 using namespace CoffeeEngine::Graphics::OpenGL;
 #endif 
 

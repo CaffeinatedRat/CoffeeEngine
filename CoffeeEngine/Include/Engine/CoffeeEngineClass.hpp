@@ -11,17 +11,17 @@
 #pragma once
 
 //#include "stdafx.h"
-//#include "Common.h"
+//#include "Common.hpp"
 
 #include <memory>
 
-#include "Utility/Logger.h"
-#include "Utility/LoggingTypes.h"
-#include "Interfaces/ITimer.h"
-#include "Interfaces/ISystem.h"
-#include "Interfaces/ISystemListener.h"
-#include "Graphics/BaseGraphicsClass.h"
-#include "Graphics/ModelClass.h"
+#include "Utility/Logger.hpp"
+#include "Utility/LoggingTypes.hpp"
+#include "Interfaces/ITimer.hpp"
+#include "Interfaces/ISystem.hpp"
+#include "Interfaces/ISystemListener.hpp"
+#include "Graphics/BaseGraphicsClass.hpp"
+#include "Graphics/ModelClass.hpp"
 
 namespace CoffeeEngine
 {

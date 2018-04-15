@@ -5,9 +5,9 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Common.h"
-#include "Graphics/OpenGL/OGLGraphicsClass.h"
-#include "Graphics/OpenGL/OGLShaderClass.h"
+#include "Common.hpp"
+#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
+#include "Graphics/OpenGL/OGLShaderClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
