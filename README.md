@@ -41,8 +41,9 @@ OpenGL Math library.
 Change Log
 ===========
 
-Change Log
------------
+#### 0.0.3
+This version is mainly structural changes:
+* Header files have been renamed with *.hpp.
 
 #### 0.0.2
 This version is an updated, refactored engine that contains the following changes:
