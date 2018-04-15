@@ -4,6 +4,8 @@
 // Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
 //--------------------------------------------------------------------------------------
 
+#ifdef __linux__
+
 #include "System/Linux/Linux_EntryPoint.h"
 #include "Global.h"
 
@@ -24,3 +26,5 @@ int linux_main(int argc, char *argv[])
 
 	return 0;
 }
+
+#endif

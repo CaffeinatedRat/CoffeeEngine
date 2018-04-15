@@ -12,11 +12,6 @@
 
 #define GLEW_STATIC
 
-//#include <gl/glew.h>
-//#include <gl/wglew.h>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <gl/glu.h>
-
 namespace CoffeeEngine
 {
 	namespace Graphics

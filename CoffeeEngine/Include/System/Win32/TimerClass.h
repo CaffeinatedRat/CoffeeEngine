@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 #ifndef _WINDOWS_TIMER_CLASS_H_
 #define _WINDOWS_TIMER_CLASS_H_
 
@@ -64,5 +66,7 @@ namespace CoffeeEngine
 		};
 	};
 };
+
+#endif
 
 #endif

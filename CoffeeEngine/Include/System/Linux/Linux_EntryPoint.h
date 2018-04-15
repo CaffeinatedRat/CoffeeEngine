@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef __linux__
+
 #ifndef _LINUX_ENTRY_POINT_H_
 #define _LINUX_ENTRY_POINT_H_
 
@@ -12,5 +14,7 @@
 
 //Forward declaration.
 int linux_main(int argc, char *argv[]);
+
+#endif
 
 #endif

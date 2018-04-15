@@ -21,17 +21,17 @@
 		return WinMain_ENTRY(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	}
 
-#else if
+#elif __linux__
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Header file's required:
 	// 1) linux_entrypoint.h -- Entry point into linux & linux based systems.
 	/////////////////////////////////////////////////////////////////////////////////
-	#include "linux_entrypoint.h"
+	#include "System/Linux/Linux_EntryPoint.h"
 
 	int main(int argc, char *argv[])
 	{
-		return linux_main(arc, argv)
+		return linux_main(argc, argv);
 	}
 
 #endif

@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 //Windows specific.
 #include "../Resources/Resource.h"
 
@@ -409,3 +411,5 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	return 0;
 }
+
+#endif

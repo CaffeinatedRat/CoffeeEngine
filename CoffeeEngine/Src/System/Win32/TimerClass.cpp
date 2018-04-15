@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 //Windows specific.
 #include "../Resources/Resource.h"
 #include "System/Win32/TimerClass.h"
@@ -86,3 +88,5 @@ void TimerClass::Run()
 		m_nTickStart = nCurrentNumberOfTicks;
 	}
 }
+
+#endif

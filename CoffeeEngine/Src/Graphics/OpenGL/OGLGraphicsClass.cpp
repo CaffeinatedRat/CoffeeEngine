@@ -67,12 +67,6 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 		return false;
 	}
 
-	//glShadeModel(GL_SMOOTH);
-	//glClearDepth(1.0f);
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LEQUAL);
-	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
 	if(!CreateModeList())
 	{
 		Shutdown();

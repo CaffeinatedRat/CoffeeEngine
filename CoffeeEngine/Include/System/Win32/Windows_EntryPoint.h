@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 #ifndef _WINDOWS_ENTRY_POINT_H_
 #define _WINDOWS_ENTRY_POINT_H_
 
@@ -17,5 +19,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 //Forward declaration.
 int WinMain_ENTRY(HINSTANCE, HINSTANCE, LPTSTR, int);
+
+#endif
 
 #endif

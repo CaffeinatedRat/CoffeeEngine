@@ -20,7 +20,7 @@ using namespace CoffeeEngine::Interfaces;
 #include "Graphics/OpenGL/WinOGLGraphicsClass.h"
 using namespace CoffeeEngine::Graphics::DirectX;
 using namespace CoffeeEngine::Graphics::OpenGL;
-#elif
+#else
 #include "Graphics/OpenGL/OGLGraphicsClass.h"
 using namespace CoffeeEngine::Graphics::OpenGL;
 #endif 

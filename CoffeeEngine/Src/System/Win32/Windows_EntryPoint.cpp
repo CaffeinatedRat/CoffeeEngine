@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+#ifdef _WIN32
+
 #include <memory>
 #include "Common.h"
 #include "System/Win32/Windows_EntryPoint.h"
@@ -95,3 +97,5 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	else
 		return DefWindowProc(hWnd, message, wParam, lParam);
 }
+
+#endif
