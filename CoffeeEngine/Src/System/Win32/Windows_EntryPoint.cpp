@@ -34,7 +34,8 @@ int WinMain_ENTRY(HINSTANCE hInstance,
 	{
 		//Attempt to create the logger and set the verbosity.
 		//Bail if we are unable to create the logger.
-		assert(pLogger = std::make_unique<Logger>(Logger::LOG_FILE_NAME, Verbosity::Normal));
+		pLogger = std::make_unique<Logger>(Logger::LOG_FILE_NAME, Verbosity::Normal);
+		assert(pLogger);
 		if (!pLogger)
 			return -1;
 	}
@@ -45,7 +46,8 @@ int WinMain_ENTRY(HINSTANCE hInstance,
 	try
 	{
 		//Instantiate the main windows operating system object. 
-		assert(pSystem = std::make_unique<WindowsSystemClass>(pLogger.get()));
+		pSystem = std::make_unique<WindowsSystemClass>(pLogger.get());
+		assert(pSystem);
 		
 		//Attempt to instantiate the CoffeeEngine, it will now handle initializing the OS component.
 		pCoffeeEngine = std::make_unique<CoffeeEngineClass>(pSystem.get());

@@ -99,8 +99,8 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 		assert(pixelFormat > 0);
 		if (pixelFormat > 0)
 		{
-			bool bResult = false;
-			assert(bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd));
+			bool bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd);
+			assert(bResult);
 			if (bResult)
 			{
 				int iContextAttributes[] =
@@ -111,14 +111,16 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 					0 // End of attributes list
 				};
 
-				assert((m_renderingContext = wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes)) != nullptr);
+				m_renderingContext = wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes);
+				assert(m_renderingContext != nullptr);
 				if (m_renderingContext == nullptr)
 				{
 					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 3 context could not be created.", LogLevelType::Error);
 					return false;
 				}
 
-				assert(bResult = wglMakeCurrent(m_hdc, m_renderingContext));
+				bResult = wglMakeCurrent(m_hdc, m_renderingContext);
+				assert(bResult);
 
 				//Call the parent class.
 				initializationStatus = OGLGraphicsClass::Initialize(graphicsInitParameters);
@@ -141,18 +143,20 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 		assert(pixelFormat > 0);
 		if (pixelFormat > 0)
 		{
-			bool bResult = false;
-			assert(bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd));
+			bool bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd);
+			assert(bResult);
 			if (bResult)
 			{
-				assert((m_renderingContext = wglCreateContext(m_hdc)) != nullptr);
+				m_renderingContext = wglCreateContext(m_hdc);
+				assert(m_renderingContext != nullptr);
 				if (m_renderingContext == nullptr)
 				{
 					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 2 context could not be created.", LogLevelType::Error);
 					return false;
 				}
-
-				assert(bResult = wglMakeCurrent(m_hdc, m_renderingContext));
+				
+				bResult = wglMakeCurrent(m_hdc, m_renderingContext);
+				assert(bResult);
 
 				//Call the parent class.
 				initializationStatus = OGLGraphicsClass::Initialize(graphicsInitParameters);

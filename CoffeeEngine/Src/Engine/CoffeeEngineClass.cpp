@@ -55,7 +55,8 @@ bool CoffeeEngineClass::Initialize()
 
 	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Attempting to create the graphics device.");
 
-	assert(m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::DIRECTX, m_pSystem));
+	m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::DIRECTX, m_pSystem);
+	assert(m_upGraphics);
 	if (!m_upGraphics)
 		return false;
 
