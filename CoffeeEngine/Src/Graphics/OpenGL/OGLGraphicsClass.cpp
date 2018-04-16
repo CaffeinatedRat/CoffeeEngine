@@ -7,10 +7,10 @@
 
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
-#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
-#include "Graphics/OpenGL/OGLModelClass.hpp"
-#include "Graphics/OpenGL/OGLShaderClass.hpp"
-#include "Graphics/OpenGL/OGLCameraClass.hpp"
+#include "OGLGraphicsClass.hpp"
+#include "OGLModelClass.hpp"
+#include "OGLShaderClass.hpp"
+#include "OGLCameraClass.hpp"
 
 #ifndef GLEW_STATIC
 #define GLEW_STATIC

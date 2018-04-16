@@ -12,7 +12,7 @@
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/CameraClass.hpp"
 
-#include "Graphics/OpenGL/OGLCommon.hpp"
+#include "OGLCommon.hpp"
 
 using namespace CoffeeEngine::Graphics;
 

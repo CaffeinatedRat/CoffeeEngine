@@ -11,9 +11,9 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Interfaces/ISystem.hpp"
-#include "Graphics/GraphicsCommon.hpp"
-#include "Graphics/BaseGraphicsClass.hpp"
+#include "System/ISystem.hpp"
+#include "GraphicsCommon.hpp"
+#include "BaseGraphicsClass.hpp"
 
 #include <memory>
 

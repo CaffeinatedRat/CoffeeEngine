@@ -5,11 +5,11 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
-#include "Engine/CoffeeEngineClass.hpp"
+#include "CoffeeEngineClass.hpp"
 
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
-#include "Interfaces/ISystem.hpp"
+#include "System/ISystem.hpp"
 #include "Graphics/GraphicsUtility.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ModelClass.hpp"

@@ -10,8 +10,8 @@
 #define _BASE_GRAPHICS_CLASS_H_
 
 #include "Common.hpp"
-#include "Interfaces/ISystem.hpp"
-#include "Interfaces/IGraphics.hpp"
+#include "System/ISystem.hpp"
+#include "IGraphics.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

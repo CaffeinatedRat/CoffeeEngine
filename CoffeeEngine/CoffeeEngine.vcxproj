@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;Src;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
@@ -119,7 +119,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;Src;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;Src;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -147,7 +147,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>Resources;Include;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Resources;Include;Src;$(Repository)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
@@ -166,51 +166,51 @@
     <None Include="Shaders\DirectX11\Default.fx" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Common.hpp" />
-    <ClInclude Include="Include\Engine\CoffeeEngineClass.hpp" />
-    <ClInclude Include="Include\Exceptions\Exception.hpp" />
-    <ClCompile Include="Include\Exceptions\NotSupportedException.hpp" />	
-    <ClInclude Include="Include\Exceptions\NotImplementedException.hpp" />
-    <ClInclude Include="Include\Exceptions\NullArgumentException.hpp" />
-    <ClInclude Include="Include\Global.hpp" />
-    <ClInclude Include="Include\Graphics\BaseGraphicsClass.hpp" />
-    <ClInclude Include="Include\Graphics\CameraClass.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\D3DCameraClass.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\D3DCommon.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\D3DGraphicsClass.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\D3DModelClass.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\D3DShaderClass.hpp" />
-    <ClInclude Include="Include\Graphics\DirectX\WICTextureLoader.hpp" />
-    <ClInclude Include="Include\Graphics\GraphicsCommon.hpp" />
-    <ClInclude Include="Include\Graphics\GraphicsUtility.hpp" />
-    <ClInclude Include="Include\Graphics\ModelClass.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\OGLCameraClass.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\OGLGraphicsClass.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\OGLCommon.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\OGLModelClass.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\OGLShaderClass.hpp" />
-    <ClInclude Include="Include\Graphics\OpenGL\WinOGLGraphicsClass.hpp" />
-    <ClInclude Include="Include\Graphics\ShaderClass.hpp" />
-    <ClInclude Include="Include\Interfaces\ICamera.hpp" />
-    <ClInclude Include="Include\Interfaces\IGraphics.hpp" />
-    <ClInclude Include="Include\Interfaces\IModel.hpp" />
-    <ClInclude Include="Include\Interfaces\IShader.hpp" />
-    <ClInclude Include="Include\Interfaces\ISystem.hpp" />
-    <ClInclude Include="Include\Interfaces\ITimer.hpp" />
-    <ClInclude Include="Include\Interfaces\ITransform.hpp" />
     <ClInclude Include="Include\stdafx.h" />
-    <ClInclude Include="Include\System\Linux\Linux_EntryPoint.hpp" />
-    <ClInclude Include="Include\System\SystemCommon.hpp" />
-    <ClInclude Include="Include\System\Win32\WindowsSystemClass.hpp" />
-    <ClInclude Include="Include\System\Win32\TimerClass.hpp" />
-    <ClInclude Include="Include\System\Win32\Windows_EntryPoint.hpp" />
     <ClInclude Include="Include\targetver.h" />
-    <ClInclude Include="Include\Interfaces\ISystemListener.hpp" />
-    <ClInclude Include="Include\Utility\Logger.hpp" />
-    <ClInclude Include="Include\Utility\LoggingTypes.hpp" />
-    <ClInclude Include="Include\Utility\UtilMath.hpp" />
     <ClInclude Include="Resources\Resource.h" />
-    <ClInclude Include="Include\Utility\UtilTypes.hpp" />
+    <ClInclude Include="Src\Common.hpp" />
+    <ClInclude Include="Src\Engine\CoffeeEngineClass.hpp" />
+    <ClInclude Include="Src\Exception.hpp" />
+    <ClInclude Include="Src\Global.hpp" />
+    <ClInclude Include="Src\Graphics\BaseGraphicsClass.hpp" />
+    <ClInclude Include="Src\Graphics\CameraClass.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\D3DCameraClass.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\D3DCommon.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\D3DGraphicsClass.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\D3DModelClass.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\D3DShaderClass.hpp" />
+    <ClInclude Include="Src\Graphics\DirectX\WICTextureLoader.hpp" />
+    <ClInclude Include="Src\Graphics\GraphicsCommon.hpp" />
+    <ClInclude Include="Src\Graphics\GraphicsUtility.hpp" />
+    <ClInclude Include="Src\Graphics\ICamera.hpp" />
+    <ClInclude Include="Src\Graphics\IGraphics.hpp" />
+    <ClInclude Include="Src\Graphics\IModel.hpp" />
+    <ClInclude Include="Src\Graphics\IShader.hpp" />
+    <ClInclude Include="Src\Graphics\ITransform.hpp" />
+    <ClInclude Include="Src\Graphics\ModelClass.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\OGLCameraClass.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\OGLCommon.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\OGLGraphicsClass.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\OGLModelClass.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\OGLShaderClass.hpp" />
+    <ClInclude Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.hpp" />
+    <ClInclude Include="Src\Graphics\ShaderClass.hpp" />
+    <ClInclude Include="Src\NotImplementedException.hpp" />
+    <ClInclude Include="Src\NotSupportedException.hpp" />
+    <ClInclude Include="Src\NullArgumentException.hpp" />
+    <ClInclude Include="Src\System\ISystem.hpp" />
+    <ClInclude Include="Src\System\ISystemListener.hpp" />
+    <ClInclude Include="Src\System\ITimer.hpp" />
+    <ClInclude Include="Src\System\Linux\Linux_EntryPoint.hpp" />
+    <ClInclude Include="Src\System\SystemCommon.hpp" />
+    <ClInclude Include="Src\System\Win32\TimerClass.hpp" />
+    <ClInclude Include="Src\System\Win32\WindowsSystemClass.hpp" />
+    <ClInclude Include="Src\System\Win32\Windows_EntryPoint.hpp" />
+    <ClInclude Include="Src\Utility\Logger.hpp" />
+    <ClInclude Include="Src\Utility\LoggingTypes.hpp" />
+    <ClInclude Include="Src\Utility\UtilMath.hpp" />
+    <ClInclude Include="Src\Utility\UtilTypes.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

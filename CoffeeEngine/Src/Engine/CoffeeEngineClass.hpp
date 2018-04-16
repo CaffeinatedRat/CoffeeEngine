@@ -17,9 +17,9 @@
 
 #include "Utility/Logger.hpp"
 #include "Utility/LoggingTypes.hpp"
-#include "Interfaces/ITimer.hpp"
-#include "Interfaces/ISystem.hpp"
-#include "Interfaces/ISystemListener.hpp"
+#include "System/ITimer.hpp"
+#include "System/ISystem.hpp"
+#include "System/ISystemListener.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ModelClass.hpp"
 

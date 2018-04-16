@@ -11,10 +11,10 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Interfaces/IModel.hpp"
-#include "Interfaces/ICamera.hpp"
-#include "Interfaces/IShader.hpp"
-#include "Interfaces/ISystem.hpp"
+#include "IModel.hpp"
+#include "ICamera.hpp"
+#include "IShader.hpp"
+#include "System/ISystem.hpp"
 #include "Graphics/GraphicsCommon.hpp"
 
 namespace CoffeeEngine

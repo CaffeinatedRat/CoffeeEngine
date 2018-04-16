@@ -16,8 +16,8 @@
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ShaderClass.hpp"
 
-#include "Graphics/DirectX/D3DCommon.hpp"
-#include "Graphics/DirectX/D3DGraphicsClass.hpp"
+#include "D3DCommon.hpp"
+#include "D3DGraphicsClass.hpp"
 
 namespace CoffeeEngine
 {

@@ -13,7 +13,7 @@
 #define _D3DGRAPHICS_CLASS_H_
 
 #include "Common.hpp"
-#include "Interfaces/ISystem.hpp"
+#include "System/ISystem.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/GraphicsCommon.hpp"
 

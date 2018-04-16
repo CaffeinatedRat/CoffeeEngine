@@ -7,7 +7,7 @@
 
 
 #include "Common.hpp"
-#include "Graphics/ModelClass.hpp"
+#include "ModelClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

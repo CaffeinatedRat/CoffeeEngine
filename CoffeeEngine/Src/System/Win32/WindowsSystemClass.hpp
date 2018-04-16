@@ -17,9 +17,9 @@
 #include <memory>
 
 #include "Utility/Logger.hpp"
-#include "Interfaces/ISystem.hpp"
-#include "Interfaces/ISystemListener.hpp"
-#include "Interfaces/ITimer.hpp"
+#include "System/ISystem.hpp"
+#include "System/ISystemListener.hpp"
+#include "System/ITimer.hpp"
 
 #define MAX_LOADSTRING 100
 

@@ -10,7 +10,7 @@
 
 //Windows specific.
 #include "Common.hpp"
-#include "Utility/Logger.hpp"
+#include "Logger.hpp"
 #include <time.h>
 #include <atomic>
 #include <cassert>

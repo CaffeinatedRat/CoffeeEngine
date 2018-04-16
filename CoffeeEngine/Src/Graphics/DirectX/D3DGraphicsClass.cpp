@@ -10,10 +10,10 @@
 
 #include "stdafx.h"
 #include "Common.hpp"
-#include "Graphics/DirectX/D3DGraphicsClass.hpp"
-#include "Graphics/DirectX/D3DModelClass.hpp"
-#include "Graphics/DirectX/D3DShaderClass.hpp"
-#include "Graphics/DirectX/D3DCameraClass.hpp"
+#include "D3DGraphicsClass.hpp"
+#include "D3DModelClass.hpp"
+#include "D3DShaderClass.hpp"
+#include "D3DCameraClass.hpp"
 #include "System/Win32/WindowsSystemClass.hpp"
 
 using namespace CoffeeEngine;

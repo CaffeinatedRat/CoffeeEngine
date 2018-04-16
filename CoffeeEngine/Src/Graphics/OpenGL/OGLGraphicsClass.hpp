@@ -11,12 +11,12 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Interfaces/ISystem.hpp"
+#include "System/ISystem.hpp"
 #include "Graphics/GraphicsCommon.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 
-#include "Graphics/OpenGL/OGLCommon.hpp"
-#include "Graphics/OpenGL/OGLCameraClass.hpp"
+#include "OGLCommon.hpp"
+#include "OGLCameraClass.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

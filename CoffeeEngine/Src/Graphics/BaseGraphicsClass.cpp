@@ -6,7 +6,7 @@
 //--------------------------------------------------------------------------------------
 
 #include "Common.hpp"
-#include "Graphics/BaseGraphicsClass.hpp"
+#include "BaseGraphicsClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

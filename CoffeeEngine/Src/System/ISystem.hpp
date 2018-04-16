@@ -13,8 +13,8 @@
 
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
-#include "Interfaces/ITimer.hpp"
-#include "Interfaces/ISystemListener.hpp"
+#include "ITimer.hpp"
+#include "ISystemListener.hpp"
 
 namespace CoffeeEngine
 {

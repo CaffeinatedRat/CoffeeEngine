@@ -13,9 +13,9 @@
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
 
-#include "System/Win32/Windows_EntryPoint.hpp"
-#include "System/Win32/WindowsSystemClass.hpp"
-#include "System/Win32/TimerClass.hpp"
+#include "Windows_EntryPoint.hpp"
+#include "WindowsSystemClass.hpp"
+#include "TimerClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;

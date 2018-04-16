@@ -11,8 +11,8 @@
 #pragma once
 
 #include "Common.hpp"
-#include "Graphics/BaseGraphicsClass.hpp"
-#include "Interfaces/IShader.hpp"
+#include "BaseGraphicsClass.hpp"
+#include "IShader.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

@@ -9,8 +9,8 @@
 #ifdef _WIN32
 
 #include "Common.hpp"
-#include "Graphics/DirectX/D3DGraphicsClass.hpp"
-#include "Graphics/DirectX/D3DCameraClass.hpp"
+#include "D3DGraphicsClass.hpp"
+#include "D3DCameraClass.hpp"
 
 #include <cmath>
 

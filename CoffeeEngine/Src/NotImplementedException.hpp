@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Exceptions/Exception.hpp"
+#include "Exception.hpp"
 
 namespace CoffeeEngine
 {

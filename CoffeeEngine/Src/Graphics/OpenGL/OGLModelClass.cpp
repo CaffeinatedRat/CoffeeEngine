@@ -6,9 +6,9 @@
 //--------------------------------------------------------------------------------------
 
 #include "Common.hpp"
-#include "Graphics/OpenGL/OGLGraphicsClass.hpp"
-#include "Graphics/OpenGL/OGLCameraClass.hpp"
-#include "Graphics/OpenGL/OGLModelClass.hpp"
+#include "OGLGraphicsClass.hpp"
+#include "OGLCameraClass.hpp"
+#include "OGLModelClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

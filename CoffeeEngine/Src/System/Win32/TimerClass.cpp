@@ -9,7 +9,7 @@
 
 //Windows specific.
 #include "../Resources/Resource.h"
-#include "System/Win32/TimerClass.hpp"
+#include "TimerClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::System;

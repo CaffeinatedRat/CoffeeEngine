@@ -9,8 +9,8 @@
 
 #include <memory>
 #include "Common.hpp"
-#include "System/Win32/Windows_EntryPoint.hpp"
-#include "System/Win32/WindowsSystemClass.hpp"
+#include "Windows_EntryPoint.hpp"
+#include "WindowsSystemClass.hpp"
 #include "Engine/CoffeeEngineClass.hpp"
 
 using namespace CoffeeEngine;

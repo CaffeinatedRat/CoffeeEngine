@@ -11,7 +11,7 @@
 
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ModelClass.hpp"
-#include "Graphics/OpenGL/OGLCommon.hpp"
+#include "OGLCommon.hpp"
 
 namespace CoffeeEngine
 {

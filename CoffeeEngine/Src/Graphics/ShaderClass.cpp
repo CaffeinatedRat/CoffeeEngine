@@ -6,7 +6,7 @@
 //--------------------------------------------------------------------------------------
 
 #include "Common.hpp"
-#include "Graphics/ShaderClass.hpp"
+#include "ShaderClass.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;

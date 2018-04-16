@@ -9,8 +9,8 @@
 #ifdef _WIN32
 
 #include "Common.hpp"
-#include "Graphics/DirectX/D3DGraphicsClass.hpp"
-#include "Graphics/DirectX/D3DShaderClass.hpp"
+#include "D3DGraphicsClass.hpp"
+#include "D3DShaderClass.hpp"
 
 //#include <d3d11.h>
 //#include <D3Dcompiler.h>

@@ -9,10 +9,10 @@
 #ifdef _WIN32
 
 #include "Common.hpp"
-#include "Graphics/DirectX/D3DGraphicsClass.hpp"
-#include "Graphics/DirectX/D3DModelClass.hpp"
-#include "Graphics/DirectX/D3DShaderClass.hpp"
-#include "Graphics/DirectX/WICTextureLoader.hpp"
+#include "D3DGraphicsClass.hpp"
+#include "D3DModelClass.hpp"
+#include "D3DShaderClass.hpp"
+#include "WICTextureLoader.hpp"
 
 #include <d3d11.h>
 //#include <d3dx11async.h>

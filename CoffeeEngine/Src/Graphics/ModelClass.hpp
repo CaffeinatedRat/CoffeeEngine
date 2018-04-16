@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "Graphics/BaseGraphicsClass.hpp"
-#include "Interfaces/IModel.hpp"
+#include "BaseGraphicsClass.hpp"
+#include "IModel.hpp"
 
 using namespace CoffeeEngine::Interfaces;
 

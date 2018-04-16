@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
-#include "Graphics/OpenGL/WinOGLGraphicsClass.hpp"
+#include "WinOGLGraphicsClass.hpp"
 #include "System/Win32/WindowsSystemClass.hpp"
 
 #ifndef GLEW_STATIC
