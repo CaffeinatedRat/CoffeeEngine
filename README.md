@@ -44,6 +44,7 @@ Change Log
 #### 0.0.3
 This version is mainly structural changes:
 * Header files have been renamed with *.hpp.
+* All relevant header files have been physically moved next to their equivalent source file.
 
 #### 0.0.2
 This version is an updated, refactored engine that contains the following changes:
