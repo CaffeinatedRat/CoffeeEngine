@@ -172,6 +172,16 @@ void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logE
 }
 
 /// <summary>
+/// Writes an event to the event log.
+/// </summary>
+/// <param name="logEvent">Event to write to the log.</param>
+/// <param name="logEventType">Type of log event.</param>
+void WindowsSystemClass::WriteToLog(const std::stringstream& logEvent, LogLevelType logEventType) noexcept
+{
+	WriteToLog(logEvent.str()), logEventType;
+}
+
+/// <summary>
 /// Writes an exception as an error event to the log.
 /// </summary>
 /// <param name="exception">Exception to write to the log as an error.</param>

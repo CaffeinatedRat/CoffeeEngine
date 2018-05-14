@@ -55,7 +55,7 @@ bool CoffeeEngineClass::Initialize()
 
 	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Attempting to create the graphics device.");
 
-	m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::DIRECTX, m_pSystem);
+	m_upGraphics = GraphicsFactory::CreateGraphics(GraphicsFactoryTypes::OPENGL, m_pSystem);
 	assert(m_upGraphics);
 	if (!m_upGraphics)
 		return false;
@@ -94,7 +94,7 @@ bool CoffeeEngineClass::Initialize()
 		return false;
 
 	m_pShader = m_upGraphics->CreateShader();
-	if(!m_pShader->Initialize("Default.fx"))
+	if(!m_pShader->Initialize("Default"))
 		return false;
 
 	return (m_bReady = true);

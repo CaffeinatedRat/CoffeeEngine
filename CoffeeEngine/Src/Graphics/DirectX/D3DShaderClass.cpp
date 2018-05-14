@@ -53,9 +53,12 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 	if(sFileName.length() == 0)
 		throw NullArgumentException("D3DShaderClass", "Initialize", "sFileName");
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Beginning...");
+
 	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
 	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
-	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
 
 	//Locals
 	bool bStatus = false;
@@ -70,6 +73,7 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 	
 	vertexShaderPath.append("/Shaders/DirectX11/");
 	vertexShaderPath.append(sFileName);
+	vertexShaderPath.append(".fx");
 	std::wstring vertexShaderPathW(vertexShaderPath.begin(), vertexShaderPath.end());
 
 	//Attempt to load and compile the vertex shader.
@@ -205,14 +209,19 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 	SAFE_RELEASE(pPixelShaderBuffer);
 	SAFE_RELEASE(pErrorMessage);
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Completed.");
+
 	return bStatus;
 }
 
 bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 {
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Beginning...");
+
 	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
 	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
-	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == nullptr)
@@ -253,6 +262,8 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	// Finanly set the constant buffer in the vertex shader with the updated values.
 	pGraphicsClass->GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_pMatrixBuffer);
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Completed.");
+
 	return true;
 }
 
@@ -280,6 +291,8 @@ void D3DShaderClass::Render(float fElapsedTime)
 
 void D3DShaderClass::Shutdown()
 {
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Shutdown] Shutting down...");
+
 	SAFE_RELEASE(m_pVertexShader);
 	SAFE_RELEASE(m_pPixelShader);
 	SAFE_RELEASE(m_pMatrixBuffer);

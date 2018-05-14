@@ -34,7 +34,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns the current operating system.
 			/// </returns>
-			inline const ISystem* GetSystem() const noexcept { return m_pSystem; }
+			inline ISystem* GetSystem() const noexcept { return m_pSystem; }
 
 			/// <summary>
 			/// Returns the current graphics library.

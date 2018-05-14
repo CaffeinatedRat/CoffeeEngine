@@ -11,13 +11,7 @@
 #include "OGLModelClass.hpp"
 #include "OGLShaderClass.hpp"
 #include "OGLCameraClass.hpp"
-
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-#include <gl/glew.h>
-#include <gl/wglew.h>
+#include "OGLCommon.hpp"
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Utility;
@@ -124,6 +118,8 @@ void OGLGraphicsClass::EndScene()
 
 void OGLGraphicsClass::Shutdown()
 {
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Shutdown] Shutting down...");
+
 	m_bDisplayReady = false;
 
 	m_videoCardDescription = "No Information Available.";
@@ -166,6 +162,8 @@ std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
 ////////////////////////////////////////////////////////////
 bool OGLGraphicsClass::InitializeGlew()
 {
+	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] Beginning...");
+
 	if (!m_bGlewInitialized)
 	{
 		GLenum err = glewInit();
@@ -176,6 +174,8 @@ bool OGLGraphicsClass::InitializeGlew()
 		}
 		m_bGlewInitialized = true;
 	}
+
+	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] Completed.");
 
 	return true;
 }
@@ -213,7 +213,11 @@ bool OGLGraphicsClass::CreateRasterState()
 
 bool OGLGraphicsClass::CreateViewPort()
 {
-	//GL COMMENTED OUT FOR BUILD.
-	//glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
+	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Beginning...");
+
+	glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
+
+	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Completed successfully.");
+
 	return true;
 }

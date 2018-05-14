@@ -59,7 +59,7 @@ namespace CoffeeEngine
 				/// <summary>
 				/// Begins the process of shutting down the graphics class and all dependencies.
 				/// </summary>
-				virtual void Shutdown();
+				virtual void Shutdown() override;
 
 				/// <summary>
 				/// Windows Message Handler for Glew

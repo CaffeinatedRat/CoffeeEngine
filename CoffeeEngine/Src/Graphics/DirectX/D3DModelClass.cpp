@@ -54,7 +54,10 @@ bool D3DModelClass::Initialize()
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Initialize", "m_pGraphicsClass");
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Beginning...");
+
 	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
 
 	//Locals
 	bool bStatus = false;
@@ -71,9 +74,7 @@ bool D3DModelClass::Initialize()
 	fileName.append("/Media/coookeee.jpg");
 	std::wstring fileNameW(fileName.begin(), fileName.end());
 
-
 	HRESULT results = CreateWICTextureFromFile(pDevice, fileNameW.c_str(), nullptr, &m_pTexture);
-	//D3DCreateShaderResourceViewFromFile(pDevice, fileNameW.c_str(), NULL, NULL, &m_pTexture, NULL);
 
 	// Set the number of vertices in the vertex array.
 	m_nVertexCount = 6;
@@ -82,8 +83,10 @@ bool D3DModelClass::Initialize()
 	m_nIndexCount = 6;
 
 	// Create the vertex array.
-	SimpleVertexType* vertices = new SimpleVertexType[m_nVertexCount];
-	unsigned long* indices = new unsigned long[m_nIndexCount];
+	auto vertices = std::unique_ptr<SimpleVertexType[]>(new SimpleVertexType[m_nVertexCount]);
+	auto indices = std::unique_ptr<long[]>(new long[m_nVertexCount]);
+	//SimpleVertexType* vertices = new SimpleVertexType[m_nIndexCount];
+	//unsigned long* indices = new unsigned long[m_nIndexCount];
 	
 	//Temporary...
 	if ( (vertices != nullptr) && (indices != nullptr) )
@@ -94,7 +97,7 @@ bool D3DModelClass::Initialize()
 		vertices[0].texture = XMFLOAT2(0.0f, 0.0f);
 
 		vertices[1].position = XMFLOAT3(3.0f, 3.0f, 0.0f);  // Top right.
-		vertices[1].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
 		vertices[1].texture = XMFLOAT2(1.0f, 0.0f);
 
 		vertices[2].position = XMFLOAT3(-3.0f, -3.0f, 0.0f);  // Bottom left.
@@ -130,7 +133,7 @@ bool D3DModelClass::Initialize()
 		vertexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the vertex data.
-		vertexData.pSysMem = vertices;
+		vertexData.pSysMem = vertices.get();
 		vertexData.SysMemPitch = 0;
 		vertexData.SysMemSlicePitch = 0;
 
@@ -149,7 +152,7 @@ bool D3DModelClass::Initialize()
 		indexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the index data.
-		indexData.pSysMem = indices;
+		indexData.pSysMem = indices.get();
 		indexData.SysMemPitch = 0;
 		indexData.SysMemSlicePitch = 0;
 
@@ -166,9 +169,13 @@ bool D3DModelClass::Initialize()
 	//END OF if ( (vertices != NULL) && (indices != NULL) )...
 
 	// Clean up regardless of the status.
-	SAFE_ARRAY_DELETE(vertices);
-	SAFE_ARRAY_DELETE(indices);
+	//SAFE_ARRAY_DELETE(vertices);
+	//SAFE_ARRAY_DELETE(indices);
+	//vertices.release();
+	//indices.release();
 	
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Completed.");
+
 	return bStatus;
 }
 
@@ -178,6 +185,7 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 		throw NullArgumentException("D3DModelClass", "Render", "m_pGraphicsClass");
 
 	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == nullptr)
@@ -224,6 +232,8 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 
 void D3DModelClass::Shutdown()
 {
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Shutting down...");
+
 	SAFE_RELEASE(m_pIndexBuffer);
 	SAFE_RELEASE(m_pVertexBuffer);
 

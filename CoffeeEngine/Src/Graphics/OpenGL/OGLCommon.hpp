@@ -10,7 +10,12 @@
 
 #pragma once
 
+#ifndef GLEW_STATIC
 #define GLEW_STATIC
+#endif
+
+#include <gl/glew.h>
+#include <gl/wglew.h>
 
 namespace CoffeeEngine
 {
@@ -19,6 +24,13 @@ namespace CoffeeEngine
 		namespace OpenGL
 		{
 			const float OGL_PI = 3.14159265f;
+
+			enum class ShaderType {
+				Vertex,
+				Fragment,
+				Geometry,
+				Program
+			};
 		}
 	}
 }

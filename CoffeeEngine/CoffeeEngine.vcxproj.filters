@@ -93,6 +93,8 @@
       <Filter>Shaders\DirectX11</Filter>
     </None>
     <None Include="..\README.md" />
+    <None Include="Shaders\OpenGL\Default.vs" />
+    <None Include="Shaders\OpenGL\Default.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\Resource.h">

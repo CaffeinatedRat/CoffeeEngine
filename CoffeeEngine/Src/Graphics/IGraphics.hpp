@@ -54,8 +54,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns the current operating system.
 			/// </returns>
-			virtual const ISystem* GetSystem() const noexcept = 0;
-
+			virtual ISystem* GetSystem() const noexcept = 0;
 
 			/// <summary>
 			/// Creates a new model for the specific graphics engine.

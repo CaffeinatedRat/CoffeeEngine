@@ -164,6 +164,8 @@
     <None Include="Resources\favicon.ico" />
     <None Include="Resources\small.ico" />
     <None Include="Shaders\DirectX11\Default.fx" />
+    <None Include="Shaders\OpenGL\Default.fs" />
+    <None Include="Shaders\OpenGL\Default.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />

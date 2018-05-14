@@ -52,7 +52,10 @@ bool D3DCameraClass::Initialize()
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DCameraClass", "Initialize", "m_pGraphicsClass");
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Beginning...");
+
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+	assert(pGraphicsClass);
 
 	int nScreenWidth, nScreenHeight;
 	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
@@ -69,6 +72,8 @@ bool D3DCameraClass::Initialize()
 
 	// Initialize the world matrix to the identity matrix.
 	m_worldMatrix = XMMatrixIdentity();
+
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Completed.");
 
 	return true;
 }
@@ -127,7 +132,7 @@ void D3DCameraClass::Render(float fElapsedTime)
 
 void D3DCameraClass::Shutdown()
 {
-
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Shutdown] Shutting down...");
 }
 
 #endif

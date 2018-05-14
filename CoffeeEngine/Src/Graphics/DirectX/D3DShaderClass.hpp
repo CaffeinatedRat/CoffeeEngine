@@ -27,24 +27,6 @@ namespace CoffeeEngine
 		{
 			class D3DShaderClass : public ShaderClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Direct3d
-				ID3D11VertexShader* m_pVertexShader = nullptr;
-				ID3D11PixelShader* m_pPixelShader = nullptr;
-
-				ID3D11InputLayout* m_pLayout = nullptr;
-				ID3D11Buffer* m_pMatrixBuffer = nullptr;
-				ID3D11SamplerState* m_pSampleState = nullptr;
-
-				XMMATRIX m_worldMatrix;
-
 			public:
 			
 				D3DShaderClass() = delete;
@@ -65,6 +47,22 @@ namespace CoffeeEngine
 
 			private:
 				bool SetShaderParameters(float fElapsedTime);
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				//Direct3d
+				ID3D11VertexShader* m_pVertexShader = nullptr;
+				ID3D11PixelShader* m_pPixelShader = nullptr;
+
+				ID3D11InputLayout* m_pLayout = nullptr;
+				ID3D11Buffer* m_pMatrixBuffer = nullptr;
+				ID3D11SamplerState* m_pSampleState = nullptr;
+
+				XMMATRIX m_worldMatrix;
 			};
 		};
 	};

@@ -66,8 +66,9 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Writes to the event log.
 			/// </summary>
-			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
 			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(const std::stringstream&, LogLevelType = LogLevelType::Informational) noexcept override;
 			void WriteToLog(Exception&) noexcept override;
 
 			/// <summary>

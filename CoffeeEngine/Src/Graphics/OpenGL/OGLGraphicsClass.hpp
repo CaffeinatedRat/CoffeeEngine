@@ -62,7 +62,7 @@ namespace CoffeeEngine
 				/// <summary>
 				/// Begins the process of shutting down the graphics class and all dependencies.
 				/// </summary>
-				void Shutdown();
+				virtual void Shutdown();
 
 				/// <summary>
 				/// Creates a new model for the specific graphics engine.
@@ -135,6 +135,7 @@ namespace CoffeeEngine
 			protected:
 				/// <summary>
 				/// Safely initializes the Glew context once.
+				/// This method is idempotent.
 				/// </summary>
 				virtual bool InitializeGlew();
 
@@ -195,6 +196,7 @@ namespace CoffeeEngine
 
 				bool m_bGlewInitialized = false;
 				std::string m_videoCardDescription = "No Information Available.";
+				std::string m_actualVersionInfo = "No version info available.";
 
 				//By default there is no master camera.
 				OGLCameraClass *m_pMasterCamera = nullptr;

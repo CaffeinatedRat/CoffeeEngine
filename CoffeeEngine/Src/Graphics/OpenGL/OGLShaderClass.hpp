@@ -25,19 +25,9 @@ namespace CoffeeEngine
 		{
 			class OGLShaderClass : public ShaderClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-			private:
-				OGLShaderClass();
-
 			public:
 			
+				OGLShaderClass() = delete;
 				OGLShaderClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLShaderClass(const OGLShaderClass& object);
 				virtual ~OGLShaderClass();
@@ -48,6 +38,19 @@ namespace CoffeeEngine
 
 			private:
 				bool SetShaderParameters(float fElapsedTime);
+
+				/// <summary>
+				/// Loads a shader from the file.
+				/// </summary>
+				GLuint LoadShaderFromFile(std::string, ShaderType);
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+				GLuint m_programId = 0;
+
 			};
 		};
 	};

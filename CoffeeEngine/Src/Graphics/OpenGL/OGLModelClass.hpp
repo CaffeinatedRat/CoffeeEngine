@@ -21,22 +21,9 @@ namespace CoffeeEngine
 		{
 			class OGLModelClass : public ModelClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				int m_nVertexCount, m_nIndexCount;
-
-			private:
-				OGLModelClass();
-
 			public:
 			
+				OGLModelClass() = delete;
 				OGLModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLModelClass(const OGLModelClass& object);
 				virtual ~OGLModelClass();
@@ -70,6 +57,24 @@ namespace CoffeeEngine
 				/// Scale the object among one or more of the 3-axises.
 				/// </summary>
 				void Scale(float x, float y, float z);
+
+			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				//Primitives
+				int m_nVertexCount = 0, m_nIndexCount = 0;
+
+				//Vertex buffers.
+				//GLuint m_vaoID[2];
+				//GLuint m_vboID[2];
+				GLuint VBO;
+				GLuint VAO;
+
 			};
 		};
 	};

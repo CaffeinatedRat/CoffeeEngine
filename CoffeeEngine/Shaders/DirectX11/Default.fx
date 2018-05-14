@@ -72,6 +72,5 @@ float4 DefaultPixelShader(SimplePixelInputType input) : SV_TARGET
 
 	//Get pixels color and blend it with the texture's color.
 	float4 color = input.color;
-    color = color * textureColor;
-    return color;
+    return color * textureColor;
 }

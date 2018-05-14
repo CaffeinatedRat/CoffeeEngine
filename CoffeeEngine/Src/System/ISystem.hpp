@@ -46,9 +46,10 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Writes to the event log.
 			/// </summary>
+			virtual void WriteToLog(char const*, Utility::Logging::LogLevelType = Utility::Logging::LogLevelType::Informational) noexcept = 0;
 			virtual void WriteToLog(const std::string&, Utility::Logging::LogLevelType=Utility::Logging::LogLevelType::Informational) noexcept = 0;
-			virtual void WriteToLog(char const*, Utility::Logging::LogLevelType=Utility::Logging::LogLevelType::Informational) noexcept = 0;
-			virtual void WriteToLog(Exception&) noexcept = 0;
+			virtual void WriteToLog(const std::stringstream&, Utility::Logging::LogLevelType=Utility::Logging::LogLevelType::Informational) noexcept = 0;
+			virtual void WriteToLog(Exception&) noexcept = 0;			
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.

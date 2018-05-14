@@ -48,6 +48,8 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	if(m_pSystem == nullptr)
 		throw NullArgumentException("D3DGraphicsClass", "Initialize", "m_pSystem");
 
+	m_pSystem->WriteToLog("[D3DGraphicsClass::Initialize] Beginning...");
+
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
 	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
 	m_bVsyncEnabled = graphicsInitParameters.bVsync;
@@ -91,6 +93,8 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	//We are ready to draw.
 	m_bDisplayReady = true;
 
+	m_pSystem->WriteToLog("[D3DGraphicsClass::Initialize] Ending initialization.");
+
 	return true;
 }
 
@@ -122,6 +126,8 @@ void D3DGraphicsClass::EndScene()
 
 void D3DGraphicsClass::Shutdown()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::Shutdown] Shutting down...");
+
 	m_bDisplayReady = false;
 
 	// Apparently, DirectX11 and possibly DirectX10 is not capable of closing while in fullscreen, so we have to reset the swap chain to windowed mode before we can release it.
@@ -186,6 +192,8 @@ std::vector<std::string> D3DGraphicsClass::GetVideoCardInfo() const
 
 bool D3DGraphicsClass::CreateModeList()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateModeList] Beginning...");
+
 	//Locals.
 	HRESULT result;
 	bool status = false;
@@ -243,17 +251,20 @@ bool D3DGraphicsClass::CreateModeList()
 	SAFE_RELEASE(adapter);
 	SAFE_RELEASE(factory);
 
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateModeList] Completed successfully.");
+
 	return status;
 }
 
 bool D3DGraphicsClass::CreateSwapChain()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateSwapChain] Beginning...");
+
 	//Locals.
 	HRESULT result;
 	bool status = false;
 	DXGI_RATIONAL refreshRate;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ID3D11Texture2D* backBufferPtr = nullptr;
 
 	//Initialize the refresh rate to zero.
 	refreshRate.Denominator = 1;
@@ -262,6 +273,8 @@ bool D3DGraphicsClass::CreateSwapChain()
 	//If VSync is enabled, search for the matching refresh rate 
 	if(m_bVsyncEnabled)
 	{
+		m_pSystem->WriteToLog("[D3DGraphicsClass::CreateSwapChain] VSync is enabled, detecting refresh rate.");
+
 		for(unsigned int i=0; (i < m_nNumOfModes && m_pDisplayModeList != nullptr); i++)
 			if (m_pDisplayModeList[i].Width == (unsigned int)m_nScreenWidth)
 				if (m_pDisplayModeList[i].Height == (unsigned int)m_nScreenHeight)
@@ -320,14 +333,20 @@ bool D3DGraphicsClass::CreateSwapChain()
 	// Create the swap chain, Direct3D device, and Direct3D device context.
 	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevels, numFeatureLevels, 
 		D3D11_SDK_VERSION, &swapChainDesc, &m_pSwapChain, &m_pDevice, NULL, &m_pDeviceContext);
-	if(SUCCEEDED(result))
+	if (SUCCEEDED(result))
 	{
+		ID3D11Texture2D* backBufferPtr = nullptr;
 		// Get the pointer to the back buffer.
-		if(SUCCEEDED(m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr)))
+		if (SUCCEEDED(m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr)))
 		{
 			// Create the render target view with the back buffer pointer.
 			status = SUCCEEDED(m_pDevice->CreateRenderTargetView(backBufferPtr, NULL, &m_pRenderTargetView));
 		}
+
+		// Clean up regardless of the status.
+		SAFE_RELEASE(backBufferPtr);
+
+		m_pSystem->WriteToLog("[D3DGraphicsClass::CreateSwapChain] Completed successfully.");
 	}
 	else
 	{
@@ -335,14 +354,13 @@ bool D3DGraphicsClass::CreateSwapChain()
 			throw Exception("D3DGraphicsClass", "CreateSwapChain", "DirectX is not supported on this machine.");
 	}
 
-	// Clean up regardless of the status.
-	SAFE_RELEASE(backBufferPtr);
-
 	return status;
 }
 
 bool D3DGraphicsClass::CreateDepthBuffer()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateDepthBuffer] Beginning...");
+
 	//Locals
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
@@ -417,11 +435,15 @@ bool D3DGraphicsClass::CreateDepthBuffer()
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
 	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateDepthBuffer] Completed successfully.");
+
 	return true;
 }
 
 bool D3DGraphicsClass::CreateRasterState()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateRasterState] Beginning...");
+
 	D3D11_RASTERIZER_DESC rasterDesc;
 
 	// Setup the raster description which will determine how and what polygons will be drawn.
@@ -445,11 +467,15 @@ bool D3DGraphicsClass::CreateRasterState()
 	// Now set the rasterizer state.
 	m_pDeviceContext->RSSetState(m_pRasterState);
 
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateRasterState] Completed successfully.");
+
 	return true;
 }
 
 bool D3DGraphicsClass::CreateViewPort()
 {
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateViewPort] Beginning...");
+
 	D3D11_VIEWPORT viewport;
 
 	// Setup the viewport for rendering.
@@ -462,6 +488,8 @@ bool D3DGraphicsClass::CreateViewPort()
 
 	// Create the viewport.
 	m_pDeviceContext->RSSetViewports(1, &viewport);
+
+	m_pSystem->WriteToLog("[D3DGraphicsClass::CreateViewPort] Completed successfully.");
 
 	return true;
 }

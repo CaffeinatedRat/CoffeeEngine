@@ -45,7 +45,10 @@ bool OGLCameraClass::Initialize()
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLCameraClass", "Initialize", "m_pGraphicsClass");
 
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Beginning...");
+
 	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
+	assert(pGraphicsClass);
 
 	int nScreenWidth, nScreenHeight;
 	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
@@ -69,6 +72,8 @@ bool OGLCameraClass::Initialize()
 	// Initialize the world matrix to the identity matrix.
 	//glMatrixMode(GL_MODELVIEW);
 	//glLoadIdentity();
+
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Completed.");
 
 	return true;
 }

@@ -42,7 +42,6 @@ WinOGLGraphicsClass::WinOGLGraphicsClass(const WinOGLGraphicsClass& object)
 
 WinOGLGraphicsClass::~WinOGLGraphicsClass()
 {
-	OGLGraphicsClass::Shutdown();
 	Shutdown();
 }
 
@@ -54,6 +53,7 @@ WinOGLGraphicsClass::~WinOGLGraphicsClass()
 bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
 {
 	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
+	assert(pSystem);
 	if (pSystem == nullptr)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_pSystem");
 
@@ -66,8 +66,8 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	m_version.nMajor = graphicsInitParameters.version.nMajor;
 	m_version.nMinor = graphicsInitParameters.version.nMinor;
 
-	if (!InitializeGlew())
-		return false;
+	//if (!InitializeGlew())
+	//	return false;
 
 	//Get the main device context for our current window.
 	m_hdc = GetDC(pSystem->GetHWND());
@@ -82,6 +82,11 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	//Initialized OpenGL version 3.0 and greater, as long as the glew context & formats are supported.
 	if (m_version.nMajor > 2 && WGLEW_ARB_create_context && WGLEW_ARB_pixel_format)
 	{
+		if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)
+		{
+			pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Vertex & Fragment shaders supported.", LogLevelType::Informational);
+		}
+
 		const int iPixelFormats[] =
 		{
 			WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
@@ -108,7 +113,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 					WGL_CONTEXT_MAJOR_VERSION_ARB, m_version.nMajor,
 					WGL_CONTEXT_MINOR_VERSION_ARB, m_version.nMinor,
 					WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-					0 // End of attributes list
+					0
 				};
 
 				m_renderingContext = wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes);
@@ -127,7 +132,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 			}
 		}
 	}
-	//Initialize OpenGL version 2.0 or fall back to 2.0 if glew could not be initialized.
+	//Initialize OpenGL version 2.0 or fall back to 2.0 if the enhanced OpenGL methods are not available.
 	else
 	{
 		memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
@@ -164,6 +169,17 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 		}
 	}
 
+	//Get the actual version, which may not be what we've requested.
+	int version[2];
+	glGetIntegerv(GL_MAJOR_VERSION, &version[0]);
+	glGetIntegerv(GL_MINOR_VERSION, &version[1]);
+
+	//Record the actual version information.
+	std::stringstream stringstream;
+	stringstream << "Actual Version: " << version[0] << "." << version[1];
+	m_actualVersionInfo = stringstream.str();
+
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] " + m_actualVersionInfo);
 	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Ending initialization.");
 	return initializationStatus;
 }
@@ -184,6 +200,8 @@ void WinOGLGraphicsClass::EndScene()
 
 void WinOGLGraphicsClass::Shutdown()
 {
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Shutdown] Shutting down...");
+
 	//Clean up the OpenGL Context.
 	if (m_renderingContext != nullptr)
 	{
