@@ -32,12 +32,6 @@ D3DModelClass::D3DModelClass(BaseGraphicsClass* pBaseGraphicsClass)
 {
 }
 
-D3DModelClass::D3DModelClass(const D3DModelClass& object)
-	: ModelClass(object)
-{
-	//m_pShader = object.m_pShader;
-}
-
 D3DModelClass::~D3DModelClass()
 {
 	Shutdown();
@@ -49,7 +43,7 @@ D3DModelClass::~D3DModelClass()
 // 
 ////////////////////////////////////////////////////////////
 
-bool D3DModelClass::Initialize()
+bool D3DModelClass::Initialize(IShader* pShader)
 {
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Initialize", "m_pGraphicsClass");
@@ -83,57 +77,58 @@ bool D3DModelClass::Initialize()
 	m_nIndexCount = 6;
 
 	// Create the vertex array.
-	auto vertices = std::unique_ptr<SimpleVertexType[]>(new SimpleVertexType[m_nVertexCount]);
+	//auto vertices = std::unique_ptr<SimpleVertexType[]>(new SimpleVertexType[m_nVertexCount]);
 	auto indices = std::unique_ptr<long[]>(new long[m_nVertexCount]);
 	//SimpleVertexType* vertices = new SimpleVertexType[m_nIndexCount];
 	//unsigned long* indices = new unsigned long[m_nIndexCount];
 	
 	//Temporary...
-	if ( (vertices != nullptr) && (indices != nullptr) )
+	//if ( (vertices != nullptr) && (indices != nullptr) )
+	if ((indices != nullptr))
 	{
+		float vertices[] = {
+			//positions           //RGBA                    //Textures
+			-3.0f,  3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.5f,   0.0f, 0.0f,
+			3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+			-3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+			3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.2f,   1.0f, 1.0f,
+		};
+
 		// Load the vertex array with data.
-		vertices[0].position = XMFLOAT3(-3.0f, 3.0f, 0.0f);  // Top left.
-		vertices[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
-		vertices[0].texture = XMFLOAT2(0.0f, 0.0f);
+		//vertices[0].position = XMFLOAT3(-3.0f, 3.0f, 0.0f);  // Top left.
+		//vertices[0].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
+		//vertices[0].texture = XMFLOAT2(0.0f, 0.0f);
 
-		vertices[1].position = XMFLOAT3(3.0f, 3.0f, 0.0f);  // Top right.
-		vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-		vertices[1].texture = XMFLOAT2(1.0f, 0.0f);
+		//vertices[1].position = XMFLOAT3(3.0f, 3.0f, 0.0f);  // Top right.
+		//vertices[1].color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		//vertices[1].texture = XMFLOAT2(1.0f, 0.0f);
 
-		vertices[2].position = XMFLOAT3(-3.0f, -3.0f, 0.0f);  // Bottom left.
-		vertices[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertices[2].texture = XMFLOAT2(0.0f, 1.0f);
+		//vertices[2].position = XMFLOAT3(-3.0f, -3.0f, 0.0f);  // Bottom left.
+		//vertices[2].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		//vertices[2].texture = XMFLOAT2(0.0f, 1.0f);
 
-		vertices[3].position = XMFLOAT3(3.0f, 3.0f, 0.0f);  // Top right.
-		vertices[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-
-		vertices[4].position = XMFLOAT3(3.0f, -3.0f, 0.0f);  // Bottom Right.
-		vertices[4].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.2f);
-		vertices[4].texture = XMFLOAT2(1.0f, 1.0f);
-
-		vertices[5].position = XMFLOAT3(-3.0f, -3.0f, 0.0f);  // Bottom left.
-		vertices[5].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertices[5].texture = XMFLOAT2(0.0f, 1.0f);
+		//vertices[3].position = XMFLOAT3(3.0f, -3.0f, 0.0f);  // Bottom Right.
+		//vertices[3].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.2f);
+		//vertices[3].texture = XMFLOAT2(1.0f, 1.0f);
 
 		// Load the index array with data.
 		indices[0] = 0;  // Top Left.
 		indices[1] = 1;  // Top Right.
 		indices[2] = 2;  // Bottom Left.
-		indices[3] = 3;  // Bottom Right.
-		indices[4] = 4;  // Bottom Right.
-		indices[5] = 5;  // Bottom Right.
+		indices[3] = 1;  // Top Right.
+		indices[4] = 3;  // Bottom Right.
+		indices[5] = 2;  // Bottom Right.
 
 		// Set up the description of the vertex buffer.
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = sizeof(SimpleVertexType) * m_nVertexCount;
+		vertexBufferDesc.ByteWidth = 9 * 4 * sizeof(float); //sizeof(SimpleVertexType) * m_nVertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
 		vertexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the vertex data.
-		vertexData.pSysMem = vertices.get();
+		vertexData.pSysMem = vertices; //vertices.get();
 		vertexData.SysMemPitch = 0;
 		vertexData.SysMemSlicePitch = 0;
 
@@ -167,19 +162,13 @@ bool D3DModelClass::Initialize()
 		}
 	}
 	//END OF if ( (vertices != NULL) && (indices != NULL) )...
-
-	// Clean up regardless of the status.
-	//SAFE_ARRAY_DELETE(vertices);
-	//SAFE_ARRAY_DELETE(indices);
-	//vertices.release();
-	//indices.release();
 	
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Completed.");
 
 	return bStatus;
 }
 
-void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
+void D3DModelClass::Render(float fElapsedTime) const
 {
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Render", "m_pGraphicsClass");
@@ -198,18 +187,35 @@ void D3DModelClass::Render(IShader* pShader, float fElapsedTime)
 	//NOTE: The order of Matrix transformations matter and will result in different effects.
 	// This simple transformation does not take into account more complex transformations.
 	scaleMatrix = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
-	worldMatrix = XMMatrixMultiply(worldMatrix, scaleMatrix);
+	worldMatrix *= scaleMatrix;
 	rotateMatrix = XMMatrixRotationRollPitchYaw(m_rotate.y, m_rotate.x, m_rotate.z);
-	worldMatrix = XMMatrixMultiply(worldMatrix, rotateMatrix);
+	worldMatrix *= rotateMatrix;
 	translateMatrix = XMMatrixTranslation(m_translate.x, m_translate.y, m_translate.z);
-	worldMatrix = XMMatrixMultiply(worldMatrix, translateMatrix);
+	worldMatrix *= translateMatrix;
 
-	((CoffeeEngine::Graphics::DirectX::D3DShaderClass*)pShader)->SetWorldMatrix(worldMatrix);
+	//Get the shaders.
+	CoffeeEngine::Graphics::DirectX::D3DShaderClass* firstShader = (CoffeeEngine::Graphics::DirectX::D3DShaderClass*)(m_shaders.size() > 0 ? m_shaders[0] : nullptr);
+	if (firstShader != nullptr) {
+		firstShader->SetWorldMatrix(worldMatrix);
+	}
 
-	//Render a shader if one was provided...if not good luck!
-	if (pShader != nullptr)
-		pShader->Render(fElapsedTime);
-	
+	//Render all shaders.
+	if (m_shaders.size() > 1)
+	{
+		//TODO: Make it dynamic cast, but it requires changing render to be a const function.
+		firstShader->Render(fElapsedTime);
+	}
+	else
+	{
+		//TODO: Make it dynamic cast, but it requires changing render to be a const function.
+		for (const IShader* pShader : m_shaders) {
+			CoffeeEngine::Graphics::DirectX::D3DShaderClass* shader = (CoffeeEngine::Graphics::DirectX::D3DShaderClass*)pShader;
+			if (shader != nullptr) {
+				shader->Render(fElapsedTime);
+			}
+		}
+	}
+
 	// Set vertex buffer stride and offset.
 	unsigned int stride = sizeof(SimpleVertexType); 
 	unsigned int offset = 0;
