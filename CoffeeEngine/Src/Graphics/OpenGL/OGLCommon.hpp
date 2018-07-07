@@ -14,6 +14,7 @@
 #define GLEW_STATIC
 #endif
 
+#include <glm/glm.hpp>
 #include <gl/glew.h>
 #include <gl/wglew.h>
 
