@@ -196,7 +196,7 @@ void WindowsSystemClass::WriteToLog(Exception& exception) noexcept
 
 std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
 {
-	std::string sRootDirectory = "";
+	std::string rootDirectory;
 	wchar_t* buffer = nullptr;
 	char* convertedString = nullptr;
 
@@ -219,7 +219,7 @@ std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
 				{
 					size_t convertedChars = 0;
 					wcstombs_s(&convertedChars, convertedString, bufferSize, buffer, _TRUNCATE);
-					sRootDirectory = std::string(convertedString);
+					rootDirectory = std::string(convertedString);
 				}
 				//END OF if ( (convertedString = new char[bufferSize]) != nullptr)..
 			}
@@ -232,7 +232,7 @@ std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
 	SAFE_DELETE(buffer);
 	SAFE_DELETE(convertedString);
 
-	return sRootDirectory;
+	return rootDirectory;
 }
 
 inline ITimer* WindowsSystemClass::CreateTimer()
