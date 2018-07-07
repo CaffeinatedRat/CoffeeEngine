@@ -232,6 +232,9 @@
     <ClInclude Include="Src\Graphics\ShaderClass.hpp">
       <Filter>Graphics\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Graphics\OpenGL\stb_image.hpp">
+      <Filter>Graphics\OpenGL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Global.cpp">
