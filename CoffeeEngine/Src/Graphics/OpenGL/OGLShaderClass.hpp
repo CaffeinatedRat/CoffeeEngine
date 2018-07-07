@@ -36,6 +36,56 @@ namespace CoffeeEngine
 				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
 
+				inline void SetWorldMatrix(glm::mat4 &worldMatrix) { m_worldMatrix = worldMatrix; }
+
+				inline void setInt(const char* name, int value) const {
+					glUniform1i(glGetUniformLocation(m_programId, name), value);
+				}
+
+				inline void setBool(const char* name, bool value) const {
+					glUniform1i(glGetUniformLocation(m_programId, name), (int)value);
+				}
+
+				inline void setFloat(const char* name, float value) const {
+					glUniform1f(glGetUniformLocation(m_programId, name), value);
+				}
+
+				inline void setVector2(const char* name, const glm::vec2& vec) const {
+					glUniform2fv(glGetUniformLocation(m_programId, name), 1, &vec[0]);
+				}
+
+				inline void setVector2(const char* name, float x, float y) const {
+					glUniform2f(glGetUniformLocation(m_programId, name), x, y);
+				}
+
+				inline void setVector3(const char* name, const glm::vec3& vec) const {
+					glUniform3fv(glGetUniformLocation(m_programId, name), 1, &vec[0]);
+				}
+
+				inline void setVector3(const char* name, float x, float y, float z) const {
+					glUniform3f(glGetUniformLocation(m_programId, name), x, y, z);
+				}
+
+				inline void setVector4(const char* name, const glm::vec4& vec) const {
+					glUniform4fv(glGetUniformLocation(m_programId, name), 1, &vec[0]);
+				}
+
+				inline void setVector4(const char* name, float x, float y, float z, float w) const {
+					glUniform4f(glGetUniformLocation(m_programId, name), x, y, z, w);
+				}
+
+				inline void setMatrix2(const char* name, glm::mat2& mat) const {
+					glUniformMatrix2fv(glGetUniformLocation(m_programId, name), 1, GL_FALSE, &mat[0][0]);
+				}
+
+				inline void setMatrix3(const char* name, glm::mat3& mat) const {
+					glUniformMatrix3fv(glGetUniformLocation(m_programId, name), 1, GL_FALSE, &mat[0][0]);
+				}
+
+				inline void setMatrix4(const char* name, const glm::mat4& mat) const {
+					glUniformMatrix4fv(glGetUniformLocation(m_programId, name), 1, GL_FALSE, &mat[0][0]);
+				}
+
 			private:
 				bool SetShaderParameters(float fElapsedTime);
 
@@ -49,7 +99,9 @@ namespace CoffeeEngine
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
+			private:
 				GLuint m_programId = 0;
+				glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 
 			};
 		};

@@ -12,6 +12,8 @@
 
 #include <fstream>
 
+#include <glm/gtc/type_ptr.hpp>
+
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
@@ -107,6 +109,9 @@ bool OGLShaderClass::Initialize(const std::string& sFileName)
 	glDeleteShader(fragmentShader);
 	glDeleteShader(vertexShader);
 
+	Render(0);
+	setInt("texture1", 0);
+
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLShaderClass::Initialize] Completed.");
 	return status;
 }
@@ -196,6 +201,7 @@ bool OGLShaderClass::SetShaderParameters(float fElapsedTime)
 void OGLShaderClass::Render(float fElapsedTime)
 {
 	glUseProgram(m_programId);
+	setMatrix4("transform", m_worldMatrix);
 	return;
 }
 
