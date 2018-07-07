@@ -156,6 +156,8 @@ void WindowsSystemClass::Shutdown()
 /// <param name="szEvent">Event to write to the log.</param>
 void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventType) noexcept
 {
+	assert(m_plogger != nullptr);
+
 	if (m_plogger != nullptr)
 		m_plogger->Write(szEvent, logEventType);
 }
@@ -167,6 +169,8 @@ void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventTy
 /// <param name="logEventType">Type of log event.</param>
 void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logEventType) noexcept
 {
+	assert(m_plogger != nullptr);
+
 	if (m_plogger != nullptr)
 		m_plogger->Write(sEvent, logEventType);
 }
