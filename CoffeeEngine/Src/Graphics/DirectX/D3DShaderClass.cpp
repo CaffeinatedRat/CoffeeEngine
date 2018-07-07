@@ -192,6 +192,8 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 		}
 		else
 		{
+			SAFE_RELEASE(pVertexShaderBuffer);
+			SAFE_RELEASE(pPixelShaderBuffer);
 			//For development...add logging.
 			throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 		}
@@ -199,6 +201,7 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 	}
 	else
 	{
+		SAFE_RELEASE(pVertexShaderBuffer);
 		//For development...add logging.
 		throw Exception("D3DShaderClass", "Initialize", (char*)pErrorMessage->GetBufferPointer());
 	}
@@ -259,7 +262,7 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	//Release the buffer, we are done.
 	pGraphicsClass->GetDeviceContext()->Unmap(m_pMatrixBuffer, 0);
 
-	// Finanly set the constant buffer in the vertex shader with the updated values.
+	//Finally set the constant buffer in the vertex shader with the updated values.
 	pGraphicsClass->GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_pMatrixBuffer);
 
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Completed.");

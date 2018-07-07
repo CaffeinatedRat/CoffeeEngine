@@ -25,7 +25,17 @@ ModelClass::ModelClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	m_pGraphicsClass = pBaseGraphicsClass;
 }
 
-ModelClass::ModelClass(const ModelClass& object)
+void ModelClass::AddShader(const IShader* pShader)
 {
-	m_pGraphicsClass = object.m_pGraphicsClass;
+	assert(pShader != nullptr);
+	m_shaders.push_back(pShader);
+}
+
+void ModelClass::AddShaders(std::vector<const IShader*>& pShaders)
+{
+	for (const IShader* pShader : pShaders) {
+		if (pShader != nullptr) {
+			m_shaders.push_back(pShader);
+		}
+	}
 }

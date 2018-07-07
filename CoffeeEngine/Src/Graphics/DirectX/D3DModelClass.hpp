@@ -32,18 +32,18 @@ namespace CoffeeEngine
 			
 				D3DModelClass() = delete;
 				D3DModelClass(BaseGraphicsClass* pBaseGraphicsClass);
-				D3DModelClass(const D3DModelClass& object);
+				D3DModelClass(D3DModelClass&& object) = default;
 				virtual ~D3DModelClass();
 
 				/// <summary>
 				/// Attempts to initialize the model object.
 				/// </summary>
-				bool Initialize();
+				bool Initialize(IShader* pShader);
 
 				/// <summary>
 				/// Begin rendering the model.
 				/// </summary>
-				void Render(IShader* pShader, float fElapsedTime);
+				void Render(float fElapsedTime) const;
 
 				/// <summary>
 				/// Begins the process of cleaning up the model.

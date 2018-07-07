@@ -23,12 +23,18 @@ namespace CoffeeEngine
 		{
 		protected:
 			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
+			std::vector<const IShader*> m_shaders;
 
 		public:		
 			ModelClass() = delete;
 			ModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
-			ModelClass(const ModelClass& object);
+			ModelClass(ModelClass&&) = default;
 			virtual ~ModelClass() { };
+
+			ModelClass& operator=(ModelClass&&) = default;
+
+			void AddShader(const IShader* pShader);
+			void AddShaders(std::vector<const IShader*>& pShader);
 		};
 	};
 };

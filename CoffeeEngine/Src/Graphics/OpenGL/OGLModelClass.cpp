@@ -11,6 +11,14 @@
 #include "OGLModelClass.hpp"
 #include "OGLCommon.hpp"
 
+#include "OGLShaderClass.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.hpp"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <cmath>
+
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
@@ -27,12 +35,6 @@ OGLModelClass::OGLModelClass(const BaseGraphicsClass* pBaseGraphicsClass)
 
 }
 
-OGLModelClass::OGLModelClass(const OGLModelClass& object)
-	: ModelClass(object)
-{
-
-}
-
 OGLModelClass::~OGLModelClass()
 {
 	Shutdown();
@@ -44,7 +46,7 @@ OGLModelClass::~OGLModelClass()
 // 
 ////////////////////////////////////////////////////////////
 
-bool OGLModelClass::Initialize()
+bool OGLModelClass::Initialize(IShader* pShader)
 {
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLModelClass", "Initialize", "m_pGraphicsClass");
@@ -54,94 +56,88 @@ bool OGLModelClass::Initialize()
 	auto pGraphicsClass = dynamic_cast<const OGLGraphicsClass*>(m_pGraphicsClass);
 	assert(pGraphicsClass);
 
-	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
-	std::string fileName = rootPath;
-	
-	fileName.append("/Media/coookeee.jpg");
-	std::wstring fileNameW(fileName.begin(), fileName.end());
-	
-	//glTexImage2D(GL_TEXTURE_2D, 0, 3, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)screenData);
-
 	// Set the number of vertices in the vertex array.
 	m_nVertexCount = 6;
 
-	//const int totalNumberOfVerticies = m_nVertexCount * 3;
-	//auto vertices = std::unique_ptr<float[]>(new float[totalNumberOfVerticies]);
-	//auto colors = std::unique_ptr<float[]>(new float[totalNumberOfVerticies]);
-
-	//vertices[0] = -3.0f; vertices[1] = 3.0f; vertices[2] = 0.0f;
-	//vertices[3] = 3.0f; vertices[4] = 3.0f; vertices[5] = 0.0f;
-	//vertices[6] = -3.0f; vertices[7] = -3.0f; vertices[8] = 0.0f;
-	//
-	//vertices[9] = -3.0f; vertices[10] = -3.0f; vertices[11] = 0.0f;
-	//vertices[12] = -3.0f; vertices[13] = -3.0f; vertices[14] = 0.0f;
-	//vertices[15] = -3.0f; vertices[16] = -3.0f; vertices[17] = 0.0f;
-
-	//float vertices[] = {
-	//	// positions         // colors
-	//	0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-	//	-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-	//	0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
-	//};
-
 	float vertices[] = {
-		-3.0f, 3.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-		3.0f, 3.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-		-3.0f, -3.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-		3.0f, 3.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-		3.0f, -3.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-		-3.0f, -3.0f, 0.0f,  1.0f, 1.0f, 1.0f
+		//positions           //RGBA                    //Textures
+		-3.0f,  3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.5f,   0.0f, 0.0f,
+		 3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+		-3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+		 3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.2f,   1.0f, 1.0f,
 	};
 
-	//for (int i = 0; i < totalNumberOfVerticies; i++)
-	//{
-	//	colors[i] = 1.0;
-	//}
+	unsigned int indices[] = {
+		0, 2, 1, // first triangle
+		1, 2, 3  // second triangle
+	};
 
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	//Create the vertex buffer and array.
+	glGenVertexArrays(1, &m_vertexArrayID);
+	glGenBuffers(1, &m_vertexBufferID);
+	glGenBuffers(1, &m_indexArrayID);
 
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
+	// Bind early so we can save our vertex attributes.
+	glBindVertexArray(m_vertexArrayID);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Bind the buffer and send the linear block of vertices.
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexArrayID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	// texture attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
-	// Two VAOs allocation
-	//glGenVertexArrays(2, &m_vaoID[0]);
-
-	// First VAO setup
-	//glBindVertexArray(m_vaoID[0]);
-
-	//glGenBuffers(2, m_vboID);
-	//glGenBuffers(1, m_vboID);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, m_vboID[0]);
-	//glBufferData(GL_ARRAY_BUFFER, totalNumberOfVerticies * sizeof(GLfloat), vertices.get(), GL_STATIC_DRAW);
-	//glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(0);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, m_vboID[1]);
-	//glBufferData(GL_ARRAY_BUFFER, totalNumberOfVerticies * sizeof(GLfloat), colors.get(), GL_STATIC_DRAW);
-	//glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(1);
-
+	//Unbind our vertex array.
 	//glBindVertexArray(0);
+
+	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
+	std::string fileName = rootPath;
+
+	fileName.append("/Media/coookeee.jpg");
+
+	// ---------
+	glGenTextures(1, &m_defaultTextureID);
+	glBindTexture(GL_TEXTURE_2D, m_defaultTextureID);
+	
+	//Set the texture wrapping to repeat for now.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
+	//Set the mipmap filtering.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load image, create texture and generate mipmaps
+	int width, height, nrChannels;
+	//stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load(fileName.c_str(), &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	//Clean up the data, we've already created the texture.
+	stbi_image_free(data);
 
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] Completed.");
 
 	return true;
 }
 
-void OGLModelClass::Render(IShader* pShader, float fElapsedTime)
+void OGLModelClass::Render(float fElapsedTime) const
 {
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLModelClass", "Render", "m_pGraphicsClass");
@@ -153,40 +149,69 @@ void OGLModelClass::Render(IShader* pShader, float fElapsedTime)
 	if(pMasterCamera == nullptr)
 		throw Exception("OGLModelClass", "Render", "There is no master camera.  You need a camera to see!");
 
-	//Render a shader if one was provided...if not good luck!
-	if (pShader != nullptr)
-		pShader->Render(fElapsedTime);
+	//Apply transformations.
+	glm::mat4 worldMatrix = glm::mat4(1.0f);
 
-	//glBindVertexArray(m_vaoID[0]);		// select first VAO
-	glBindVertexArray(VAO);		// select first VAO
-	glDrawArrays(GL_TRIANGLES, 0, m_nVertexCount);	// draw first object
+	//NOTE: The order of Matrix transformations matter and will result in different effects.
+	// This simple transformation does not take into account more complex transformations.
+	worldMatrix = glm::scale(worldMatrix, m_scale);
+	//worldMatrix = glm::rotate(worldMatrix, fElapsedTime,  m_rotate);
+	//worldMatrix = glm::translate(worldMatrix, m_translate);
+
+	worldMatrix = glm::rotate(worldMatrix, std::fmod(fElapsedTime, 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	worldMatrix = glm::translate(worldMatrix, glm::vec3(0.5f, -0.5f, 0.0f));
+	//worldMatrix = glm::translate(worldMatrix, m_translate);
+
+	//Get the shaders.
+	CoffeeEngine::Graphics::OpenGL::OGLShaderClass* firstShader = (CoffeeEngine::Graphics::OpenGL::OGLShaderClass*)(m_shaders.size() > 0 ? m_shaders[0] : nullptr);
+	if (firstShader != nullptr) {
+		firstShader->SetWorldMatrix(worldMatrix);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_defaultTextureID);
+
+	//Render all shaders.
+	if (m_shaders.size() > 1)
+	{
+		//TODO: Make it dynamic cast, but it requires changing render to be a const function.
+		firstShader->Render(fElapsedTime);
+	}
+	else
+	{
+		//TODO: Make it dynamic cast, but it requires changing render to be a const function.
+		for (const IShader* pShader : m_shaders) {
+			CoffeeEngine::Graphics::OpenGL::OGLShaderClass* shader = (CoffeeEngine::Graphics::OpenGL::OGLShaderClass*)pShader;
+			if (shader != nullptr) {
+				shader->Render(fElapsedTime);
+			}
+		}
+	}
+
+	glBindVertexArray(m_vertexArrayID);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void OGLModelClass::Shutdown()
 {
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] Shutting down...");
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glDeleteBuffers(2, m_vboID);
-	glDeleteBuffers(1, &VBO);
-
-	glBindVertexArray(0);
-	//glDeleteVertexArrays(2, m_vaoID);
-	glDeleteVertexArrays(1, &VAO);
+	glDeleteVertexArrays(1, &m_vertexArrayID);
+	glDeleteBuffers(1, &m_vertexBufferID);
+	glDeleteBuffers(1, &m_indexArrayID);
 }
 
 void OGLModelClass::Rotate(float x, float y, float z)
 {
-	//m_rotate = D3DXVECTOR3(x, y, z);
+	m_rotate = glm::vec3(x, y, z);
 }
 
 void OGLModelClass::Translate(float x, float y, float z)
 {
-	//m_translate = D3DXVECTOR3(x, y, z);
+	m_translate = glm::vec3(x, y, z);
 }
 
 void OGLModelClass::Scale(float x, float y, float z)
 {
-	//m_scale = D3DXVECTOR3(x, y, z);
+	m_scale = glm::vec3(x, y, z);
 }

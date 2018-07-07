@@ -25,12 +25,18 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Attempts to initialize the model object.
 			/// </summary>
-			virtual bool Initialize() = 0;
+			virtual bool Initialize(IShader*) = 0;
 
 			/// <summary>
 			/// Begin rendering the model.
 			/// </summary>
-			virtual void Render(IShader*, float) = 0;
+			virtual void Render(float) const = 0;
+
+			/// <summary>
+			/// A method for adding shaders to a model.
+			/// </summary>
+			virtual void AddShader(const IShader*) = 0;
+			virtual void AddShaders(std::vector<const IShader*>&) = 0;
 
 			/// <summary>
 			/// Begins the process of cleaning up the model.

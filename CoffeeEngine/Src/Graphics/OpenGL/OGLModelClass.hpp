@@ -25,18 +25,18 @@ namespace CoffeeEngine
 			
 				OGLModelClass() = delete;
 				OGLModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
-				OGLModelClass(const OGLModelClass& object);
+				OGLModelClass(OGLModelClass&&) = default;
 				virtual ~OGLModelClass();
 
 				/// <summary>
 				/// Attempts to initialize the model object.
 				/// </summary>
-				bool Initialize();
+				bool Initialize(IShader* pShader);
 
 				/// <summary>
 				/// Begin rendering the model.
 				/// </summary>
-				void Render(IShader* pShader, float fElapsedTime);
+				void Render(float fElapsedTime) const;
 
 				/// <summary>
 				/// Begins the process of cleaning up the model.
@@ -70,10 +70,15 @@ namespace CoffeeEngine
 				int m_nVertexCount = 0, m_nIndexCount = 0;
 
 				//Vertex buffers.
-				//GLuint m_vaoID[2];
-				//GLuint m_vboID[2];
-				GLuint VBO;
-				GLuint VAO;
+				GLuint m_vertexBufferID;
+				GLuint m_vertexArrayID;
+				GLuint m_defaultTextureID;
+
+				GLuint m_indexArrayID;
+
+				glm::vec3 m_rotate = glm::vec3(0.0f, 0.0f, 0.0f);
+				glm::vec3 m_scale = glm::vec3(1.0f, 1.0f, 1.0f);
+				glm::vec3 m_translate = glm::vec3(0.0f, 0.0f, 0.0f);
 
 			};
 		};
