@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The transform interface allows an object to be transformed geometrically.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 

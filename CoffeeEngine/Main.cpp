@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Defines the main entry point for the application.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 //--------------------------------------------------------------------------------------
 
 #ifdef _WIN32

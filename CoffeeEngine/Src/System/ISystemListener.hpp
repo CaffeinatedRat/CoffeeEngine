@@ -2,7 +2,7 @@
 // Description: The operating system listener interface.
 // Used to provide a light-weight skeleton of a set of methods that a listener is prepared to handle.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 

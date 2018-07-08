@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Manages the windows operating system.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -361,6 +361,11 @@ void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 	RegisterClassEx(&wcex);
 }
 
+int WindowsSystemClass::TranslateKeys(int virtualKey)
+{
+	return 0;
+}
+
 ////////////////////////////////////////////////////////////
 //
 //                INTERNAL MESSAGE HANDLER
@@ -402,6 +407,17 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 		EndPaint(hWnd, &ps);
 
 		//WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::Diagnostic);
+	}
+	break;
+
+	case WM_KEYDOWN:
+	{
+		int keyPress = (int)wParam;
+		switch (keyPress)
+		{
+		case VK_LEFT:
+			break;
+		}
 	}
 	break;
 

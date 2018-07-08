@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: This exception usually occurs if an argument that is supplied is null.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -20,12 +20,12 @@ namespace CoffeeEngine
 		{
 		public:
 		
-			NullArgumentException(const std::string& sClassName, const std::string& sMethodName, const std::string& sArgument)
-				: Exception(sClassName, sMethodName)
+			NullArgumentException(const std::string& className, const std::string& methodName, const std::string& argument)
+				: Exception(className, methodName)
 			{
-				m_sMessage.append("The argument ");
-				m_sMessage.append(sArgument);
-				m_sMessage.append(" is null.");
+				m_Message.append("The argument ");
+				m_Message.append(argument);
+				m_Message.append(" is null.");
 			}
 			
 			NullArgumentException(const NullArgumentException& exception) : Exception(exception) {}

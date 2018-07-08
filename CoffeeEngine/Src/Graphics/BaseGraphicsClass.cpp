@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: The base graphics class.  Used to provide a a foundation for all the graphics classes that should be created.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 

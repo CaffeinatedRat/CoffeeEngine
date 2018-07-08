@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a not supported exception for features that are not supported.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -20,10 +20,10 @@ namespace CoffeeEngine
 		{
 		public:
 
-			NotSupportedException(const std::string& sClassName, const std::string& sMethodName)
-				: Exception(sClassName, sMethodName)
+			NotSupportedException(const std::string& className, const std::string& methodName)
+				: Exception(className, methodName)
 			{
-				m_sMessage = "This type is not supported.";
+				m_Message = "This type is not supported.";
 			}
 
 			NotSupportedException(const NotSupportedException& exception) : Exception(exception) {}

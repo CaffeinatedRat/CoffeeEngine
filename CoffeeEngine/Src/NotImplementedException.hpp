@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a not implemented exception for features that have not been built yet.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -20,10 +20,10 @@ namespace CoffeeEngine
 		{
 		public:
 		
-			NotImplementedException(const std::string& sClassName, const std::string& sMethodName)
-				: Exception(sClassName, sMethodName)
+			NotImplementedException(const std::string& className, const std::string& methodName)
+				: Exception(className, methodName)
 			{
-				m_sMessage = "This method is not implemented.";
+				m_Message = "This method is not implemented.";
 			}
 
 			NotImplementedException(const NotImplementedException& exception) : Exception(exception) {}

@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------------------
 // Description: Provides a light-weight base exception.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
@@ -22,33 +22,36 @@ namespace CoffeeEngine
 		
 			Exception() = default;
 
-			Exception(const std::string& sClassName, const std::string& sMethodName) 
-				: m_sClassName(sClassName), m_sMethodName(sMethodName) {}
+			Exception(const std::string& className, const std::string& methodName) 
+				: m_ClassName(className), m_MethodName(methodName) {}
 
-			Exception(const std::string& sClassName, const std::string& sMethodName, const std::string& sMessage)
-				: Exception(sClassName, sMethodName) { m_sMessage = sMessage; }
+			Exception(const std::string& className, const std::string& methodName, const std::string& message)
+				: Exception(className, methodName)
+			{
+				m_Message = message;
+			}
 
 			Exception(const Exception& exception)
 			{
-				m_sMessage = exception.m_sMessage;
-				m_sClassName = exception.m_sClassName;
-				m_sMethodName = exception.m_sMethodName;
+				m_Message = exception.m_Message;
+				m_ClassName = exception.m_ClassName;
+				m_MethodName = exception.m_MethodName;
 			}
 
-			virtual std::string GetMessage() const noexcept { return m_sMessage; }
-			virtual std::string GetClass() const noexcept { return m_sClassName; }
-			virtual std::string GetMethod() const noexcept { return m_sMethodName; }
+			virtual std::string GetMessage() const noexcept { return m_Message; }
+			virtual std::string GetClass() const noexcept { return m_ClassName; }
+			virtual std::string GetMethod() const noexcept { return m_MethodName; }
 			virtual std::string ToString() noexcept
 			{
 				std::stringstream ss;
-				ss << "[" << m_sClassName << "::" << m_sMethodName << "] " << m_sMessage;
+				ss << "[" << m_ClassName << "::" << m_MethodName << "] " << m_Message;
 				return ss.str();
 			}
 
 		protected:
-			std::string m_sMessage = "An undefined exception has occured.";
-			std::string m_sClassName = "Undefined";
-			std::string m_sMethodName = "Undefined";
+			std::string m_Message = "An undefined exception has occured.";
+			std::string m_ClassName = "Undefined";
+			std::string m_MethodName = "Undefined";
 		};
 	};
 };

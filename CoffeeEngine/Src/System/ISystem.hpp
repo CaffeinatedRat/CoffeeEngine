@@ -2,7 +2,7 @@
 // Description: The operating system interface.
 // Used to provide a light-weight skeleton of how the other operating system classes should be created.
 //
-// Copyright (c) 2012-2017 Ken Anderson <caffeinatedrat@gmail.com>
+// Copyright (c) 2012-2018 Ken Anderson <caffeinatedrat@gmail.com>
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
