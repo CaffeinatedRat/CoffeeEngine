@@ -68,8 +68,25 @@ namespace CoffeeEngine
 			/// </summary>
 			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
 			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
-			void WriteToLog(const std::stringstream&, LogLevelType = LogLevelType::Informational) noexcept override;
-			void WriteToLog(Exception&) noexcept override;
+
+			/// <summary>
+			/// Writes an event to the event log.
+			/// </summary>
+			/// <param name="logEvent">Event to write to the log.</param>
+			/// <param name="logEventType">Type of log event.</param>
+			inline void WindowsSystemClass::WriteToLog(const std::stringstream& logEvent, LogLevelType logEventType) noexcept 
+			{
+				WriteToLog(logEvent.str()), logEventType;
+			};
+
+			/// <summary>
+			/// Writes an exception as an error event to the log.
+			/// </summary>
+			/// <param name="exception">Exception to write to the log as an error.</param>
+			inline void WindowsSystemClass::WriteToLog(Exception& exception) noexcept 
+			{
+				WriteToLog(exception.ToString(), LogLevelType::Error);
+			};
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.
@@ -119,9 +136,9 @@ namespace CoffeeEngine
 			void RegisterWindowsClass(HINSTANCE hInstance);
 
 			/// <summary>
-			/// Translates the virtual keys into a series of common keys.
+			/// Translates an OS specific virtaul key into a known keyboard key.
 			/// </summary>
-			int TranslateKeys(int virtualKey);
+			KeyboardKeys TranslateKeys(int virtualKey) const;
 
 		private:
 

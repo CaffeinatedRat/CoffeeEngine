@@ -117,7 +117,7 @@ void CoffeeEngineClass::Run()
 
 void CoffeeEngineClass::Render()
 {
-	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] Begin Render", LogLevelType::Diagnostic);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] Begin Render", LogLevelType::DeepDiagnostic);
 
 	static float rotationY = 0.0f;
 	static float rotationX = 0.0f;
@@ -138,7 +138,7 @@ void CoffeeEngineClass::Render()
 
 	m_upGraphics->EndScene();
 
-	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] End Render", LogLevelType::Diagnostic);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] End Render", LogLevelType::DeepDiagnostic);
 }
 
 /// <summary>
@@ -153,6 +153,31 @@ void CoffeeEngineClass::OnIdle(bool isActive)
 	{
 		m_pTimer->Run();
 		Render();
+	}
+}
+
+/// <summary>
+/// This event is usually triggered when a keydown event occurs.
+/// </summary>
+void CoffeeEngineClass::OnKeyDown(KeyboardKeys keyboardKey)
+{
+	std::stringstream stream;
+	stream << "[CoffeeEngineClass::OnKeyDown] Keycode: " << (int)keyboardKey;
+	m_pSystem->WriteToLog(stream, LogLevelType::Diagnostic);
+}
+
+/// <summary>
+/// This event is usually triggered when a keyup event occurs.
+/// </summary>
+void CoffeeEngineClass::OnKeyUp(KeyboardKeys keyboardKey)
+{
+	std::stringstream stream;
+	stream << "[CoffeeEngineClass::OnKeyUp] Keycode: " << (int)keyboardKey;
+	m_pSystem->WriteToLog(stream, LogLevelType::Diagnostic);
+
+	if (keyboardKey == KeyboardKeys::Escape)
+	{
+		m_pSystem->Shutdown();
 	}
 }
 

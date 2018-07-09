@@ -235,6 +235,7 @@
     <ClInclude Include="Src\Graphics\OpenGL\stb_image.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Input\Keyboard.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Global.cpp">

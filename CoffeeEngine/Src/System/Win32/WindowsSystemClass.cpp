@@ -39,6 +39,7 @@ WindowsSystemClass::WindowsSystemClass(const WindowsSystemClass& systemClass)
 
 WindowsSystemClass::WindowsSystemClass(Logger *pLogger)
 {
+	assert(pLogger);
 	if (pLogger == nullptr)
 		throw NullArgumentException("WindowsSystemClass", "Constructor", "pLogger");
 
@@ -59,6 +60,7 @@ WindowsSystemClass::~WindowsSystemClass()
 
 bool WindowsSystemClass::Initialize(ISystemListener* listener)
 {
+	assert(listener);
 	if (listener == nullptr)
 	{
 		//Add the heavy action of an exception but increase diag when necessary.
@@ -127,8 +129,6 @@ void WindowsSystemClass::Run()
 /// </summary>
 void WindowsSystemClass::Shutdown()
 {
-	assert(m_bCurrentState != WindowsOSState::SHUTDOWN);
-
 	//This flag allows this method to be idempotent.
 	if (m_bCurrentState != WindowsOSState::SHUTDOWN)
 	{
@@ -156,8 +156,7 @@ void WindowsSystemClass::Shutdown()
 /// <param name="szEvent">Event to write to the log.</param>
 void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventType) noexcept
 {
-	assert(m_plogger != nullptr);
-
+	assert(m_plogger);
 	if (m_plogger != nullptr)
 		m_plogger->Write(szEvent, logEventType);
 }
@@ -169,29 +168,9 @@ void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventTy
 /// <param name="logEventType">Type of log event.</param>
 void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logEventType) noexcept
 {
-	assert(m_plogger != nullptr);
-
+	assert(m_plogger);
 	if (m_plogger != nullptr)
 		m_plogger->Write(sEvent, logEventType);
-}
-
-/// <summary>
-/// Writes an event to the event log.
-/// </summary>
-/// <param name="logEvent">Event to write to the log.</param>
-/// <param name="logEventType">Type of log event.</param>
-void WindowsSystemClass::WriteToLog(const std::stringstream& logEvent, LogLevelType logEventType) noexcept
-{
-	WriteToLog(logEvent.str()), logEventType;
-}
-
-/// <summary>
-/// Writes an exception as an error event to the log.
-/// </summary>
-/// <param name="exception">Exception to write to the log as an error.</param>
-void WindowsSystemClass::WriteToLog(Exception& exception) noexcept
-{
-	WriteToLog(exception.ToString(), LogLevelType::Error);
 }
 
 std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
@@ -263,10 +242,9 @@ bool WindowsSystemClass::InitializeWindow()
 	m_hInstance = GetModuleHandle(nullptr);
 
 	//We're screwed if this happens.
+	assert(m_hInstance);
 	if (m_hInstance == nullptr)
-	{
 		throw NullArgumentException("WindowsSystemClass", "InitializeWindow", "m_hInstance");
-	}
 
 	// Initialize global strings
 	LoadString(m_hInstance, IDS_APP_TITLE, m_szTitle, MAX_LOADSTRING);
@@ -340,7 +318,7 @@ std::string WindowsSystemClass::GetLastErrorMessage() const
 ////////////////////////////////////////////////////////////
 void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 {
-	assert(hInstance != nullptr);
+	assert(hInstance);
 
 	//Register the windows class.
 	WNDCLASSEX wcex;
@@ -361,9 +339,80 @@ void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 	RegisterClassEx(&wcex);
 }
 
-int WindowsSystemClass::TranslateKeys(int virtualKey)
+/// <summary>
+/// Translates an OS specific virtaul key into a known keyboard key.
+/// </summary>
+KeyboardKeys WindowsSystemClass::TranslateKeys(int virtualKey) const
 {
-	return 0;
+	switch (virtualKey)
+	{
+	case VK_BACK:
+		return KeyboardKeys::Backspace;
+	case VK_ESCAPE:
+		return KeyboardKeys::Escape;
+	case VK_RETURN:
+		return KeyboardKeys::Enter;
+	case VK_UP:
+		return KeyboardKeys::UpArrow;
+	case VK_DOWN:
+		return KeyboardKeys::DownArrow;
+	case VK_LEFT:
+		return KeyboardKeys::LeftArrow;
+	case VK_RIGHT:
+		return KeyboardKeys::RightArrow;
+	case VK_SPACE:
+		return KeyboardKeys::Space;
+	case VK_TAB:
+		return KeyboardKeys::Tab;
+	case VK_PAUSE:
+		return KeyboardKeys::Pause;
+	case VK_CAPITAL:
+		return KeyboardKeys::Caps;
+	case VK_INSERT:
+		return KeyboardKeys::Insert;
+	case VK_DELETE:
+		return KeyboardKeys::Delete;
+	case VK_HOME:
+		return KeyboardKeys::Home;
+	case VK_END:
+		return KeyboardKeys::End;
+	case VK_PRIOR:
+		return KeyboardKeys::PageUp;
+	case VK_NEXT:
+		return KeyboardKeys::PageDown;
+	case VK_F1:
+		return KeyboardKeys::F1;
+	case VK_F2:
+		return KeyboardKeys::F2;
+	case VK_F3:
+		return KeyboardKeys::F3;
+	case VK_F4:
+		return KeyboardKeys::F4;
+	case VK_F5:
+		return KeyboardKeys::F5;
+	case VK_F6:
+		return KeyboardKeys::F6;
+	case VK_F7:
+		return KeyboardKeys::F7;
+	case VK_F8:
+		return KeyboardKeys::F8;
+	case VK_F9:
+		return KeyboardKeys::F9;
+	case VK_F10:
+		return KeyboardKeys::F10;
+	case VK_F11:
+		return KeyboardKeys::F11;
+	case VK_F12:
+		return KeyboardKeys::F12;
+	case VK_LSHIFT:
+		return KeyboardKeys::LeftShift;
+	case VK_RSHIFT:
+		return KeyboardKeys::RightShift;
+	case VK_OEM_3:
+		return KeyboardKeys::Tilde;
+	default:
+		return KeyboardKeys::Unknown;
+	}
 }
 
 ////////////////////////////////////////////////////////////
@@ -398,7 +447,7 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	case WM_PAINT:
 	{
-		//WriteToLog("[WindowsSystemClass::MessageHandler] Begin Paint.", LogLevelType::Diagnostic);
+		//WriteToLog("[WindowsSystemClass::MessageHandler] Begin Paint.", LogLevelType::DeepDiagnostic);
 		BeginPaint(hWnd, &ps);
 
 		if (m_pListener != nullptr)
@@ -406,17 +455,44 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 		EndPaint(hWnd, &ps);
 
-		//WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::Diagnostic);
+		//WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::DeepDiagnostic);
 	}
 	break;
 
 	case WM_KEYDOWN:
 	{
-		int keyPress = (int)wParam;
-		switch (keyPress)
+		if (m_pListener != nullptr)
 		{
-		case VK_LEFT:
-			break;
+			auto translatedKeyboardKey = TranslateKeys((int)wParam);
+			if (translatedKeyboardKey != KeyboardKeys::Unknown)
+			{
+				m_pListener->OnKeyDown(translatedKeyboardKey);
+			}
+			else
+			{
+				std::stringstream stream;
+				stream << "[WindowsSystemClass::WM_KEYDOWN] Undefined Keycode: " << (int)wParam;
+				WriteToLog(stream, CoffeeEngine::Utility::Logging::LogLevelType::Diagnostic);
+			}
+		}
+	}
+	break;
+
+	case WM_KEYUP:
+	{
+		if (m_pListener != nullptr)
+		{
+			auto translatedKeyboardKey = TranslateKeys((int)wParam);
+			if (translatedKeyboardKey != KeyboardKeys::Unknown)
+			{
+				m_pListener->OnKeyUp(translatedKeyboardKey);
+			}
+			else
+			{
+				std::stringstream stream;
+				stream << "[WindowsSystemClass::WM_KEYUP] Undefined Keycode: " << (int)wParam;
+				WriteToLog(stream, CoffeeEngine::Utility::Logging::LogLevelType::Diagnostic);
+			}
 		}
 	}
 	break;

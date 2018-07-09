@@ -15,7 +15,10 @@
 #include "Utility/Logger.hpp"
 #include "ITimer.hpp"
 #include "ISystemListener.hpp"
+#include "Input/Keyboard.hpp"
 
+using namespace CoffeeEngine::Input;
+ 
 namespace CoffeeEngine
 {
 	namespace Interfaces

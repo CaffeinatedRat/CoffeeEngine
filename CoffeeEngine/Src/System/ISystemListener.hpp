@@ -11,6 +11,10 @@
 
 #pragma once
 
+#include "Input/Keyboard.hpp"
+
+using namespace CoffeeEngine::Input;
+
 namespace CoffeeEngine
 {
 	namespace Interfaces
@@ -27,6 +31,16 @@ namespace CoffeeEngine
 			/// This event is usually triggered when the OS's message loop is idling and no events are occuring.
 			/// </summary>
 			virtual void OnIdle(bool) = 0;
+
+			/// <summary>
+			/// This event is usually triggered when a keydown event occurs.
+			/// </summary>
+			virtual void OnKeyDown(KeyboardKeys) = 0;
+
+			/// <summary>
+			/// This event is usually triggered when a keyup event occurs.
+			/// </summary>
+			virtual void OnKeyUp(KeyboardKeys) = 0;
 		};
 	};
 };

@@ -34,7 +34,7 @@ int WinMain_ENTRY(HINSTANCE hInstance,
 	{
 		//Attempt to create the logger and set the verbosity.
 		//Bail if we are unable to create the logger.
-		pLogger = std::make_unique<Logger>(Logger::LOG_FILE_NAME, Verbosity::Normal);
+		pLogger = std::make_unique<Logger>(Logger::LOG_FILE_NAME, Verbosity::Detailed);
 		assert(pLogger);
 		if (!pLogger)
 			return -1;

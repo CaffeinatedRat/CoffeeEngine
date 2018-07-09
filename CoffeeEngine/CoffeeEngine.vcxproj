@@ -199,6 +199,7 @@
     <ClInclude Include="Src\Graphics\OpenGL\stb_image.hpp" />
     <ClInclude Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.hpp" />
     <ClInclude Include="Src\Graphics\ShaderClass.hpp" />
+    <ClInclude Include="Src\Input\Keyboard.hpp" />
     <ClInclude Include="Src\NotImplementedException.hpp" />
     <ClInclude Include="Src\NotSupportedException.hpp" />
     <ClInclude Include="Src\NullArgumentException.hpp" />

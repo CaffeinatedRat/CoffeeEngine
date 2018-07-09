@@ -50,6 +50,16 @@ namespace CoffeeEngine
 			virtual void OnIdle(bool) override;
 
 			/// <summary>
+			/// This event is usually triggered when a keydown event occurs.
+			/// </summary>
+			virtual void OnKeyDown(KeyboardKeys keyboardKey) override;
+
+			/// <summary>
+			/// This event is usually triggered when a keyup event occurs.
+			/// </summary>
+			virtual void OnKeyUp(KeyboardKeys keyboardKey) override;
+
+			/// <summary>
 			/// This method will shutdown the engine, clean up and release any resources.
 			/// </summary>
 			void Shutdown();
