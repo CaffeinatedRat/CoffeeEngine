@@ -29,6 +29,9 @@ namespace CoffeeEngine
 			{
 			public:
 			
+				//Restricting namespace scoping to within the class.
+				using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
+
 				D3DShaderClass() = delete;
 				D3DShaderClass(BaseGraphicsClass* pBaseGraphicsClass);
 				D3DShaderClass(const D3DShaderClass& object);

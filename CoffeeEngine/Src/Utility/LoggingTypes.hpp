@@ -34,7 +34,8 @@ namespace CoffeeEngine
 				Error = 2,
 				Warning = 4,
 				Informational = 8,
-				Diagnostic = 16
+				Diagnostic = 16,
+				DeepDiagnostic = 32,
 			};
 
 			/// <summary>
@@ -47,7 +48,8 @@ namespace CoffeeEngine
 					"Error",
 					"Warning",
 					"Informational",
-					"Diagnostic"
+					"Diagnostic",
+					"DeepDiagnostic"
 				};
 
 				auto logLevelIntegral = PrecomputeLog2Byte(static_cast<uint16_t>(logLevelType));
@@ -78,6 +80,7 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 				// Scoped Datatypes
 				////////////////////////////////////////////////////////////
+				const LogLevelType DeeplyDetailed = LogLevelType::Critical | LogLevelType::Error | LogLevelType::Warning | LogLevelType::Informational | LogLevelType::Diagnostic | LogLevelType::DeepDiagnostic;
 				const LogLevelType Detailed = LogLevelType::Critical | LogLevelType::Error | LogLevelType::Warning | LogLevelType::Informational | LogLevelType::Diagnostic;
 				const LogLevelType Normal = LogLevelType::Critical | LogLevelType::Error | LogLevelType::Warning | LogLevelType::Informational;
 				const LogLevelType Minimum = LogLevelType::Critical | LogLevelType::Error | LogLevelType::Warning;

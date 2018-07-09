@@ -219,7 +219,7 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 
 bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 {
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Beginning...");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Beginning...", LogLevelType::DeepDiagnostic);
 
 	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
 	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
@@ -265,7 +265,7 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	//Finally set the constant buffer in the vertex shader with the updated values.
 	pGraphicsClass->GetDeviceContext()->VSSetConstantBuffers(0, 1, &m_pMatrixBuffer);
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Completed.");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::SetShaderParameters] Completed.", LogLevelType::DeepDiagnostic);
 
 	return true;
 }
