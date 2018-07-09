@@ -271,11 +271,11 @@ bool D3DGraphicsClass::CreateSwapChain()
 	refreshRate.Numerator = 0;
 
 	//If VSync is enabled, search for the matching refresh rate 
-	if(m_bVsyncEnabled)
+	if (m_bVsyncEnabled)
 	{
 		m_pSystem->WriteToLog("[D3DGraphicsClass::CreateSwapChain] VSync is enabled, detecting refresh rate.");
 
-		for(unsigned int i=0; (i < m_nNumOfModes && m_pDisplayModeList != nullptr); i++)
+		for (unsigned int i = 0; (i < m_nNumOfModes && m_pDisplayModeList != nullptr); i++)
 			if (m_pDisplayModeList[i].Width == (unsigned int)m_nScreenWidth)
 				if (m_pDisplayModeList[i].Height == (unsigned int)m_nScreenHeight)
 					refreshRate = m_pDisplayModeList[i].RefreshRate;
@@ -300,8 +300,14 @@ bool D3DGraphicsClass::CreateSwapChain()
 	// Set the usage of the back buffer.
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
+	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
+	assert(pSystem);
+
 	// Set the handle for the window to render to.
-	swapChainDesc.OutputWindow = ((WindowsSystemClass*)m_pSystem)->GetHWND();
+	if (pSystem != nullptr)
+	{
+		swapChainDesc.OutputWindow = pSystem->GetHWND();
+	}
 
 	// Turn multisampling off for now...we'll have an option to enable this in the future.
 	swapChainDesc.SampleDesc.Count = 1;

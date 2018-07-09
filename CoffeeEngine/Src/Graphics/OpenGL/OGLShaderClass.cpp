@@ -57,7 +57,7 @@ bool OGLShaderClass::Initialize(const std::string& sFileName)
 
 	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
 	auto pGraphicsClass = dynamic_cast<const OGLGraphicsClass*>(m_pGraphicsClass);
-	assert(pGraphicsClass != nullptr);
+	assert(pGraphicsClass);
 
 	// Compile the vertex shader code.
 	std::string shaderPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();

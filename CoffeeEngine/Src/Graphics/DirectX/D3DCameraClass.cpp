@@ -55,7 +55,6 @@ bool D3DCameraClass::Initialize()
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Beginning...");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
-	assert(pGraphicsClass);
 
 	int nScreenWidth, nScreenHeight;
 	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);

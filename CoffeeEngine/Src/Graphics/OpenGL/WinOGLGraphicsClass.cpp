@@ -71,7 +71,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 
 	//Get the main device context for our current window.
 	m_hdc = GetDC(pSystem->GetHWND());
-	assert(m_hdc != nullptr);
+	assert(m_hdc);
 	if (m_hdc == nullptr)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_hdc");
 
@@ -117,7 +117,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 				};
 
 				m_renderingContext = wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes);
-				assert(m_renderingContext != nullptr);
+				assert(m_renderingContext);
 				if (m_renderingContext == nullptr)
 				{
 					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 3 context could not be created.", LogLevelType::Error);
@@ -153,7 +153,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 			if (bResult)
 			{
 				m_renderingContext = wglCreateContext(m_hdc);
-				assert(m_renderingContext != nullptr);
+				assert(m_renderingContext);
 				if (m_renderingContext == nullptr)
 				{
 					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 2 context could not be created.", LogLevelType::Error);
@@ -214,6 +214,7 @@ void WinOGLGraphicsClass::Shutdown()
 	if (m_hdc != nullptr)
 	{
 		auto pSystem = dynamic_cast<const WindowsSystemClass*>(m_pSystem);
+		assert(pSystem);
 		ReleaseDC(pSystem->GetHWND(), m_hdc);
 		m_hdc = nullptr;
 	}
@@ -229,13 +230,13 @@ void WinOGLGraphicsClass::Shutdown()
 bool WinOGLGraphicsClass::InitializeGlew()
 {
 	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
-	assert(pSystem != nullptr);
+	assert(pSystem);
 
 	HINSTANCE systemHInstance = pSystem->GetHInstance();
-	assert(systemHInstance != nullptr);
+	assert(systemHInstance);
 
 	HWND systemHWND = pSystem->GetHWND();
-	assert(systemHWND != nullptr);
+	assert(systemHWND);
 
 	RegisterGlewClass(systemHInstance);
 

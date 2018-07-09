@@ -25,7 +25,7 @@ using namespace CoffeeEngine::Utility::Logging;
 
 Logger::Logger(const char* szFilename, LogLevelType verbosityLevel)
 {
-	assert(szFilename != nullptr);
+	assert(szFilename);
 	m_szLogFileName = szFilename == nullptr ? Logger::LOG_FILE_NAME : szFilename;
 	m_verbosityLevel = verbosityLevel;
 }
@@ -67,7 +67,7 @@ void Logger::Write(const char* szEvent, LogLevelType logEventType)
 		if (m_fpLogFile)
 		{
 			auto fileHandle = m_fpLogFile.get();
-			assert(fileHandle != nullptr);
+			assert(fileHandle);
 			if (fileHandle != nullptr) {
 
 				//Get the current time.
