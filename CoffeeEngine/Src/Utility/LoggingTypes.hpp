@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Common.hpp"
-#include "UtilMath.hpp"
+#include "Math/UtilMath.hpp"
 #include <type_traits>
 
 namespace CoffeeEngine
@@ -20,6 +20,8 @@ namespace CoffeeEngine
 	{
 		namespace Logging
 		{
+			using namespace CoffeeEngine::Math;
+
 			////////////////////////////////////////////////////////////
 			// Scoped Datatypes
 			////////////////////////////////////////////////////////////

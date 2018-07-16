@@ -12,7 +12,7 @@
 
 namespace CoffeeEngine
 {
-	namespace Utility
+	namespace Math
 	{
 		inline uint8_t PrecomputeLog2Byte(uint16_t value)
 		{

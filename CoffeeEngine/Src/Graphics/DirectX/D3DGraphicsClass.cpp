@@ -167,7 +167,7 @@ IShader* D3DGraphicsClass::CreateShader()
 
 ICamera* D3DGraphicsClass::CreateCamera()
 {
-	return ((ICamera*)new D3DCameraClass(this));
+	return dynamic_cast<ICamera*>(new D3DCameraClass(this));
 }
 
 void D3DGraphicsClass::SetMasterCamera(ICamera* camera)

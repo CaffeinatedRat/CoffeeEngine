@@ -9,6 +9,9 @@
 #include "OGLGraphicsClass.hpp"
 #include "OGLCameraClass.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
@@ -40,6 +43,51 @@ OGLCameraClass::~OGLCameraClass()
 // 
 ////////////////////////////////////////////////////////////
 
+/// <summary>
+/// Sets the vector position of the camera.
+/// </summary>
+void OGLCameraClass::SetPosition(const Vector3& vector)
+{
+	m_position = vector;
+	m_positionVector = glm::ext::vec3(m_position);
+}
+
+void OGLCameraClass::SetPosition(Vector3&& vector)
+{
+	m_position = std::move(vector);
+	m_positionVector = glm::ext::vec3(m_position);
+}
+
+/// <summary>
+/// Sets the lookat vector of the camera.
+/// </summary>
+void OGLCameraClass::SetLookAt(const Vector3& vector)
+{
+	m_lookAt = vector;
+	m_lookAtVector = glm::ext::vec3(m_lookAt);
+}
+
+void OGLCameraClass::SetLookAt(Vector3&& vector)
+{
+	m_lookAt = std::move(vector);
+	m_lookAtVector = glm::ext::vec3(m_lookAt);
+}
+
+/// <summary>
+/// Sets the up vector of the camera.
+/// </summary>
+void OGLCameraClass::SetUp(const Vector3& vector)
+{
+	m_up = vector;
+	m_upVector = glm::ext::vec3(m_up);
+}
+
+void OGLCameraClass::SetUp(Vector3&& vector)
+{
+	m_up = std::move(vector);
+	m_upVector = glm::ext::vec3(m_up);
+}
+
 bool OGLCameraClass::Initialize()
 {
 	if(m_pGraphicsClass == nullptr)
@@ -53,10 +101,6 @@ bool OGLCameraClass::Initialize()
 	int nScreenWidth, nScreenHeight;
 	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
 
-	//GL COMMENTED OUT FOR BUILD.
-	//glMatrixMode(GL_PROJECTION); 
-	//glLoadIdentity();
-
 	float screenDepth = 1000.0f;
 	float screenNear = 0.1f;
 
@@ -64,14 +108,12 @@ bool OGLCameraClass::Initialize()
 	float fieldOfView = (float)OGL_PI / 4.0f;
 	float screenAspect = (float)nScreenWidth / (float)nScreenHeight;
 
-	//GL COMMENTED OUT FOR BUILD.
 	// Create the projection matrix for 3D rendering.
-	//glm::mat4 Projection = glm::perspective(fieldOfView, screenAspect, screenNear, screenDepth);
+	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, screenNear, screenDepth);
 
-	//GL COMMENTED OUT FOR BUILD.
-	// Initialize the world matrix to the identity matrix.
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
+	m_positionVector = glm::ext::vec3(m_position);
+	m_lookAtVector = glm::ext::vec3(m_lookAt);
+	m_upVector = glm::ext::vec3(m_up);
 
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Completed.");
 
@@ -80,8 +122,23 @@ bool OGLCameraClass::Initialize()
 
 void OGLCameraClass::Render(float fElapsedTime)
 {
-	//GL COMMENTED OUT FOR BUILD.
-	//glLoadIdentity();
+	float yawRate = m_yaw * 0.001f * fElapsedTime;
+	float rollRate = m_roll * 0.001f * fElapsedTime;
+	float pitchRate = m_pitch * 0.001f * fElapsedTime;
+
+	glm::vec3 front = glm::ext::vec3(m_position);
+	front.x = cos(glm::radians(yawRate)) * cos(glm::radians(pitchRate));
+	front.y = sin(glm::radians(pitchRate));
+	front.z = sin(glm::radians(yawRate)) * cos(glm::radians(pitchRate));
+
+	auto Front = glm::normalize(front);
+	
+	// Also re-calculate the Right and Up vector
+	auto Right = glm::normalize(glm::cross(Front, m_upVector));
+	auto upVector = glm::normalize(glm::cross(Right, Front));
+
+	// Finally create the view matrix from the three updated vectors.
+	m_viewMatrix = glm::lookAt(m_positionVector, (m_lookAtVector + m_positionVector), upVector);
 	return;
 }
 

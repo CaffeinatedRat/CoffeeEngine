@@ -15,7 +15,7 @@
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/CameraClass.hpp"
 
-#include "Graphics/DirectX/D3DCommon.hpp"
+#include "D3DCommon.hpp"
 
 using namespace CoffeeEngine::Graphics;
 
@@ -27,30 +27,7 @@ namespace CoffeeEngine
 		{
 			class D3DCameraClass : public CameraClass
 			{
-			private:
-
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				float m_positionX = 0.0f, m_positionY = 0.0f, m_positionZ = 0.0f;
-				float m_rotationX = 0.0f, m_rotationY = 0.0f, m_rotationZ = 0.0f;
-				
-				//Direct3d
-				XMMATRIX m_viewMatrix;
-				XMMATRIX m_projectionMatrix;
-				XMMATRIX m_worldMatrix;
-
 			public:
-			
-				////////////////////////////////////////////////////////////
-				//
-				//                Standard methods
-				// 
-				////////////////////////////////////////////////////////////
 
 				D3DCameraClass() = delete;
 				D3DCameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
@@ -61,15 +38,53 @@ namespace CoffeeEngine
 				void Render(float fElapsedTime);
 				void Shutdown();
 
+				/// <summary>
+				/// Sets the vector position of the camera.
+				/// </summary>
+				inline void SetPosition(float x, float y, float z) override { SetPosition(Vector3(x, y, z)); }
+				void SetPosition(const Vector3& vector) override;
+				void SetPosition(Vector3&& vector) override;
+
+				/// <summary>
+				/// Sets the lookat vector of the camera.
+				/// </summary>
+				void SetLookAt(float x, float y, float z) override { SetLookAt(Vector3(x, y, z)); }
+				void SetLookAt(const Vector3& vector) override;
+				void SetLookAt(Vector3&& vector) override;
+
+				/// <summary>
+				/// Sets the up vector of the camera.
+				/// </summary>
+				void SetUp(float x, float y, float z)  override { SetUp(Vector3(x, y, z)); }
+				void SetUp(const Vector3& vector) override;
+				void SetUp(Vector3&& vector) override;
+
 				////////////////////////////////////////////////////////////
 				//
 				//                DirectX Specific methods
 				// 
 				////////////////////////////////////////////////////////////
 
-				inline XMMATRIX& GetProjectionMatrix() { return m_projectionMatrix; }
-				inline XMMATRIX& GetWorldMatrix() { return m_worldMatrix; }
-				inline XMMATRIX& GetViewMatrix() { return m_viewMatrix; }
+				inline const XMMATRIX& GetProjectionMatrix() { return m_projectionMatrix; }
+				inline const XMMATRIX& GetWorldMatrix() { return m_worldMatrix; }
+				inline const XMMATRIX& GetViewMatrix() { return m_viewMatrix; }
+
+			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				XMVECTOR m_positionVector;
+				XMVECTOR m_lookAtVector;
+				XMVECTOR m_upVector;
+
+				//Direct3d
+				XMMATRIX m_viewMatrix;
+				XMMATRIX m_projectionMatrix;
+				XMMATRIX m_worldMatrix;
 			};
 		}
 	};

@@ -195,13 +195,35 @@ GLuint OGLShaderClass::LoadShaderFromFile(std::string shaderFile, ShaderType sha
 
 bool OGLShaderClass::SetShaderParameters(float fElapsedTime)
 {
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLShaderClass::SetShaderParameters] Beginning...", LogLevelType::DeepDiagnostic);
+
+	//Cast to the OGL graphics class so that we can get access to OGL specific methods.
+	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
+	auto pGraphicsClass = dynamic_cast<const OGLGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
+
+	OGLCameraClass* pMasterCamera = (OGLCameraClass*)pGraphicsClass->GetMasterCamera();
+	if (pMasterCamera == nullptr)
+		throw Exception("OGLShaderClass", "SetShaderParameters", "There is no master camera.  You need a camera to see!");
+
+	//Retrieve all of our matrices
+	m_worldMatrix = pMasterCamera->GetWorldMatrix();
+	glm::mat4 viewMatrix = pMasterCamera->GetViewMatrix();
+	glm::mat4 projectionMatrix = pMasterCamera->GetProjectionMatrix();
+
+	setMatrix4("world", m_worldMatrix);
+	setMatrix4("projection", projectionMatrix);
+	setMatrix4("view", viewMatrix);
+
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLShaderClass::SetShaderParameters] Completed.", LogLevelType::DeepDiagnostic);
+
 	return true;
 }
 
 void OGLShaderClass::Render(float fElapsedTime)
 {
 	glUseProgram(m_programId);
-	setMatrix4("transform", m_worldMatrix);
+	SetShaderParameters(fElapsedTime);
 	return;
 }
 

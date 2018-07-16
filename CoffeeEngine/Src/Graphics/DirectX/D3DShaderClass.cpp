@@ -228,7 +228,7 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 
 	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
 	if(pMasterCamera == nullptr)
-		throw Exception("D3DShaderClass", "Render", "There is no master camera.  You need a camera to see!");
+		throw Exception("D3DShaderClass", "SetShaderParameters", "There is no master camera.  You need a camera to see!");
 
 	//Retrieve all of our matrices
 	//D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();

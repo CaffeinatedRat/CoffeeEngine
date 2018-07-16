@@ -41,6 +41,11 @@ namespace CoffeeEngine
 			/// This event is usually triggered when a keyup event occurs.
 			/// </summary>
 			virtual void OnKeyUp(KeyboardKeys) = 0;
+
+			/// <summary>
+			/// This event is usually triggered when keyup and keydown are not handled.
+			/// </summary>
+			virtual void OnChar(uint characterCode) = 0;
 		};
 	};
 };

@@ -199,6 +199,8 @@
     <ClInclude Include="Src\Graphics\OpenGL\stb_image.hpp" />
     <ClInclude Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.hpp" />
     <ClInclude Include="Src\Graphics\ShaderClass.hpp" />
+    <ClInclude Include="Src\Input\InputCommon.hpp" />
+    <ClInclude Include="Src\Input\InputMapper.hpp" />
     <ClInclude Include="Src\Input\Keyboard.hpp" />
     <ClInclude Include="Src\NotImplementedException.hpp" />
     <ClInclude Include="Src\NotSupportedException.hpp" />
@@ -213,8 +215,10 @@
     <ClInclude Include="Src\System\Win32\Windows_EntryPoint.hpp" />
     <ClInclude Include="Src\Utility\Logger.hpp" />
     <ClInclude Include="Src\Utility\LoggingTypes.hpp" />
-    <ClInclude Include="Src\Utility\UtilMath.hpp" />
+    <ClInclude Include="Src\Math\UtilMath.hpp" />
     <ClInclude Include="Src\Utility\UtilTypes.hpp" />
+    <ClInclude Include="Src\Engine\IObject.hpp" />
+    <ClInclude Include="Src\Math\Vectors.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -237,6 +241,7 @@
     <ClCompile Include="Src\Graphics\OpenGL\WinOGLGraphicsClass.cpp" />
     <ClCompile Include="Src\Graphics\ShaderClass.cpp" />
     <ClCompile Include="Src\Global.cpp" />
+    <ClCompile Include="Src\Input\InputMapper.cpp" />
     <ClCompile Include="Src\stdafx.cpp" />
     <ClCompile Include="Src\System\Linux\Linux_EntryPoint.cpp" />
     <ClCompile Include="Src\System\Win32\TimerClass.cpp" />

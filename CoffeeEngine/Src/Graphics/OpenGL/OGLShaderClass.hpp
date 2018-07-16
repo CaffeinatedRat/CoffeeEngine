@@ -27,6 +27,9 @@ namespace CoffeeEngine
 			{
 			public:
 			
+				//Restricting namespace scoping to within the class.
+				using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
+
 				OGLShaderClass() = delete;
 				OGLShaderClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLShaderClass(const OGLShaderClass& object);

@@ -23,30 +23,10 @@ namespace CoffeeEngine
 		namespace OpenGL
 		{
 			class OGLCameraClass : public CameraClass
-			{
-			private:
+			{			
+			public:		
 
-				////////////////////////////////////////////////////////////
-				//
-				//                Member Vars
-				// 
-				////////////////////////////////////////////////////////////
-
-				//Primitives
-				float m_positionX = 0.0f, m_positionY = 0.0f, m_positionZ = 0.0f;
-				float m_rotationX = 0.0f, m_rotationY = 0.0f, m_rotationZ = 0.0f;
-				
-			private:
-				OGLCameraClass();
-
-			public:
-			
-				////////////////////////////////////////////////////////////
-				//
-				//                Standard methods
-				// 
-				////////////////////////////////////////////////////////////
-
+				OGLCameraClass() = delete;
 				OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
 				OGLCameraClass(const OGLCameraClass& object);
 				virtual ~OGLCameraClass();
@@ -55,9 +35,59 @@ namespace CoffeeEngine
 				void Render(float fElapsedTime);
 				void Shutdown();
 
+				/// <summary>
+				/// Sets the vector position of the camera.
+				/// </summary>
+				inline void SetPosition(float x, float y, float z) override { SetPosition(Vector3(x, y, z)); }
+				void SetPosition(const Vector3& vector) override;
+				void SetPosition(Vector3&& vector) override;
+
+				/// <summary>
+				/// Sets the lookat vector of the camera.
+				/// </summary>
+				void SetLookAt(float x, float y, float z) override { SetLookAt(Vector3(x, y, z)); }
+				void SetLookAt(const Vector3& vector) override;
+				void SetLookAt(Vector3&& vector) override;
+
+				/// <summary>
+				/// Sets the up vector of the camera.
+				/// </summary>
+				void SetUp(float x, float y, float z)  override { SetUp(Vector3(x, y, z)); }
+				void SetUp(const Vector3& vector) override;
+				void SetUp(Vector3&& vector) override;
+
+				////////////////////////////////////////////////////////////
+				//
+				//                OGL Specific methods
+				// 
+				////////////////////////////////////////////////////////////
+
+				inline const glm::mat4& GetProjectionMatrix() { return m_projectionMatrix; }
+				inline const glm::mat4& GetWorldMatrix() { return m_worldMatrix; }
+				inline const glm::mat4& GetViewMatrix() { return m_viewMatrix; }
+
 			protected:
 				void OGLMatrixPerspectiveFovLH(float *m, float fov, float aspect, float znear, float zfar);
 
+			private:
+				////////////////////////////////////////////////////////////
+				//
+				//                Member Vars
+				// 
+				////////////////////////////////////////////////////////////
+
+				glm::vec3 m_positionVector;
+				glm::vec3 m_lookAtVector;
+				glm::vec3 m_upVector;
+
+				//Primitives
+				float m_positionX = 0.0f, m_positionY = 0.0f, m_positionZ = 0.0f;
+				float m_rotationX = 0.0f, m_rotationY = 0.0f, m_rotationZ = 0.0f;
+
+				//OGL
+				glm::mat4 m_viewMatrix;
+				glm::mat4 m_projectionMatrix;
+				glm::mat4 m_worldMatrix;
 			};
 		}
 	};

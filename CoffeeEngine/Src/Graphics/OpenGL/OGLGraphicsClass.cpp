@@ -138,7 +138,7 @@ IShader* OGLGraphicsClass::CreateShader()
 
 ICamera* OGLGraphicsClass::CreateCamera()
 {
-	return ((ICamera*)new OGLCameraClass(this));
+	return dynamic_cast<ICamera*>(new OGLCameraClass(this));
 }
 
 void OGLGraphicsClass::SetMasterCamera(ICamera* camera)

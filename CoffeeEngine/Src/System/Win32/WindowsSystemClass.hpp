@@ -31,9 +31,9 @@ namespace CoffeeEngine
 	{
 		enum class WindowsOSState
 		{
-			UNKNOWN,
-			INITIALIZED,
-			SHUTDOWN
+			SHUTDOWN = 0,
+			INITIALIZED = 1,
+			RUNNING = 2, 
 		};
 
 		class WindowsSystemClass : public ISystem
@@ -45,7 +45,7 @@ namespace CoffeeEngine
 
 			WindowsSystemClass() = default;
 			WindowsSystemClass(Logger *pLogger);
-			WindowsSystemClass(const WindowsSystemClass&);
+			WindowsSystemClass(const WindowsSystemClass&) = delete;
 			virtual ~WindowsSystemClass() noexcept override;
 
 			/// <summary>
@@ -138,7 +138,7 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Translates an OS specific virtaul key into a known keyboard key.
 			/// </summary>
-			KeyboardKeys TranslateKeys(int virtualKey) const;
+			static KeyboardKeys TranslateKeys(int virtualKey);
 
 		private:
 
@@ -162,7 +162,8 @@ namespace CoffeeEngine
 			//We are not idling.
 			bool m_bIsIdiling = false;
 
-			WindowsOSState m_bCurrentState = WindowsOSState::UNKNOWN;
+			//Maintain the system's state.
+			WindowsOSState m_state = WindowsOSState::SHUTDOWN;
 
 			//Allows the Shutdown method to be idempotent.
 			//bool m_bHasShutdown = false;

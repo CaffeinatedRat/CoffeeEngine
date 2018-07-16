@@ -27,6 +27,13 @@ namespace CoffeeEngine
 {
 	namespace Engine
 	{
+		enum class EngineState
+		{
+			SHUTDOWN = 0,
+			INITIALIZED = 1,
+			RUNNING = 2,
+		};
+
 		//Restricting namespace scoping to within the class.
 		using BaseGraphicsClass = CoffeeEngine::Graphics::BaseGraphicsClass;
 		using Logger = CoffeeEngine::Utility::Logging::Logger;
@@ -38,12 +45,29 @@ namespace CoffeeEngine
 
 			CoffeeEngineClass() = default;
 			CoffeeEngineClass(Interfaces::ISystem*);
+			CoffeeEngineClass(const CoffeeEngineClass&) = delete;
 			virtual ~CoffeeEngineClass();
+
+			////////////////////////////////////////////////////////////
+			//
+			//                Methods
+			// 
+			////////////////////////////////////////////////////////////
 
 			bool Initialize();
 			void Run();
-			void Render();
 
+		private:
+			void Render(float elapsedTime);
+			void ManageWorld(float elapsedTime);
+
+			////////////////////////////////////////////////////////////
+			//
+			//                Events
+			// 
+			////////////////////////////////////////////////////////////
+		
+		public:
 			/// <summary>
 			/// This event is usually triggered when the OS's message loop is idling and no events are occuring.
 			/// </summary>
@@ -60,10 +84,20 @@ namespace CoffeeEngine
 			virtual void OnKeyUp(KeyboardKeys keyboardKey) override;
 
 			/// <summary>
+			/// This event is usually triggered when keyup and keydown are not handled.
+			/// </summary>
+			virtual void OnChar(uint characterCode) override;
+
+			/// <summary>
 			/// This method will shutdown the engine, clean up and release any resources.
 			/// </summary>
 			void Shutdown();
 
+			////////////////////////////////////////////////////////////
+			//
+			//                Member Vars
+			// 
+			////////////////////////////////////////////////////////////
 		private:
 			//Reference pointers.
 			Interfaces::ISystem* m_pSystem = nullptr;
@@ -79,6 +113,13 @@ namespace CoffeeEngine
 			Interfaces::IShader* m_pShader = nullptr;
 
 			bool m_bReady = false;
+			EngineState m_state = EngineState::SHUTDOWN;
+
+			float m_strafeMovement = 0.0f;
+			float m_pitchMovement = 0.0f;
+			float m_turnMovement = 0.0f;
+			float m_forwardMovement = 0.0f;
+
 		};
 	};
 };

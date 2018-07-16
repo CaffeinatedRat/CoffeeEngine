@@ -150,7 +150,7 @@ void OGLModelClass::Render(float fElapsedTime) const
 		throw Exception("OGLModelClass", "Render", "There is no master camera.  You need a camera to see!");
 
 	//Apply transformations.
-	glm::mat4 worldMatrix = glm::mat4(1.0f);
+	glm::mat4 worldMatrix = pMasterCamera->GetWorldMatrix();
 
 	//NOTE: The order of Matrix transformations matter and will result in different effects.
 	// This simple transformation does not take into account more complex transformations.

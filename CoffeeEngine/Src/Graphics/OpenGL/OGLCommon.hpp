@@ -18,6 +18,18 @@
 #include <gl/glew.h>
 #include <gl/wglew.h>
 
+#ifndef GLM_EXTENSION
+#define GLM_EXTENSION 
+namespace glm
+{
+	//Extensions
+	namespace ext
+	{
+		inline glm::vec3 vec3(Vector3 v) { return glm::vec3(v._x, v._y, v._z); }
+	}
+}
+#endif
+
 namespace CoffeeEngine
 {
 	namespace Graphics

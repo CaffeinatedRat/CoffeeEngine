@@ -28,6 +28,20 @@ TimerClass::TimerClass(const TimerClass& object)
 	m_fElapsedTimeInMilliseconds = object.m_fElapsedTimeInMilliseconds;
 }
 
+TimerClass::TimerClass(TimerClass&& object)
+{
+	m_bRun = object.m_bRun;
+	m_nFrequency = object.m_nFrequency;
+	m_nTickStart = object.m_nTickStart;
+	m_fTicksPerMilliseconds = object.m_fTicksPerMilliseconds;
+	m_fElapsedTimeInMilliseconds = object.m_fElapsedTimeInMilliseconds;
+
+	object.m_nFrequency = object.m_nTickStart = 0;
+	object.m_fTicksPerMilliseconds = 0.0f;
+	object.m_fElapsedTimeInMilliseconds = 0.0f;
+	object.m_bRun = false;
+}
+
 TimerClass::~TimerClass()
 {
 	Stop();

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Interfaces">
-      <UniqueIdentifier>{81bcd512-b558-491f-8251-d155e0df5081}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Globals">
       <UniqueIdentifier>{e574e7e6-6f93-462c-b9fe-ecd02030157f}</UniqueIdentifier>
     </Filter>
@@ -76,6 +73,12 @@
     </Filter>
     <Filter Include="Graphics\DirectX\Src">
       <UniqueIdentifier>{0662bb3d-611a-4b54-9c2c-900d72265b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{16d043d9-0859-4f84-8903-02028fdfa432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{99a61b17-3dc9-4d49-bb72-1db7b4aa6f05}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +199,6 @@
     <ClInclude Include="Src\Utility\UtilTypes.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utility\UtilMath.hpp">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Src\System\Win32\TimerClass.hpp">
       <Filter>System\Win32</Filter>
     </ClInclude>
@@ -235,7 +235,24 @@
     <ClInclude Include="Src\Graphics\OpenGL\stb_image.hpp">
       <Filter>Graphics\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Input\Keyboard.hpp" />
+    <ClInclude Include="Src\Math\UtilMath.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\Vectors.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Input\InputCommon.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Input\InputMapper.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Input\Keyboard.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Engine\IObject.hpp">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Global.cpp">
@@ -316,6 +333,9 @@
     </ClCompile>
     <ClCompile Include="Src\Graphics\DirectX\WICTextureLoader.cpp">
       <Filter>Graphics\DirectX\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Input\InputMapper.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

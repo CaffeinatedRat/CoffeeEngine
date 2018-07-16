@@ -29,14 +29,6 @@ using namespace CoffeeEngine::Utility::Logging;
 // 
 ////////////////////////////////////////////////////////////
 
-WindowsSystemClass::WindowsSystemClass(const WindowsSystemClass& systemClass)
-{
-	m_hInstance = systemClass.m_hInstance;
-	m_hWnd = systemClass.m_hWnd;
-	m_bIsActive = systemClass.m_bIsActive;
-	m_bIsIdiling = systemClass.m_bIsIdiling;
-}
-
 WindowsSystemClass::WindowsSystemClass(Logger *pLogger)
 {
 	assert(pLogger);
@@ -60,68 +52,81 @@ WindowsSystemClass::~WindowsSystemClass()
 
 bool WindowsSystemClass::Initialize(ISystemListener* listener)
 {
-	assert(listener);
-	if (listener == nullptr)
+	//Allow this method to be idempotent.
+	assert(m_state == WindowsOSState::SHUTDOWN);
+	if (m_state == WindowsOSState::SHUTDOWN)
 	{
-		//Add the heavy action of an exception but increase diag when necessary.
-		throw NullArgumentException("WindowsSystemClass", "Initialize", "listener");
+		assert(listener);
+		if (listener == nullptr)
+		{
+			//Add the heavy action of an exception but increase diag when necessary.
+			throw NullArgumentException("WindowsSystemClass", "Initialize", "listener");
+		}
+
+		//Assign the listener.
+		//Technically we could make this an array of multiple listeners if necessary.
+		m_pListener = listener;
+
+		WriteToLog("[WindowsSystemClass::Initialize] Beginning...", LogLevelType::Informational);
+
+		if (!InitializeWindow())
+		{
+			WriteToLog("[WindowsSystemClass::Initialize] Failed!", LogLevelType::Error);
+			return false;
+		}
+
+		m_state = WindowsOSState::INITIALIZED;
 	}
 
-	//Assign the listener.
-	//Technically we could make this an array of multiple listeners if necessary.
-	m_pListener = listener;
-
-	WriteToLog("[WindowsSystemClass::Initialize] Initializing...", LogLevelType::Informational);
-
-	if (InitializeWindow())
-		return true;
-
-	WriteToLog("[WindowsSystemClass::Initialize] Initializing failed!", LogLevelType::Error);
-
-	return false;
+	return true;
 }
 
 void WindowsSystemClass::Run()
 {
-	WriteToLog("[WindowsSystemClass::Run] Beginning the message pump.", LogLevelType::Informational);
-
-	//Begin the windows message pump.
-	MSG msg;
-	HACCEL hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDC_COFFEEENGINE));
-
-	ZeroMemory(&msg, sizeof(MSG));
-
-	while (msg.message != WM_QUIT)
+	assert(m_state == WindowsOSState::INITIALIZED);
+	if (m_state == WindowsOSState::INITIALIZED)
 	{
-		//Windows messages have the highest priority.
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		WriteToLog("[WindowsSystemClass::Run] Beginning the message pump.", LogLevelType::Informational);
+		m_state = WindowsOSState::RUNNING;
+
+		//Begin the windows message pump.
+		MSG msg;
+		HACCEL hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDC_COFFEEENGINE));
+
+		ZeroMemory(&msg, sizeof(MSG));
+
+		while (msg.message != WM_QUIT)
 		{
-			if (msg.message != WM_QUIT)
+			//Windows messages have the highest priority.
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{
-				if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+				if (msg.message != WM_QUIT)
 				{
-					TranslateMessage(&msg);
-					DispatchMessage(&msg);
+					if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+					{
+						TranslateMessage(&msg);
+						DispatchMessage(&msg);
+					}
+				}
+			}
+			//The engine is invoked while the application is idling.
+			else
+			{
+				if (m_pListener != nullptr)
+				{
+					m_pListener->OnIdle(m_bIsActive);
+				}
+				else
+				{
+					//Sleep for a bit to prevent pegging the CPU.
+					//This occurs when the application is in the background.
+					Sleep(200);
 				}
 			}
 		}
-		//The engine is invoked while the application is idling.
-		else
-		{
-			if (m_pListener != nullptr)
-			{
-				m_pListener->OnIdle(m_bIsActive);
-			}
-			else
-			{
-				//Sleep for a bit to prevent pegging the CPU.
-				//This occurs when the application is in the background.
-				Sleep(200);
-			}
-		}
-	}
 
-	WriteToLog("[WindowsSystemClass::Run] Ending the message pump.", LogLevelType::Informational);
+		WriteToLog("[WindowsSystemClass::Run] Ending the message pump.", LogLevelType::Informational);
+	}
 }
 
 /// <summary>
@@ -130,17 +135,18 @@ void WindowsSystemClass::Run()
 void WindowsSystemClass::Shutdown()
 {
 	//This flag allows this method to be idempotent.
-	if (m_bCurrentState != WindowsOSState::SHUTDOWN)
+	if (m_state > WindowsOSState::SHUTDOWN)
 	{
 		WriteToLog("[WindowsSystemClass::Shutdown] Shutting down...", LogLevelType::Informational);
 
 		//Clean up the window.
-		DestroyWindow(m_hWnd);
-		m_hWnd = nullptr;
+		if (m_hWnd)
+			DestroyWindow(m_hWnd);
 
 		UnregisterClass(m_szWindowClass, m_hInstance);
 
-		m_bCurrentState = WindowsOSState::SHUTDOWN;
+		m_hWnd = nullptr;
+		m_state = WindowsOSState::SHUTDOWN;
 	}
 }
 
@@ -227,15 +233,6 @@ inline ITimer* WindowsSystemClass::CreateTimer()
 
 bool WindowsSystemClass::InitializeWindow()
 {
-	assert(m_bCurrentState != WindowsOSState::INITIALIZED);
-
-	//Allow this method to be idempotent.
-	if (m_bCurrentState == WindowsOSState::INITIALIZED)
-	{
-		WriteToLog("[WindowsSystemClass::InitializeWindow] The window has already been initialized.", LogLevelType::Diagnostic);
-		return true;
-	}
-
 	WriteToLog("[WindowsSystemClass::InitializeWindow] Attempting to create a window.", LogLevelType::Diagnostic);
 
 	// Get the instance of this application.
@@ -280,13 +277,10 @@ bool WindowsSystemClass::InitializeWindow()
 		UpdateWindow(m_hWnd);
 
 		//We are now active and initialized.
-		m_bIsActive = true;
-		m_bCurrentState = WindowsOSState::INITIALIZED;
-
-		return true;
+		return (m_bIsActive = true);
 	}
 
-	WriteToLog("[WindowsSystemClass::InitializeWindow] Window creation failed!", LogLevelType::Error);
+	WriteToLog("[WindowsSystemClass::InitializeWindow] Failed!", LogLevelType::Error);
 	return false;
 }
 
@@ -322,7 +316,6 @@ void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 
 	//Register the windows class.
 	WNDCLASSEX wcex;
-
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	wcex.lpfnWndProc = WndProc;
@@ -342,7 +335,7 @@ void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 /// <summary>
 /// Translates an OS specific virtaul key into a known keyboard key.
 /// </summary>
-KeyboardKeys WindowsSystemClass::TranslateKeys(int virtualKey) const
+KeyboardKeys WindowsSystemClass::TranslateKeys(int virtualKey)
 {
 	switch (virtualKey)
 	{
@@ -410,8 +403,10 @@ KeyboardKeys WindowsSystemClass::TranslateKeys(int virtualKey) const
 		return KeyboardKeys::RightShift;
 	case VK_OEM_3:
 		return KeyboardKeys::Tilde;
+	//default:
+		//return KeyboardKeys::Unknown;
 	default:
-		return KeyboardKeys::Unknown;
+		return (KeyboardKeys)virtualKey;
 	}
 }
 
@@ -423,7 +418,6 @@ KeyboardKeys WindowsSystemClass::TranslateKeys(int virtualKey) const
 
 LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	PAINTSTRUCT ps;
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -448,52 +442,43 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 	case WM_PAINT:
 	{
 		//WriteToLog("[WindowsSystemClass::MessageHandler] Begin Paint.", LogLevelType::DeepDiagnostic);
+		PAINTSTRUCT ps;
 		BeginPaint(hWnd, &ps);
 
 		if (m_pListener != nullptr)
 			m_pListener->OnIdle(true);
 
 		EndPaint(hWnd, &ps);
-
 		//WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::DeepDiagnostic);
 	}
 	break;
 
 	case WM_KEYDOWN:
 	{
+		std::stringstream stream;
+		stream << "[WindowsSystemClass::WM_KEYDOWN] Keycode: " << (int)wParam;
+		WriteToLog(stream, LogLevelType::Diagnostic);
+
 		if (m_pListener != nullptr)
-		{
-			auto translatedKeyboardKey = TranslateKeys((int)wParam);
-			if (translatedKeyboardKey != KeyboardKeys::Unknown)
-			{
-				m_pListener->OnKeyDown(translatedKeyboardKey);
-			}
-			else
-			{
-				std::stringstream stream;
-				stream << "[WindowsSystemClass::WM_KEYDOWN] Undefined Keycode: " << (int)wParam;
-				WriteToLog(stream, CoffeeEngine::Utility::Logging::LogLevelType::Diagnostic);
-			}
-		}
+			m_pListener->OnKeyDown(TranslateKeys((int)wParam));
 	}
 	break;
 
 	case WM_KEYUP:
 	{
+		std::stringstream stream;
+		stream << "[WindowsSystemClass::WM_KEYUP] Keycode: " << (int)wParam;
+		WriteToLog(stream, LogLevelType::Diagnostic);
+
 		if (m_pListener != nullptr)
-		{
-			auto translatedKeyboardKey = TranslateKeys((int)wParam);
-			if (translatedKeyboardKey != KeyboardKeys::Unknown)
-			{
-				m_pListener->OnKeyUp(translatedKeyboardKey);
-			}
-			else
-			{
-				std::stringstream stream;
-				stream << "[WindowsSystemClass::WM_KEYUP] Undefined Keycode: " << (int)wParam;
-				WriteToLog(stream, CoffeeEngine::Utility::Logging::LogLevelType::Diagnostic);
-			}
-		}
+			m_pListener->OnKeyUp(TranslateKeys((int)wParam));
+	}
+	break;
+
+	case WM_CHAR:
+	{
+		if (m_pListener != nullptr)
+			m_pListener->OnChar((int)wParam);
 	}
 	break;
 

@@ -26,4 +26,31 @@ CameraClass::CameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 CameraClass::CameraClass(const CameraClass& object)
 {
 	m_pGraphicsClass = object.m_pGraphicsClass;
+	m_yaw = object.m_yaw;
+	m_pitch = object.m_pitch;
+	m_roll = object.m_roll;
+	m_strafe = object.m_strafe;
+	m_forward = object.m_forward;
+
+	m_position = Vector3(object.m_position);
+	m_lookAt = Vector3(object.m_lookAt);
+	m_up = Vector3(object.m_up);
+}
+
+CameraClass::CameraClass(CameraClass&& object)
+{
+	m_pGraphicsClass = object.m_pGraphicsClass;
+	m_yaw = object.m_yaw;
+	m_pitch = object.m_pitch;
+	m_roll = object.m_roll;
+	m_strafe = object.m_strafe;
+	m_forward = object.m_forward;
+
+	m_position = std::move(object.m_position);
+	m_lookAt = std::move(object.m_lookAt);
+	m_up = std::move(object.m_up);
+
+	object.m_pGraphicsClass = nullptr;
+	object.m_yaw = object.m_pitch = object.m_roll = 0.0f;
+	object.m_strafe = object.m_forward = 0.0f;
 }

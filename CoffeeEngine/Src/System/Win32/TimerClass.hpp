@@ -24,18 +24,15 @@ namespace CoffeeEngine
 	{
 		class TimerClass : public ITimer
 		{
-		private:
-			INT64 m_nFrequency = 0;
-			INT64 m_nTickStart = 0;
-			float m_fTicksPerMilliseconds = 0.0f;
-			float m_fElapsedTimeInMilliseconds = 0.0f;
-			bool m_bRun = false;
-
 		public:
 		
 			TimerClass() = default;
 			TimerClass(const TimerClass&);
+			TimerClass(TimerClass&&);
 			~TimerClass();
+
+			TimerClass& operator=(TimerClass&& vector) = default;
+			TimerClass& operator=(const TimerClass& vector) = default;
 
 			/// <summary>
 			/// Starts the timer.
@@ -63,6 +60,13 @@ namespace CoffeeEngine
 			/// TimeComplexity: O(1) for all operations.
 			/// </summary>
 			inline float GetElaspedTime() const { return m_fElapsedTimeInMilliseconds; }
+
+		private:
+			INT64 m_nFrequency = 0;
+			INT64 m_nTickStart = 0;
+			float m_fTicksPerMilliseconds = 0.0f;
+			float m_fElapsedTimeInMilliseconds = 0.0f;
+			bool m_bRun = false;
 		};
 	};
 };
