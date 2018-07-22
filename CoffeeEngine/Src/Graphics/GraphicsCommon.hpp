@@ -13,7 +13,7 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		enum class GraphicsFactoryTypes
+		enum class GraphicsAPIType
 		{
 			DIRECTX,
 			OPENGL
@@ -32,8 +32,8 @@ namespace CoffeeEngine
 			int nColorBits = 32;
 			int nDepthBits = 32;
 			bool bVsync = false;
-			float fScreenDepth;
-			float fScreenNear;
+			float fScreenDepth = 1000.0f;
+			float fScreenNear = 0.1f;
 			bool bFullscreen = false;
 			GRAPHICS_VERSION version;
 		};

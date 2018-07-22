@@ -25,19 +25,19 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 using namespace CoffeeEngine::Graphics::OpenGL;
 #endif 
 
-std::unique_ptr<BaseGraphicsClass> GraphicsFactory::CreateGraphics(GraphicsFactoryTypes graphicsType, ISystem *pSystem)
+std::unique_ptr<BaseGraphicsClass> GraphicsFactory::CreateGraphics(GraphicsAPIType graphicsType, ISystem *pSystem)
 {
 	switch (graphicsType)
 	{
 	#ifdef _WIN32
-		case GraphicsFactoryTypes::DIRECTX:
+		case GraphicsAPIType::DIRECTX:
 			return std::make_unique<D3DGraphicsClass>(pSystem);
 
-		case GraphicsFactoryTypes::OPENGL:
+		case GraphicsAPIType::OPENGL:
 			return std::make_unique<WinOGLGraphicsClass>(pSystem);
 			break;
 	#else
-		case GraphicsFactoryTypes::OPENGL:
+		case GraphicsAPIType::OPENGL:
 			return std::make_unique<OGLGraphicsClass>(pSystem);
 			break;
 	#endif

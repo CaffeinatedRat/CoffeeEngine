@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Input/Keyboard.hpp"
+#include "Graphics/GraphicsCommon.hpp"
 
 using namespace CoffeeEngine::Input;
 
@@ -19,6 +20,8 @@ namespace CoffeeEngine
 {
 	namespace Interfaces
 	{
+		using namespace CoffeeEngine::Graphics;
+
 		class ISystemListener
 		{
 		public:
@@ -45,7 +48,12 @@ namespace CoffeeEngine
 			/// <summary>
 			/// This event is usually triggered when keyup and keydown are not handled.
 			/// </summary>
-			virtual void OnChar(uint characterCode) = 0;
+			virtual void OnChar(uint) = 0;
+
+			/// <summary>
+			/// This event is usually triggered when a graphics reset has been issued.
+			/// </summary>
+			virtual bool OnGraphicsReset(GraphicsAPIType) = 0;
 		};
 	};
 };

@@ -25,7 +25,7 @@ namespace CoffeeEngine
 		{
 			using ISystem = CoffeeEngine::Interfaces::ISystem;
 			using BaseGraphicsClass = Graphics::BaseGraphicsClass;
-			static std::unique_ptr<BaseGraphicsClass> CreateGraphics(GraphicsFactoryTypes graphicsType, ISystem *pSystem);
+			static std::unique_ptr<BaseGraphicsClass> CreateGraphics(GraphicsAPIType graphicsType, ISystem *pSystem);
 		};
 	};
 };

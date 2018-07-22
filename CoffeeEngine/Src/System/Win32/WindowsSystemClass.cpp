@@ -12,12 +12,14 @@
 
 #include "Common.hpp"
 #include "Utility/Logger.hpp"
+#include "Graphics/GraphicsCommon.hpp"
 
 #include "Windows_EntryPoint.hpp"
 #include "WindowsSystemClass.hpp"
 #include "TimerClass.hpp"
 
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Interfaces;
 using namespace CoffeeEngine::Utility;
@@ -431,6 +433,16 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 		case IDM_EXIT:
 			WriteToLog("[WindowsSystemClass::MessageHandler] Exit command event received.", LogLevelType::Diagnostic);
 			DestroyWindow(hWnd);
+			break;
+
+		case ID_GRAPHICS_OPENGL:
+			if (m_pListener != nullptr)
+				m_pListener->OnGraphicsReset(GraphicsAPIType::OPENGL);
+			break;
+
+		case ID_GRAPHICS_DIRECTX:
+			if (m_pListener != nullptr)
+				m_pListener->OnGraphicsReset(GraphicsAPIType::DIRECTX);
 			break;
 
 		default:

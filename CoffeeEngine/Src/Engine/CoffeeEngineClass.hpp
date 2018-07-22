@@ -20,6 +20,7 @@
 #include "System/ITimer.hpp"
 #include "System/ISystem.hpp"
 #include "System/ISystemListener.hpp"
+#include "Graphics/GraphicsCommon.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ModelClass.hpp"
 
@@ -32,9 +33,11 @@ namespace CoffeeEngine
 			SHUTDOWN = 0,
 			INITIALIZED = 1,
 			RUNNING = 2,
+			RESTART_GRAPHICS = 3
 		};
 
 		//Restricting namespace scoping to within the class.
+		using namespace CoffeeEngine::Graphics;
 		using BaseGraphicsClass = CoffeeEngine::Graphics::BaseGraphicsClass;
 		using Logger = CoffeeEngine::Utility::Logging::Logger;
 		using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
@@ -54,12 +57,34 @@ namespace CoffeeEngine
 			// 
 			////////////////////////////////////////////////////////////
 
+			/// <summary>
+			/// This method initializes the engine.
+			/// </summary>
 			bool Initialize();
+
+			/// <summary>
+			/// This method begins the engine.
+			/// </summary>
 			void Run();
+
+			/// <summary>
+			/// This method will shutdown the engine, clean up and release any resources.
+			/// </summary>
+			void Shutdown();
 
 		private:
 			void Render(float elapsedTime);
 			void ManageWorld(float elapsedTime);
+
+			/// <summary>
+			/// This method initializes the graphics display of the engine only.
+			/// </summary>
+			bool InitializeGraphics(GraphicsAPIType);
+
+			/// <summary>
+			/// This method will shutdown the graphics display of the engine only.
+			/// </summary>
+			void ShutdownGraphicsDisplay();
 
 			////////////////////////////////////////////////////////////
 			//
@@ -89,9 +114,17 @@ namespace CoffeeEngine
 			virtual void OnChar(uint characterCode) override;
 
 			/// <summary>
-			/// This method will shutdown the engine, clean up and release any resources.
+			/// This event is usually triggered when the graphis type has changed
 			/// </summary>
-			void Shutdown();
+			inline virtual bool OnGraphicsReset(GraphicsAPIType graphicsAPIType) override
+			{
+				assert(m_pSystem);
+				if (m_pSystem)
+					m_pSystem->WriteToLog("[CoffeeEngineClass::OnGraphicsReset] Resetting...");
+
+				ShutdownGraphicsDisplay();
+				return (m_bReady = InitializeGraphics(graphicsAPIType));
+			}
 
 			////////////////////////////////////////////////////////////
 			//
@@ -101,17 +134,19 @@ namespace CoffeeEngine
 		private:
 			//Reference pointers.
 			Interfaces::ISystem* m_pSystem = nullptr;
+			Interfaces::ITimer* m_pTimer = nullptr;
 			Logger *m_pLogger = nullptr;
 
+			//Graphics states.
 			std::unique_ptr<BaseGraphicsClass> m_upGraphics = nullptr;
-
-			Interfaces::ICamera* m_pCamera = nullptr;
-			Interfaces::ITimer* m_pTimer = nullptr;
+			GraphicsAPIType m_graphicsType;
 
 			//Temporary for testing.
+			Interfaces::ICamera* m_pCamera = nullptr;
 			Interfaces::IModel* m_pModel = nullptr;
 			Interfaces::IShader* m_pShader = nullptr;
 
+			//Engine states.
 			bool m_bReady = false;
 			EngineState m_state = EngineState::SHUTDOWN;
 
@@ -119,7 +154,6 @@ namespace CoffeeEngine
 			float m_pitchMovement = 0.0f;
 			float m_turnMovement = 0.0f;
 			float m_forwardMovement = 0.0f;
-
 		};
 	};
 };
