@@ -30,9 +30,12 @@ namespace CoffeeEngine
 			
 			CameraClass() = delete;
 			CameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
-			CameraClass(const CameraClass& object);
-			CameraClass(CameraClass&& object);
+			CameraClass(const CameraClass& object) noexcept;
+			CameraClass(CameraClass&& object) noexcept;
 			virtual ~CameraClass() { };
+
+			CameraClass& operator=(CameraClass&&) = default;
+			CameraClass& operator=(const CameraClass&) = default;
 
 			////////////////////////////////////////////////////////////
 			//

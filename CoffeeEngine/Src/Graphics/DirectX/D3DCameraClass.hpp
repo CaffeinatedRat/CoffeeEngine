@@ -31,12 +31,13 @@ namespace CoffeeEngine
 
 				D3DCameraClass() = delete;
 				D3DCameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
-				D3DCameraClass(const D3DCameraClass& object);
+				D3DCameraClass(const D3DCameraClass& object) noexcept;
+				D3DCameraClass(D3DCameraClass&& object) noexcept;
 				virtual ~D3DCameraClass();
 
-				bool Initialize();
-				void Render(float fElapsedTime);
-				void Shutdown();
+				bool Initialize() override;
+				void Render(float fElapsedTime) override;
+				void Shutdown() override;
 
 				/// <summary>
 				/// Sets the vector position of the camera.

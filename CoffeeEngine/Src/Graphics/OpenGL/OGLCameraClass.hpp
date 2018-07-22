@@ -28,12 +28,16 @@ namespace CoffeeEngine
 
 				OGLCameraClass() = delete;
 				OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass);
-				OGLCameraClass(const OGLCameraClass& object);
+				OGLCameraClass(const OGLCameraClass& object) noexcept;
+				OGLCameraClass(OGLCameraClass&& object) noexcept;
 				virtual ~OGLCameraClass();
 
-				bool Initialize();
-				void Render(float fElapsedTime);
-				void Shutdown();
+				OGLCameraClass& operator=(OGLCameraClass&&) = default;
+				OGLCameraClass& operator=(const OGLCameraClass&) = default;
+
+				bool Initialize() override;
+				void Render(float fElapsedTime) override;
+				void Shutdown() override;
 
 				/// <summary>
 				/// Sets the vector position of the camera.
@@ -87,7 +91,7 @@ namespace CoffeeEngine
 				//OGL
 				glm::mat4 m_viewMatrix;
 				glm::mat4 m_projectionMatrix;
-				glm::mat4 m_worldMatrix;
+				glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 			};
 		}
 	};

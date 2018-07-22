@@ -31,8 +31,25 @@ D3DCameraClass::D3DCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 {
 }
 
-D3DCameraClass::D3DCameraClass(const D3DCameraClass& object)
-	: CameraClass(object)
+D3DCameraClass::D3DCameraClass(const D3DCameraClass& object) noexcept
+	: CameraClass(object),
+	m_positionVector(m_positionVector),
+	m_lookAtVector(m_lookAtVector),
+	m_upVector(m_upVector),
+	m_viewMatrix(m_viewMatrix),
+	m_projectionMatrix(m_projectionMatrix),
+	m_worldMatrix(m_worldMatrix)
+{
+}
+
+D3DCameraClass::D3DCameraClass(D3DCameraClass&& object) noexcept
+	: CameraClass(object),
+	m_positionVector(std::move(m_positionVector)),
+	m_lookAtVector(std::move(m_lookAtVector)),
+	m_upVector(std::move(m_upVector)),
+	m_viewMatrix(std::move(m_viewMatrix)),
+	m_projectionMatrix(std::move(m_projectionMatrix)),
+	m_worldMatrix(std::move(m_worldMatrix))
 {
 }
 
@@ -154,15 +171,16 @@ void D3DCameraClass::Render(float fElapsedTime)
 	float pitchRate = m_pitch * 0.001f * fElapsedTime;
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
-	auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitchRate, yawRate, rollRate);
+	//auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitchRate, yawRate, rollRate);
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-	m_lookAtVector = XMVector3Normalize(XMVector3TransformCoord(m_lookAtVector, rotationMatrix));
+	//m_lookAtVector = XMVector3Normalize(XMVector3TransformCoord(m_lookAtVector, rotationMatrix));
 
 	// Translate the rotated camera position to the location of the viewer.
 	m_positionVector += m_forward * m_lookAtVector;
 
-	auto upVector = XMVector3TransformCoord(m_upVector, rotationMatrix);
+	//auto upVector = XMVector3TransformCoord(m_upVector, rotationMatrix);
+	auto upVector = m_upVector;
 
 	// Finally create the view matrix from the three updated vectors.
 	m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
