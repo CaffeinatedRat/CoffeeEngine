@@ -169,7 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
-    <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Resources\targetver.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="Src\Common.hpp" />
     <ClInclude Include="Src\Engine\CoffeeEngineClass.hpp" />

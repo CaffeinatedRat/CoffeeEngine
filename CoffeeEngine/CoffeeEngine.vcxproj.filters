@@ -106,9 +106,6 @@
     <ClInclude Include="Include\stdafx.h">
       <Filter>System\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Include\targetver.h">
-      <Filter>System\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Graphics\BaseGraphicsClass.hpp">
       <Filter>System\Base</Filter>
     </ClInclude>
@@ -252,6 +249,9 @@
     </ClInclude>
     <ClInclude Include="Src\Engine\IObject.hpp">
       <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\targetver.h">
+      <Filter>System\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
