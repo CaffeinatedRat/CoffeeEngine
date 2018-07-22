@@ -48,6 +48,8 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 	if(m_pSystem == nullptr)
 		throw NullArgumentException("D3DGraphicsClass", "Initialize", "m_pSystem");
 
+	BaseGraphicsClass::Initialize(graphicsInitParameters);
+
 	m_pSystem->WriteToLog("[D3DGraphicsClass::Initialize] Beginning...");
 
 	m_nScreenWidth = graphicsInitParameters.nScreenWidth;

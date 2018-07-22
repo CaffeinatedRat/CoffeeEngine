@@ -47,7 +47,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) = 0;
+				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override = 0;
 
 				/// <summary>
 				/// Begins the rendering process.

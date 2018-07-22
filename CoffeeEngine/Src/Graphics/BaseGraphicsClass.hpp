@@ -26,7 +26,19 @@ namespace CoffeeEngine
 			BaseGraphicsClass() = delete;
 			BaseGraphicsClass(ISystem* pSystem, std::string sGraphicsLibraryName);
 			BaseGraphicsClass(const BaseGraphicsClass& object) noexcept;
+			BaseGraphicsClass(BaseGraphicsClass&& object) noexcept;
 			virtual ~BaseGraphicsClass() { };
+
+			BaseGraphicsClass& operator=(BaseGraphicsClass&&) = default;
+			BaseGraphicsClass& operator=(const BaseGraphicsClass&) = default;
+
+			/// <summary>
+			/// Attempts to initialize the graphics object.
+			/// </summary>
+			/// <returns>
+			/// Returns true if initialization was successful.
+			/// </returns>
+			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
 
 			/// <summary>
 			/// Returns the current operating system interface.
@@ -52,7 +64,10 @@ namespace CoffeeEngine
 			int m_nScreenWidth = 0;
 			int m_nScreenHeight = 0;
 			int m_videoCardMemory = 0;
-			unsigned int m_nNumOfModes = 0;
+			uint m_nNumOfModes = 0;
+			float m_ScreenDepth = 0.0f;
+			float m_ScreenNear = 0.0f;
+
 			GRAPHICS_VERSION m_version;
 		};
 	};

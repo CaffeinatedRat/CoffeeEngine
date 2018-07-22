@@ -57,14 +57,9 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	if (pSystem == nullptr)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_pSystem");
 
-	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Beginning initialization.");
+	BaseGraphicsClass::Initialize(graphicsInitParameters);
 
-	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
-	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
-	m_bVsyncEnabled = graphicsInitParameters.bVsync;
-	m_bFullScreen = graphicsInitParameters.bFullscreen;
-	m_version.nMajor = graphicsInitParameters.version.nMajor;
-	m_version.nMinor = graphicsInitParameters.version.nMinor;
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Beginning initialization.");
 
 	//if (!InitializeGlew())
 	//	return false;
@@ -170,7 +165,7 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	}
 
 	//Get the actual version, which may not be what we've requested.
-	int version[2];
+	int version[2] = { 0,0 };
 	glGetIntegerv(GL_MAJOR_VERSION, &version[0]);
 	glGetIntegerv(GL_MINOR_VERSION, &version[1]);
 

@@ -49,7 +49,7 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters);
+				bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
 
 				/// <summary>
 				/// Begins the rendering process.

@@ -48,13 +48,6 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 
 	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Beginning initialization.");
 
-	m_nScreenWidth = graphicsInitParameters.nScreenWidth;
-	m_nScreenHeight = graphicsInitParameters.nScreenHeight;
-	m_bVsyncEnabled = graphicsInitParameters.bVsync;
-	m_bFullScreen = graphicsInitParameters.bFullscreen;
-	m_version.nMajor = graphicsInitParameters.version.nMajor;
-	m_version.nMinor = graphicsInitParameters.version.nMinor;
-
 	//Initialize Glew only once.
 	if (!OGLGraphicsClass::InitializeGlew())
 	{
@@ -121,6 +114,7 @@ void OGLGraphicsClass::Shutdown()
 	m_pSystem->WriteToLog("[OGLGraphicsClass::Shutdown] Shutting down...");
 
 	m_bDisplayReady = false;
+	m_bGlewInitialized = false;
 
 	m_videoCardDescription = "No Information Available.";
 	m_nNumOfModes = 0;
