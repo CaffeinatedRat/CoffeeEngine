@@ -194,7 +194,7 @@ void D3DModelClass::Render(float fElapsedTime) const
 	worldMatrix *= translateMatrix;
 
 	//Get the shaders.
-	CoffeeEngine::Graphics::DirectX::D3DShaderClass* firstShader = (CoffeeEngine::Graphics::DirectX::D3DShaderClass*)(m_shaders.size() > 0 ? m_shaders[0] : nullptr);
+	auto firstShader = (CoffeeEngine::Graphics::DirectX::D3DShaderClass*)(m_shaders.size() > 0 ? m_shaders[0] : nullptr);
 	if (firstShader != nullptr) {
 		firstShader->SetWorldMatrix(worldMatrix);
 	}

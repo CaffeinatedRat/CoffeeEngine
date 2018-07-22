@@ -25,6 +25,23 @@ ModelClass::ModelClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	m_pGraphicsClass = pBaseGraphicsClass;
 }
 
+ModelClass::ModelClass(const ModelClass& otherClass) noexcept
+	: m_enableAlphaBlending(otherClass.m_enableAlphaBlending),
+	m_pGraphicsClass(otherClass.m_pGraphicsClass),
+	m_shaders(otherClass.m_shaders)
+{
+
+}
+
+ModelClass::ModelClass(ModelClass&& otherClass) noexcept
+	: m_enableAlphaBlending(otherClass.m_enableAlphaBlending),
+	m_pGraphicsClass(otherClass.m_pGraphicsClass),
+	m_shaders(std::move(otherClass.m_shaders))
+{
+	otherClass.m_enableAlphaBlending = false;
+	otherClass.m_pGraphicsClass = nullptr;
+}
+
 void ModelClass::AddShader(const IShader* pShader)
 {
 	assert(pShader);

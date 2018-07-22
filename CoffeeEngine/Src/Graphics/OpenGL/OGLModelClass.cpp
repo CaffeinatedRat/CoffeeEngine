@@ -80,8 +80,10 @@ bool OGLModelClass::Initialize(IShader* pShader)
 	// Bind early so we can save our vertex attributes.
 	glBindVertexArray(m_vertexArrayID);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if (m_enableAlphaBlending) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 
 	//Bind the buffer and send the linear block of vertices.
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
@@ -154,12 +156,12 @@ void OGLModelClass::Render(float fElapsedTime) const
 
 	//NOTE: The order of Matrix transformations matter and will result in different effects.
 	// This simple transformation does not take into account more complex transformations.
-	worldMatrix = glm::scale(worldMatrix, m_scale);
+	//worldMatrix = glm::scale(worldMatrix, m_scale);
 	//worldMatrix = glm::rotate(worldMatrix, fElapsedTime,  m_rotate);
 	//worldMatrix = glm::translate(worldMatrix, m_translate);
 
-	worldMatrix = glm::rotate(worldMatrix, std::fmod(fElapsedTime, 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	worldMatrix = glm::translate(worldMatrix, glm::vec3(0.5f, -0.5f, 0.0f));
+	//worldMatrix = glm::rotate(worldMatrix, std::fmod(fElapsedTime, 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//worldMatrix = glm::translate(worldMatrix, glm::vec3(0.5f, -0.5f, 0.0f));
 	//worldMatrix = glm::translate(worldMatrix, m_translate);
 
 	//Get the shaders.

@@ -21,20 +21,31 @@ namespace CoffeeEngine
 	{
 		class ModelClass : public IModel
 		{
-		protected:
-			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
-			std::vector<const IShader*> m_shaders;
-
 		public:		
 			ModelClass() = delete;
 			ModelClass(const BaseGraphicsClass* pBaseGraphicsClass);
-			ModelClass(ModelClass&&) = default;
+			ModelClass(const ModelClass& otherClass) noexcept;
+			ModelClass(ModelClass&& otherClass) noexcept;
 			virtual ~ModelClass() { };
 
+			ModelClass& operator=(const ModelClass&) = default;
 			ModelClass& operator=(ModelClass&&) = default;
 
 			void AddShader(const IShader* pShader);
 			void AddShaders(std::vector<const IShader*>& pShader);
+
+			////////////////////////////////////////////////////////////
+			//
+			//                Member Vars
+			// 
+			////////////////////////////////////////////////////////////
+
+		protected:
+			const BaseGraphicsClass *m_pGraphicsClass = nullptr;
+			std::vector<const IShader*> m_shaders;
+
+			bool m_enableAlphaBlending = false;
+
 		};
 	};
 };
