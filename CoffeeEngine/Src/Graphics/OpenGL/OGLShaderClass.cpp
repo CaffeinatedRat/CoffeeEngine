@@ -212,9 +212,9 @@ bool OGLShaderClass::SetShaderParameters(float fElapsedTime)
 	glm::mat4 projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
 	setMatrix4("world", m_worldMatrix);
-	setMatrix4("projection", projectionMatrix);
 	setMatrix4("view", viewMatrix);
-
+	setMatrix4("projection", projectionMatrix);
+	
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLShaderClass::SetShaderParameters] Completed.", LogLevelType::DeepDiagnostic);
 
 	return true;
