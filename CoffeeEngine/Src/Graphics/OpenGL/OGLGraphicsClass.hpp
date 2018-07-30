@@ -32,7 +32,7 @@ namespace CoffeeEngine
 		
 				////////////////////////////////////////////////////////////
 				//
-				//                Standard methods
+				//            Constructors/Assignment Operators
 				// 
 				////////////////////////////////////////////////////////////
 
@@ -41,13 +41,19 @@ namespace CoffeeEngine
 				OGLGraphicsClass(const OGLGraphicsClass& object);
 				virtual ~OGLGraphicsClass() = 0;
 
+				////////////////////////////////////////////////////////////
+				//
+				//                Standard methods
+				// 
+				////////////////////////////////////////////////////////////
+
 				/// <summary>
 				/// Attempts to initialize the graphics object.
 				/// </summary>
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override = 0;
+				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters) override = 0;
 
 				/// <summary>
 				/// Begins the rendering process.
@@ -107,30 +113,18 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns a compliant list of video card information.
 				/// </returns>
-				std::vector<std::string> GetVideoCardInfo() const override;
+				//std::vector<std::string> GetVideoCardInfo() const override;
 
 				////////////////////////////////////////////////////////////
 				//
-				//                Transition methods
+				//                Graphics Properties Methods
 				// 
 				////////////////////////////////////////////////////////////
 
-				inline void GetScreenProperties(int& nWidth, int& nHeight)
-				{
-					nWidth = m_nScreenWidth;
-					nHeight = m_nScreenHeight;
-				}
-
-				////////////////////////////////////////////////////////////
-				//
-				//                OpenGL Specific methods
-				// 
-				////////////////////////////////////////////////////////////
-			public:
-				//inline ID3D11Device* GetDevice() { return m_pDevice; }
-				//inline ID3D11DeviceContext* GetDeviceContext() { return m_pDeviceContext; }
-
-				//inline D3DXMATRIX& GetOrthoMatrix() { return m_orthoMatrix; }
+				/// <summary>
+				/// Sets the screen dimensions for the graphics presentation properties.
+				/// </summary>
+				virtual void SetScreenDimensions(int width, int height) override;
 
 			protected:
 				/// <summary>
@@ -138,11 +132,6 @@ namespace CoffeeEngine
 				/// This method is idempotent.
 				/// </summary>
 				virtual bool InitializeGlew();
-
-				/// <summary>
-				/// Performs the main GLContext logic.
-				/// </summary>
-				virtual void InitializeGLContext();
 
 			private:
 				
@@ -179,12 +168,9 @@ namespace CoffeeEngine
 				bool CreateRasterState();
 
 				/// <summary>
-				/// Create a viewport.
+				/// Sets the viewport.
 				/// </summary>
-				/// <returns>
-				/// True if the viewport was successfully created.
-				/// </returns>
-				bool CreateViewPort();
+				void SetViewport(int x, int y, int width, int height);
 
 			protected:
 
@@ -194,7 +180,7 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 
-				bool m_bGlewInitialized = false;
+				bool m_isGlewInitialized = false;
 				std::string m_videoCardDescription = "No Information Available.";
 				std::string m_actualVersionInfo = "No version info available.";
 

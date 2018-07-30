@@ -42,7 +42,6 @@ namespace CoffeeEngine
 			using Logger = CoffeeEngine::Utility::Logging::Logger;
 
 		public:
-
 			WindowsSystemClass() = default;
 			WindowsSystemClass(Logger *pLogger);
 			WindowsSystemClass(const WindowsSystemClass&) = delete;

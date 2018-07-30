@@ -18,6 +18,7 @@
 //#include <d3dx11async.h>
 
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Utility::Logging;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::DirectX;
 
@@ -48,7 +49,7 @@ bool D3DModelClass::Initialize(IShader* pShader)
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("D3DModelClass", "Initialize", "m_pGraphicsClass");
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Beginning...");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Begin", LogLevelType::Diagnostic);
 
 	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
 	assert(pGraphicsClass);
@@ -163,7 +164,7 @@ bool D3DModelClass::Initialize(IShader* pShader)
 	}
 	//END OF if ( (vertices != NULL) && (indices != NULL) )...
 	
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Completed.");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] End", LogLevelType::Diagnostic);
 
 	return bStatus;
 }
@@ -238,7 +239,7 @@ void D3DModelClass::Render(float fElapsedTime) const
 
 void D3DModelClass::Shutdown()
 {
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Initialize] Shutting down...");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Shutdown] Begin", LogLevelType::Diagnostic);
 
 	SAFE_RELEASE(m_pIndexBuffer);
 	SAFE_RELEASE(m_pVertexBuffer);
@@ -248,6 +249,7 @@ void D3DModelClass::Shutdown()
 
 	m_nVertexCount = 0;
 	m_nIndexCount = 0;
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DModelClass::Shutdown] End", LogLevelType::Diagnostic);
 }
 
 void D3DModelClass::Rotate(float x, float y, float z)

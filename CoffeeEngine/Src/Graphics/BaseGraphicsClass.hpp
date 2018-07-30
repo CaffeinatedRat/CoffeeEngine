@@ -23,6 +23,12 @@ namespace CoffeeEngine
 		{
 		public:
 
+			////////////////////////////////////////////////////////////
+			//
+			//            Constructors/Assignment Operators
+			// 
+			////////////////////////////////////////////////////////////
+
 			BaseGraphicsClass() = delete;
 			BaseGraphicsClass(ISystem* pSystem, std::string sGraphicsLibraryName);
 			BaseGraphicsClass(const BaseGraphicsClass& object) noexcept;
@@ -32,13 +38,19 @@ namespace CoffeeEngine
 			BaseGraphicsClass& operator=(BaseGraphicsClass&&) = default;
 			BaseGraphicsClass& operator=(const BaseGraphicsClass&) = default;
 
+			////////////////////////////////////////////////////////////
+			//
+			//                Standard methods
+			// 
+			////////////////////////////////////////////////////////////
+
 			/// <summary>
 			/// Attempts to initialize the graphics object.
 			/// </summary>
 			/// <returns>
 			/// Returns true if initialization was successful.
 			/// </returns>
-			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
+			virtual bool Initialize(const GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters) override;
 
 			/// <summary>
 			/// Returns the current operating system interface.
@@ -51,24 +63,42 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Returns the current graphics library.
 			/// </summary>
-			std::string GetGraphicsLibraryName() const { return m_sGraphicsLibraryName; }
+			inline std::string GetGraphicsLibraryName() const noexcept  { return m_graphicsLibraryName; }
+
+			////////////////////////////////////////////////////////////
+			//
+			//                Graphics Properties Methods
+			// 
+			////////////////////////////////////////////////////////////
+
+			/// <summary>
+			/// Returns a constant refernece to the graphics presentation properties.
+			/// </summary>
+			inline const GRAPHICS_PRESENTATION_PROPERTIES& GetGraphicsPresentationProperties() const { return m_graphicsPresentationProperties; }
+
+			/// <summary>
+			/// Sets the screen dimensions for the graphics presentation properties.
+			/// </summary>
+			inline virtual void SetScreenDimensions(int width, int height)
+			{
+				m_graphicsPresentationProperties.screenWidth = width;
+				m_graphicsPresentationProperties.screenHeight = height;
+			}
 
 		protected:
 			ISystem *m_pSystem = nullptr;
-			std::string m_sGraphicsLibraryName = "Undefined";
+			std::string m_graphicsLibraryName = "Undefined";
 
 			//Primitives
-			bool m_bFullScreen = false;
-			bool m_bDisplayReady = false;
-			bool m_bVsyncEnabled = false;
-			int m_nScreenWidth = 0;
-			int m_nScreenHeight = 0;
+			bool m_displayReady = false;
 			int m_videoCardMemory = 0;
-			uint m_nNumOfModes = 0;
-			float m_ScreenDepth = 0.0f;
-			float m_ScreenNear = 0.0f;
+			uint m_numberOfModes = 0;
 
-			GRAPHICS_VERSION m_version;
+			//
+			int m_width = 0, m_height = 0;
+
+			//Store the initial graphics parameters.  These should be constant once set.
+			GRAPHICS_PRESENTATION_PROPERTIES m_graphicsPresentationProperties;
 		};
 	};
 };

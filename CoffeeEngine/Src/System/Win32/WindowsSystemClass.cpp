@@ -54,23 +54,19 @@ WindowsSystemClass::~WindowsSystemClass()
 
 bool WindowsSystemClass::Initialize(ISystemListener* listener)
 {
+	assert(listener);
+	if (listener == nullptr)
+		throw NullArgumentException("WindowsSystemClass", "Initialize", "listener");
+
+	WriteToLog("[WindowsSystemClass::Initialize] Begin");
+
 	//Allow this method to be idempotent.
 	assert(m_state == WindowsOSState::SHUTDOWN);
 	if (m_state == WindowsOSState::SHUTDOWN)
 	{
-		assert(listener);
-		if (listener == nullptr)
-		{
-			//Add the heavy action of an exception but increase diag when necessary.
-			throw NullArgumentException("WindowsSystemClass", "Initialize", "listener");
-		}
-
-		//Assign the listener.
-		//Technically we could make this an array of multiple listeners if necessary.
 		m_pListener = listener;
 
-		WriteToLog("[WindowsSystemClass::Initialize] Beginning...", LogLevelType::Informational);
-
+		//Attempt to initialize the window.
 		if (!InitializeWindow())
 		{
 			WriteToLog("[WindowsSystemClass::Initialize] Failed!", LogLevelType::Error);
@@ -80,16 +76,19 @@ bool WindowsSystemClass::Initialize(ISystemListener* listener)
 		m_state = WindowsOSState::INITIALIZED;
 	}
 
+	WriteToLog("[WindowsSystemClass::Initialize] End");
 	return true;
 }
 
 void WindowsSystemClass::Run()
 {
+	WriteToLog("[WindowsSystemClass::Run] Begin");
+
 	assert(m_state == WindowsOSState::INITIALIZED);
 	if (m_state == WindowsOSState::INITIALIZED)
 	{
-		WriteToLog("[WindowsSystemClass::Run] Beginning the message pump.", LogLevelType::Informational);
 		m_state = WindowsOSState::RUNNING;
+		WriteToLog("[WindowsSystemClass::Run] Beginning the message pump. State Updated: WindowsOSState::RUNNING.");
 
 		//Begin the windows message pump.
 		MSG msg;
@@ -127,8 +126,10 @@ void WindowsSystemClass::Run()
 			}
 		}
 
-		WriteToLog("[WindowsSystemClass::Run] Ending the message pump.", LogLevelType::Informational);
+		WriteToLog("[WindowsSystemClass::Run] Ending the message pump.");
 	}
+
+	WriteToLog("[WindowsSystemClass::Run] End");
 }
 
 /// <summary>
@@ -136,20 +137,27 @@ void WindowsSystemClass::Run()
 /// </summary>
 void WindowsSystemClass::Shutdown()
 {
+	WriteToLog("[WindowsSystemClass::Shutdown] Begin");
+
 	//This flag allows this method to be idempotent.
 	if (m_state > WindowsOSState::SHUTDOWN)
 	{
-		WriteToLog("[WindowsSystemClass::Shutdown] Shutting down...", LogLevelType::Informational);
+		WriteToLog("[WindowsSystemClass::Shutdown] Shutting down...");
 
 		//Clean up the window.
 		if (m_hWnd)
+		{
 			DestroyWindow(m_hWnd);
+			m_hWnd = nullptr;
+		}
 
 		UnregisterClass(m_szWindowClass, m_hInstance);
-
-		m_hWnd = nullptr;
 		m_state = WindowsOSState::SHUTDOWN;
+
+		WriteToLog("[WindowsSystemClass::Shutdown] State Updated: WindowsOSState::SHUTDOWN.");
 	}
+
+	WriteToLog("[WindowsSystemClass::Shutdown] End");
 }
 
 ////////////////////////////////////////////////////////////
@@ -235,7 +243,7 @@ inline ITimer* WindowsSystemClass::CreateTimer()
 
 bool WindowsSystemClass::InitializeWindow()
 {
-	WriteToLog("[WindowsSystemClass::InitializeWindow] Attempting to create a window.", LogLevelType::Diagnostic);
+	WriteToLog("[WindowsSystemClass::InitializeWindow] Begin");
 
 	// Get the instance of this application.
 	m_hInstance = GetModuleHandle(nullptr);
@@ -255,21 +263,17 @@ bool WindowsSystemClass::InitializeWindow()
 	m_nScreenWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
 	m_nScreenHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
 
-	//Center the window.
-	int xPos = m_nScreenWidth / 2;
-	int yPos = m_nScreenHeight / 2;
-
 	//Create a window with the following parameters.
-	m_hWnd = CreateWindowEx(WS_EX_WINDOWEDGE,			//The Extended Style of the window.
-		m_szWindowClass,			//The name of the class.
-		m_szTitle,					//The name of the window.
-		WS_OVERLAPPEDWINDOW,		//The style of the window.
-		xPos,						//The x coordinate of the window.
-		yPos,						//The y coordinate of the window.
-		m_nScreenWidth,				//The width of the window.
-		m_nScreenHeight,			//The height of the window.
-		nullptr, nullptr,			//The handle to the parent & menu.
-		m_hInstance, nullptr);		//The instance of the window program & child info.
+	m_hWnd = CreateWindowEx(WS_EX_WINDOWEDGE,	//The Extended Style of the window.
+		m_szWindowClass,						//The name of the class.
+		m_szTitle,								//The name of the window.
+		WS_OVERLAPPEDWINDOW,					//The style of the window.
+		(m_nScreenWidth / 2),					//The x coordinate of the window, horizontally centered.
+		(m_nScreenHeight / 2),					//The y coordinate of the window, vertically centered.
+		m_nScreenWidth,							//The width of the window.
+		m_nScreenHeight,						//The height of the window.
+		nullptr, nullptr,						//The handle to the parent & menu.
+		m_hInstance, nullptr);					//The instance of the window program & child info.
 
 	if (m_hWnd)
 	{
@@ -279,6 +283,7 @@ bool WindowsSystemClass::InitializeWindow()
 		UpdateWindow(m_hWnd);
 
 		//We are now active and initialized.
+		WriteToLog("[WindowsSystemClass::InitializeWindow] End");
 		return (m_bIsActive = true);
 	}
 
@@ -298,7 +303,6 @@ std::string WindowsSystemClass::GetLastErrorMessage() const
 		(LPWSTR)&lpMsgBuf,
 		0, nullptr);
 
-	//const char* test = (const char*)lpMsgBuf;
 	std::wstring wstr = std::wstring((wchar_t*)lpMsgBuf);
 
 	LocalFree(lpMsgBuf);
@@ -315,6 +319,7 @@ std::string WindowsSystemClass::GetLastErrorMessage() const
 void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 {
 	assert(hInstance);
+	WriteToLog("[WindowsSystemClass::RegisterWindowsClass] Begin", LogLevelType::Diagnostic);
 
 	//Register the windows class.
 	WNDCLASSEX wcex;
@@ -332,6 +337,7 @@ void WindowsSystemClass::RegisterWindowsClass(HINSTANCE hInstance)
 	wcex.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
 	RegisterClassEx(&wcex);
+	WriteToLog("[WindowsSystemClass::RegisterWindowsClass] End", LogLevelType::Diagnostic);
 }
 
 /// <summary>
@@ -436,11 +442,13 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 			break;
 
 		case ID_GRAPHICS_OPENGL:
+			WriteToLog("[WindowsSystemClass::MessageHandler] OPENGL command event received.", LogLevelType::Diagnostic);
 			if (m_pListener != nullptr)
 				m_pListener->OnGraphicsReset(GraphicsAPIType::OPENGL);
 			break;
 
 		case ID_GRAPHICS_DIRECTX:
+			WriteToLog("[WindowsSystemClass::MessageHandler] DIRECTX command event received.", LogLevelType::Diagnostic);
 			if (m_pListener != nullptr)
 				m_pListener->OnGraphicsReset(GraphicsAPIType::DIRECTX);
 			break;
@@ -467,8 +475,8 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	case WM_KEYDOWN:
 	{
-		std::stringstream stream;
-		stream << "[WindowsSystemClass::WM_KEYDOWN] Keycode: " << (int)wParam;
+		std::stringstream stream("[WindowsSystemClass::WM_KEYDOWN] Keycode: ");
+		stream << (int)wParam;
 		WriteToLog(stream, LogLevelType::Diagnostic);
 
 		if (m_pListener != nullptr)
@@ -478,8 +486,8 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	case WM_KEYUP:
 	{
-		std::stringstream stream;
-		stream << "[WindowsSystemClass::WM_KEYUP] Keycode: " << (int)wParam;
+		std::stringstream stream("[WindowsSystemClass::WM_KEYUP] Keycode: ");
+		stream << (int)wParam;
 		WriteToLog(stream, LogLevelType::Diagnostic);
 
 		if (m_pListener != nullptr)
@@ -491,6 +499,23 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 	{
 		if (m_pListener != nullptr)
 			m_pListener->OnChar((int)wParam);
+	}
+	break;
+
+	case WM_SIZE:
+	{
+		int width = LOWORD(lParam);
+		int height = HIWORD(lParam);
+		if (m_pListener != nullptr)
+			m_pListener->OnWindowResize(width, height);
+	}
+	break;
+
+	case WM_SIZING:
+	{
+		RECT* pRect = (RECT*)lParam;
+		if (m_pListener != nullptr)
+			m_pListener->OnWindowResize(pRect->right - pRect->left, pRect->bottom - pRect->top);
 	}
 	break;
 

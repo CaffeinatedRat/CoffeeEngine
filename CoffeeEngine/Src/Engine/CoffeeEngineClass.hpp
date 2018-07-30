@@ -10,9 +10,6 @@
 
 #pragma once
 
-//#include "stdafx.h"
-//#include "Common.hpp"
-
 #include <memory>
 
 #include "Utility/Logger.hpp"
@@ -23,6 +20,8 @@
 #include "Graphics/GraphicsCommon.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
 #include "Graphics/ModelClass.hpp"
+
+using namespace CoffeeEngine::Graphics;
 
 namespace CoffeeEngine
 {
@@ -36,14 +35,13 @@ namespace CoffeeEngine
 			RESTART_GRAPHICS = 3
 		};
 
-		//Restricting namespace scoping to within the class.
-		using namespace CoffeeEngine::Graphics;
-		using BaseGraphicsClass = CoffeeEngine::Graphics::BaseGraphicsClass;
-		using Logger = CoffeeEngine::Utility::Logging::Logger;
-		using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
-
 		class CoffeeEngineClass : public Interfaces::ISystemListener
 		{
+			//Restricting namespace scoping to within the class.
+			using BaseGraphicsClass = CoffeeEngine::Graphics::BaseGraphicsClass;
+			using Logger = CoffeeEngine::Utility::Logging::Logger;
+			using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
+
 		public:
 
 			CoffeeEngineClass() = default;
@@ -116,15 +114,12 @@ namespace CoffeeEngine
 			/// <summary>
 			/// This event is usually triggered when the graphis type has changed
 			/// </summary>
-			inline virtual bool OnGraphicsReset(GraphicsAPIType graphicsAPIType) override
-			{
-				assert(m_pSystem);
-				if (m_pSystem)
-					m_pSystem->WriteToLog("[CoffeeEngineClass::OnGraphicsReset] Resetting...");
+			virtual bool OnGraphicsReset(GraphicsAPIType graphicsAPIType) override;
 
-				ShutdownGraphicsDisplay();
-				return (m_bReady = InitializeGraphics(graphicsAPIType));
-			}
+			/// <summary>
+			/// This event is usually triggered when a window is resized.
+			/// </summary>
+			virtual void OnWindowResize(int width, int height) override;
 
 			////////////////////////////////////////////////////////////
 			//

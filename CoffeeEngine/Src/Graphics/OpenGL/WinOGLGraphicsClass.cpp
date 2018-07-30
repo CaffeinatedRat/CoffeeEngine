@@ -26,7 +26,8 @@ using namespace CoffeeEngine::System;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
 
-LRESULT CALLBACK MessageHandlerGlew(HWND, UINT, WPARAM, LPARAM);
+//Forward Declarations
+LRESULT CALLBACK DummyMessageHandlerGlew(HWND, UINT, WPARAM, LPARAM);
 
 ////////////////////////////////////////////////////////////
 //
@@ -50,19 +51,12 @@ WinOGLGraphicsClass::~WinOGLGraphicsClass()
 //                Public Methods
 // 
 ////////////////////////////////////////////////////////////
-bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
+bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters)
 {
 	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
 	assert(pSystem);
 	if (pSystem == nullptr)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_pSystem");
-
-	BaseGraphicsClass::Initialize(graphicsInitParameters);
-
-	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Beginning initialization.");
-
-	//if (!InitializeGlew())
-	//	return false;
 
 	//Get the main device context for our current window.
 	m_hdc = GetDC(pSystem->GetHWND());
@@ -70,113 +64,81 @@ bool WinOGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INIT
 	if (m_hdc == nullptr)
 		throw NullArgumentException("WinOGLGraphicsClass", "Initialize", "m_hdc");
 
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Begin", LogLevelType::Diagnostic);
+
+	BaseGraphicsClass::Initialize(graphicsInitParameters);
+
 	//Initialize OpenGL based on the verison number.
 	PIXELFORMATDESCRIPTOR pfd;
+	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.iLayerType = PFD_MAIN_PLANE;
+	pfd.cColorBits = graphicsInitParameters.colorBits;
+	pfd.cDepthBits = graphicsInitParameters.depthBits;
+
+	if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)
+	{
+		pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Vertex & Fragment shaders supported.", LogLevelType::Informational);
+	}
+
+	int iContextAttributes[] =
+	{
+		WGL_CONTEXT_MAJOR_VERSION_ARB, graphicsInitParameters.version.nMajor,
+		WGL_CONTEXT_MINOR_VERSION_ARB,  graphicsInitParameters.version.nMinor,
+		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+		0
+	};
+
 	bool initializationStatus = false;
+	bool newerOpenGLVersion = (graphicsInitParameters.version.nMajor > 2);//&& WGLEW_ARB_create_context && WGLEW_ARB_pixel_format);
 
-	//Initialized OpenGL version 3.0 and greater, as long as the glew context & formats are supported.
-	if (m_version.nMajor > 2 && WGLEW_ARB_create_context && WGLEW_ARB_pixel_format)
+	//Get the pixel format based on the version of OpenGL.
+	//int pixelFormat = newerOpenGLVersion ? GetPixelFormat(graphicsInitParameters) : ChoosePixelFormat(m_hdc, &pfd);
+	int pixelFormat = GetPixelFormat(graphicsInitParameters, pfd);
+
+	if (!OGLGraphicsClass::InitializeGlew())
 	{
-		if (GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader)
-		{
-			pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Vertex & Fragment shaders supported.", LogLevelType::Informational);
-		}
-
-		const int iPixelFormats[] =
-		{
-			WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-			WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-			WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-			WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
-			WGL_COLOR_BITS_ARB, graphicsInitParameters.nColorBits,
-			WGL_DEPTH_BITS_ARB, graphicsInitParameters.nDepthBits,
-			WGL_STENCIL_BITS_ARB, 8,
-			0 // End of attributes list
-		};
-
-		int pixelFormat = 0, numberOfFormats = 0;
-		wglChoosePixelFormatARB(m_hdc, iPixelFormats, NULL, 1, &pixelFormat, (UINT*)&numberOfFormats);
-		assert(pixelFormat > 0);
-		if (pixelFormat > 0)
-		{
-			bool bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd);
-			assert(bResult);
-			if (bResult)
-			{
-				int iContextAttributes[] =
-				{
-					WGL_CONTEXT_MAJOR_VERSION_ARB, m_version.nMajor,
-					WGL_CONTEXT_MINOR_VERSION_ARB, m_version.nMinor,
-					WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-					0
-				};
-
-				m_renderingContext = wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes);
-				assert(m_renderingContext);
-				if (m_renderingContext == nullptr)
-				{
-					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 3 context could not be created.", LogLevelType::Error);
-					return false;
-				}
-
-				bResult = wglMakeCurrent(m_hdc, m_renderingContext);
-				assert(bResult);
-
-				//Call the parent class.
-				initializationStatus = OGLGraphicsClass::Initialize(graphicsInitParameters);
-			}
-		}
+		pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Couldn't initialize GLEW!", LogLevelType::Error);
+		return 0;
 	}
-	//Initialize OpenGL version 2.0 or fall back to 2.0 if the enhanced OpenGL methods are not available.
-	else
+
+	assert(pixelFormat > 0);
+	if (pixelFormat > 0)
 	{
-		memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-		pfd.nVersion = 1;
-		pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
-		pfd.iPixelType = PFD_TYPE_RGBA;
-		pfd.cColorBits = graphicsInitParameters.nColorBits;
-		pfd.cDepthBits = graphicsInitParameters.nDepthBits;
-		pfd.iLayerType = PFD_MAIN_PLANE;
-
-		int pixelFormat = ChoosePixelFormat(m_hdc, &pfd);
-		assert(pixelFormat > 0);
-		if (pixelFormat > 0)
+		if (SetPixelFormat(m_hdc, pixelFormat, &pfd))
 		{
-			bool bResult = SetPixelFormat(m_hdc, pixelFormat, &pfd);
-			assert(bResult);
-			if (bResult)
+			m_renderingContext = newerOpenGLVersion ? wglCreateContextAttribsARB(m_hdc, 0, iContextAttributes) : wglCreateContext(m_hdc);
+			assert(m_renderingContext);
+			if (m_renderingContext != nullptr)
 			{
-				m_renderingContext = wglCreateContext(m_hdc);
-				assert(m_renderingContext);
-				if (m_renderingContext == nullptr)
-				{
-					pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version 2 context could not be created.", LogLevelType::Error);
-					return false;
-				}
-				
-				bResult = wglMakeCurrent(m_hdc, m_renderingContext);
-				assert(bResult);
-
-				//Call the parent class.
-				initializationStatus = OGLGraphicsClass::Initialize(graphicsInitParameters);
+				initializationStatus = true;
 			}
+			else
+			{
+				pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version context could not wglCreateContext or wglCreateContextAttribsARB.", LogLevelType::Error);
+			}
+		}
+		else
+		{
+			pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] The OpenGL version could not SetPixelFormat.", LogLevelType::Error);
 		}
 	}
 
-	//Get the actual version, which may not be what we've requested.
-	int version[2] = { 0,0 };
-	glGetIntegerv(GL_MAJOR_VERSION, &version[0]);
-	glGetIntegerv(GL_MINOR_VERSION, &version[1]);
+	if (initializationStatus && wglMakeCurrent(m_hdc, m_renderingContext))
+	{
+		if (OGLGraphicsClass::Initialize(graphicsInitParameters))
+		{
+			m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] End", LogLevelType::Diagnostic);
+			return true;
+		}
+	}
 
-	//Record the actual version information.
-	std::stringstream stringstream;
-	stringstream << "Actual Version: " << version[0] << "." << version[1];
-	m_actualVersionInfo = stringstream.str();
-
-	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] " + m_actualVersionInfo);
-	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Ending initialization.");
-	return initializationStatus;
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] Failed!", LogLevelType::Error);
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Initialize] End", LogLevelType::Diagnostic);
+	return false;
 }
 
 void WinOGLGraphicsClass::BeginScene(float red, float green, float blue, float alpha)
@@ -186,7 +148,7 @@ void WinOGLGraphicsClass::BeginScene(float red, float green, float blue, float a
 
 void WinOGLGraphicsClass::EndScene()
 {
-	if (m_bDisplayReady)
+	if (m_displayReady)
 	{
 		OGLGraphicsClass::EndScene();
 		SwapBuffers(m_hdc);
@@ -195,7 +157,9 @@ void WinOGLGraphicsClass::EndScene()
 
 void WinOGLGraphicsClass::Shutdown()
 {
-	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Shutdown] Shutting down...");
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Shutdown] Begin", LogLevelType::Diagnostic);
+
+	OGLGraphicsClass::Shutdown();
 
 	//Clean up the OpenGL Context.
 	if (m_renderingContext != nullptr)
@@ -214,7 +178,7 @@ void WinOGLGraphicsClass::Shutdown()
 		m_hdc = nullptr;
 	}
 
-	OGLGraphicsClass::Shutdown();
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::Shutdown] End", LogLevelType::Diagnostic);
 }
 
 ////////////////////////////////////////////////////////////
@@ -222,74 +186,60 @@ void WinOGLGraphicsClass::Shutdown()
 //                Protected Methods
 // 
 ////////////////////////////////////////////////////////////
-bool WinOGLGraphicsClass::InitializeGlew()
+int WinOGLGraphicsClass::GetPixelFormat(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters, PIXELFORMATDESCRIPTOR& pfd)
 {
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::GetPixelFormat] Begin", LogLevelType::Diagnostic);
+
 	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
 	assert(pSystem);
 
-	HINSTANCE systemHInstance = pSystem->GetHInstance();
-	assert(systemHInstance);
+	bool newerOpenGLVersion = (graphicsInitParameters.version.nMajor > 2);//&& WGLEW_ARB_create_context && WGLEW_ARB_pixel_format);
 
-	HWND systemHWND = pSystem->GetHWND();
-	assert(systemHWND);
-
-	RegisterGlewClass(systemHInstance);
-
-	HWND placeHolderHWND = CreateWindow(WinOGLGraphicsClass::GLEW_CLASS_NAME
-		, WinOGLGraphicsClass::GLEW_CLASS_NAME
-		, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE | WS_CLIPCHILDREN
-		, 0
-		, 0
-		, CW_USEDEFAULT
-		, CW_USEDEFAULT
-		, nullptr
-		, nullptr
-		, systemHInstance
-		, nullptr);
-
-	if (placeHolderHWND == nullptr)
+	int pixelFormat = 0, numberOfFormats = 0;
+	if (newerOpenGLVersion)
 	{
-		m_pSystem->WriteToLog("[WinOGLGraphicsClass::InitializeGlew] Glew window could not be created.");
-		return false;
-	}
+		if (!CreateGlewDummyWindow())
+			return 0;
 
-	// First, choose false pixel format
-	PIXELFORMATDESCRIPTOR pfd;
-	ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
-	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-
-	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
-	pfd.iPixelType = PFD_TYPE_RGBA;
-	pfd.cColorBits = 32;
-	pfd.cDepthBits = 32;
-	pfd.iLayerType = PFD_MAIN_PLANE;
-
-	bool glewResults = false;
-	HDC placeHolderHDC = GetDC(placeHolderHWND);
-	int iPixelFormat = ChoosePixelFormat(placeHolderHDC, &pfd);
-	if (iPixelFormat > 0)
-	{
-		if (SetPixelFormat(placeHolderHDC, iPixelFormat, &pfd))
+		const int iPixelFormats[] =
 		{
-			// Create the false, old style context (OpenGL 2.1 and before)
-			HGLRC hglrc = wglCreateContext(placeHolderHDC);
-			wglMakeCurrent(placeHolderHDC, hglrc);
+			WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+			WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+			WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+			WGL_COLOR_BITS_ARB, graphicsInitParameters.colorBits,
+			//WGL_DEPTH_BITS_ARB, graphicsInitParameters.depthBits,
+			WGL_DEPTH_BITS_ARB, 24,
+			WGL_ALPHA_BITS_ARB, graphicsInitParameters.alphaBits,
+			WGL_STENCIL_BITS_ARB, graphicsInitParameters.stencilBits,
+			WGL_SAMPLE_BUFFERS_ARB, graphicsInitParameters.numberOfSamples > 0 ? 1 : 0,
+			WGL_SAMPLES_ARB, graphicsInitParameters.numberOfSamples,
+			WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+			WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+			0 // End of attributes list
+		};
 
-			if (!(glewResults = OGLGraphicsClass::InitializeGlew()))
-			{
-				MessageBox(systemHWND, _T("Couldn't initialize GLEW!"), _T("Fatal Error"), MB_ICONERROR);
-			}
-
-			wglMakeCurrent(NULL, NULL);
-			wglDeleteContext(hglrc);
-			DestroyWindow(placeHolderHWND);
+		//Initialize Glew early since we need to use the extension for choosing a pixel format.
+		//NOTE: This method is idempotent and should have no side effects if it is called multiple times.
+		if (OGLGraphicsClass::InitializeGlew())
+		{
+			bool status = wglChoosePixelFormatARB(m_hdc, iPixelFormats, NULL, 1, &pixelFormat, (uint*)&numberOfFormats);
+			pixelFormat = (status && numberOfFormats > 0) ? pixelFormat : 0;
 		}
+		else
+		{
+			m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Couldn't initialize GLEW!", LogLevelType::Error);
+		}
+
+		DestroyGlewDummyWindow();
+	}
+	else
+	{
+		pixelFormat = ChoosePixelFormat(m_hdc, &pfd);
 	}
 
-	return glewResults;
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::GetPixelFormat] End", LogLevelType::Diagnostic);
+	return pixelFormat;
 }
-
 
 ////////////////////////////////////////////////////////////
 //
@@ -298,49 +248,172 @@ bool WinOGLGraphicsClass::InitializeGlew()
 ////////////////////////////////////////////////////////////
 void WinOGLGraphicsClass::RegisterGlewClass(HINSTANCE hInstance)
 {
-	assert(hInstance != nullptr);
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::RegisterGlewClass] Begin", LogLevelType::Diagnostic);
 
-	if (!m_bGlewClassRegistered)
+	assert(hInstance);
+
+	if (!m_glewDummyInfo.glewRegistered)
 	{
-		WNDCLASSEX wc;
+		m_glewDummyInfo.wndClass.cbSize = sizeof(WNDCLASSEX);
+		m_glewDummyInfo.wndClass.style = CS_OWNDC;
+		m_glewDummyInfo.wndClass.cbClsExtra = 0;
+		m_glewDummyInfo.wndClass.cbWndExtra = 0;
+		m_glewDummyInfo.wndClass.lpfnWndProc = DummyMessageHandlerGlew;
+		m_glewDummyInfo.wndClass.hInstance = hInstance;
+		m_glewDummyInfo.wndClass.hIcon = nullptr;
+		m_glewDummyInfo.wndClass.hIconSm = nullptr;
+		m_glewDummyInfo.wndClass.hCursor = nullptr;
+		m_glewDummyInfo.wndClass.hbrBackground = (HBRUSH)(COLOR_MENUBAR + 1);
+		m_glewDummyInfo.wndClass.lpszMenuName = nullptr;
+		m_glewDummyInfo.wndClass.lpszClassName = WinOGLGraphicsClass::GLEW_CLASS_NAME;
+		RegisterClassEx(&m_glewDummyInfo.wndClass);
 
-		wc.cbSize = sizeof(WNDCLASSEX);
-		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
-		wc.lpfnWndProc = MessageHandlerGlew;
-		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 0;
-		wc.hInstance = hInstance;
-		wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
-		wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
-		wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)(COLOR_MENUBAR + 1);
-		wc.lpszMenuName = nullptr;
-		wc.lpszClassName = WinOGLGraphicsClass::GLEW_CLASS_NAME;
-		RegisterClassEx(&wc);
+		m_glewDummyInfo.glewRegistered = true;
+	}
 
-		m_bGlewClassRegistered = true;
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::RegisterGlewClass] End", LogLevelType::Diagnostic);
+}
+
+void WinOGLGraphicsClass::UnregisterGlewClass(HINSTANCE hInstance)
+{
+	assert(hInstance);
+	if (m_glewDummyInfo.glewRegistered)
+	{
+		UnregisterClass(WinOGLGraphicsClass::GLEW_CLASS_NAME, hInstance);
+		m_glewDummyInfo.glewRegistered = false;
 	}
 }
 
-LRESULT CALLBACK MessageHandlerGlew(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+bool WinOGLGraphicsClass::CreateGlewDummyWindow()
+{
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Begin", LogLevelType::Diagnostic);
+
+	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
+	assert(pSystem);
+
+	HINSTANCE systemHInstance = pSystem->GetHInstance();
+	assert(systemHInstance);
+
+	RegisterGlewClass(systemHInstance);
+
+	if (m_glewDummyInfo.hwnd == nullptr)
+	{
+		m_glewDummyInfo.hwnd = CreateWindow(WinOGLGraphicsClass::GLEW_CLASS_NAME
+			, WinOGLGraphicsClass::GLEW_CLASS_NAME
+			, WS_OVERLAPPEDWINDOW
+			, 0
+			, 0
+			, 0
+			, 0
+			, nullptr
+			, nullptr
+			, systemHInstance
+			, nullptr);
+
+		if (m_glewDummyInfo.hwnd == nullptr)
+		{
+			UnregisterGlewClass(systemHInstance);
+			m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Glew placeholder window could not be created.", LogLevelType::Error);
+			return false;
+		}
+
+		// First, choose false pixel format
+		PIXELFORMATDESCRIPTOR pfd;
+		ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+		pfd.nVersion = 1;
+		pfd.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
+		pfd.iPixelType = PFD_TYPE_RGBA;
+		pfd.iLayerType = PFD_MAIN_PLANE;
+		pfd.cColorBits = 32;
+		pfd.cDepthBits = 32;
+
+		m_glewDummyInfo.hdc = GetDC(m_glewDummyInfo.hwnd);
+		int iPixelFormat = ChoosePixelFormat(m_glewDummyInfo.hdc, &pfd);
+		if (iPixelFormat > 0)
+		{
+			if (SetPixelFormat(m_glewDummyInfo.hdc, iPixelFormat, &pfd))
+			{
+				// Create a fake context and make it current.
+				m_glewDummyInfo.hrc = wglCreateContext(m_glewDummyInfo.hdc);
+				if (wglMakeCurrent(m_glewDummyInfo.hdc, m_glewDummyInfo.hrc))
+				{
+					m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] End", LogLevelType::Diagnostic);
+					return true;
+				}
+
+				m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Coult not make current context.", LogLevelType::Error);
+			}
+			else
+			{
+				m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Could not SetPixelFormat.", LogLevelType::Error);
+			}
+		}
+		else
+		{
+			m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] Could not ChoosePixelFormat.", LogLevelType::Error);
+		}
+
+		//Handle error states.
+		DestroyGlewDummyWindow();
+		return false;
+	}
+
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::CreateDummyWindow] End", LogLevelType::Diagnostic);
+	return true;
+}
+
+void WinOGLGraphicsClass::DestroyGlewDummyWindow()
+{
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::DestroyDummyWindow] Begin", LogLevelType::Diagnostic);
+
+	auto pSystem = dynamic_cast<WindowsSystemClass*>(m_pSystem);
+	assert(pSystem);
+
+	HINSTANCE systemHInstance = pSystem->GetHInstance();
+	assert(systemHInstance);
+
+	if (m_glewDummyInfo.hrc != nullptr)
+	{
+		wglMakeCurrent(m_glewDummyInfo.hdc, nullptr);
+		wglDeleteContext(m_glewDummyInfo.hrc);
+		m_glewDummyInfo.hrc = nullptr;
+	}
+	
+	if (m_glewDummyInfo.hdc != nullptr)
+	{
+		ReleaseDC(m_glewDummyInfo.hwnd, m_glewDummyInfo.hdc);
+		m_glewDummyInfo.hdc = nullptr;
+	}
+
+	if (m_glewDummyInfo.hwnd != nullptr)
+	{
+		DestroyWindow(m_glewDummyInfo.hwnd);
+		m_glewDummyInfo.hwnd = nullptr;
+	}
+
+	UnregisterGlewClass(systemHInstance);
+
+	m_pSystem->WriteToLog("[WinOGLGraphicsClass::DestroyDummyWindow] End", LogLevelType::Diagnostic);
+}
+
+LRESULT CALLBACK DummyMessageHandlerGlew(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 	case WM_PAINT:
 	{
-		//WriteToLog("[WindowsSystemClass::MessageHandler] Begin Paint.", LogLevelType::DeepDiagnostic);
 		PAINTSTRUCT ps;
 		BeginPaint(hWnd, &ps);
 		EndPaint(hWnd, &ps);
-		//WriteToLog("[WindowsSystemClass::MessageHandler] End Paint.", LogLevelType::DeepDiagnostic);
 	}
 	break;
 
 	default:
-		return DefWindowProc(hWnd, message, wParam, lParam);
+		break;
 	}
 
-	return 0;
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 #endif

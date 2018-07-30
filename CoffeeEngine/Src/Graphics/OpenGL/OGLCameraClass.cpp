@@ -59,7 +59,14 @@ OGLCameraClass::OGLCameraClass(OGLCameraClass&& object) noexcept
 	m_rotationY(object.m_rotationY),
 	m_rotationZ(object.m_rotationZ)
 {
-
+	object.m_positionVector = glm::vec3();
+	object.m_lookAtVector = glm::vec3();
+	object.m_upVector = glm::vec3();
+	object.m_viewMatrix = glm::mat4();
+	object.m_projectionMatrix = glm::mat4();
+	object.m_worldMatrix = glm::mat4();
+	object.m_positionX = object.m_positionY = object.m_positionZ = 0.0f;
+	object.m_rotationX = object.m_rotationY = object.m_rotationZ = 0.0f;
 }
 
 OGLCameraClass::~OGLCameraClass()
@@ -120,34 +127,26 @@ void OGLCameraClass::SetUp(Vector3&& vector)
 
 bool OGLCameraClass::Initialize()
 {
-	if(m_pGraphicsClass == nullptr)
-		throw NullArgumentException("OGLCameraClass", "Initialize", "m_pGraphicsClass");
-
-	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Beginning...");
+	assert(m_pGraphicsClass);
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Begin");
 
 	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
 	assert(pGraphicsClass);
 
-	int nScreenWidth, nScreenHeight;
-	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
-
-	float screenDepth = 1000.0f;
-	float screenNear = 0.1f;
+	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
 
 	// Setup the projection matrix.
 	float fieldOfView = (float)OGL_PI / 4.0f;
-	float screenAspect = (float)nScreenWidth / (float)nScreenHeight;
+	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
 
 	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, screenNear, screenDepth);
-
-	//glMatrixTranslatefEXT();
+	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
 
 	m_positionVector = glm::ext::vec3(m_position);
 	m_lookAtVector = glm::ext::vec3(m_lookAt);
 	m_upVector = glm::ext::vec3(m_up);
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Completed.");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] End");
 	return true;
 }
 
@@ -179,43 +178,4 @@ void OGLCameraClass::Render(float fElapsedTime)
 void OGLCameraClass::Shutdown()
 {
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Shutdown] Shutting down...");
-}
-
-////////////////////////////////////////////////////////////
-//
-//                Private Methods
-// 
-////////////////////////////////////////////////////////////
-void OGLCameraClass::OGLMatrixPerspectiveFovLH(float *m, float fov, float aspect, float znear, float zfar)
-{
-	float ymax = znear * tan(fov * OGL_PI / 180);
-	float ymin = -ymax;
-	float xmax = ymax * aspect;
-	float xmin = ymin * aspect;
-
-	float width = xmax - xmin;
-	float height = ymax - ymin;
-
-	float depth = zfar - znear;
-	float q = -(zfar + znear) / depth;
-	float qn = -2 * (zfar * znear) / depth;
-
-	float w = 2 * znear / width;
-	w = w / aspect;
-	float h = 2 * znear / height;
-
-	m[0]  = w;
-	m[1]  = 0;
-	m[2]  = 0;
-	m[3]  = 0;
-
-	m[4]  = 0;
-	m[5]  = h;
-	m[6]  = 0;
-	m[7]  = 0;
-
-	m[8]  = 0;
-	m[9]  = 0;
-	m[10] = q;
-	m[11] = -1;
 }

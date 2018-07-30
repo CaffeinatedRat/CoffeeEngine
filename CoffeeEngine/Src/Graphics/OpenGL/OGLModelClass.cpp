@@ -20,6 +20,7 @@
 #include <cmath>
 
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Utility::Logging;
 using namespace CoffeeEngine::Graphics;
 using namespace CoffeeEngine::Graphics::OpenGL;
 
@@ -51,7 +52,7 @@ bool OGLModelClass::Initialize(IShader* pShader)
 	if(m_pGraphicsClass == nullptr)
 		throw NullArgumentException("OGLModelClass", "Initialize", "m_pGraphicsClass");
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] Beginning...");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] Begin", LogLevelType::Diagnostic);
 
 	auto pGraphicsClass = dynamic_cast<const OGLGraphicsClass*>(m_pGraphicsClass);
 	assert(pGraphicsClass);
@@ -134,7 +135,7 @@ bool OGLModelClass::Initialize(IShader* pShader)
 	//Clean up the data, we've already created the texture.
 	stbi_image_free(data);
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] Completed.");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLModelClass::Initialize] End", LogLevelType::Diagnostic);
 
 	return true;
 }

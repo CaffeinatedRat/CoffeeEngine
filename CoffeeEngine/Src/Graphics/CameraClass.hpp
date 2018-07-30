@@ -34,8 +34,8 @@ namespace CoffeeEngine
 			CameraClass(CameraClass&& object) noexcept;
 			virtual ~CameraClass() { };
 
-			CameraClass& operator=(CameraClass&&) = default;
 			CameraClass& operator=(const CameraClass&) = default;
+			CameraClass& operator=(CameraClass&&) = default;
 
 			////////////////////////////////////////////////////////////
 			//

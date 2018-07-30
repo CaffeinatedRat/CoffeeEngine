@@ -41,15 +41,16 @@ CoffeeEngineClass::~CoffeeEngineClass()
 //                Public Methods
 // 
 ////////////////////////////////////////////////////////////
-
 bool CoffeeEngineClass::Initialize()
 {
 	assert(m_pSystem);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Begin", LogLevelType::Diagnostic);
+
 	//Allow this method to be idempotent.
 	assert(m_state == EngineState::SHUTDOWN);
 	if (m_state == EngineState::SHUTDOWN)
 	{
-		m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing...");
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing from a shutdown state.");
 
 		if (!m_pSystem->Initialize(this))
 			return false;
@@ -59,42 +60,56 @@ bool CoffeeEngineClass::Initialize()
 		if (!m_pTimer->Start())
 			return false;
 
-		if (!InitializeGraphics(GraphicsAPIType::OPENGL))
+		if (!InitializeGraphics(GraphicsAPIType::DIRECTX))
 			return false;
 
 		m_state = EngineState::INITIALIZED;
-		return (m_bReady = true);
+		m_bReady = true;
+
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Engine Ready (m_state == EngineState::INITIALIZED).");
 	}
 
-	return true;
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] End", LogLevelType::Diagnostic);
+	return m_bReady;
 }
 
 void CoffeeEngineClass::Run()
 {
+	assert(m_pSystem);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Run] Begin", LogLevelType::Diagnostic);
+
 	assert(m_state == EngineState::INITIALIZED);
 	if (m_state == EngineState::INITIALIZED)
 	{
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Run] Starting engine.");
+
 		//Begin the system's message pump and set the state to running.
 		m_state = EngineState::RUNNING;
-		m_pSystem->Run();
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Run] State Updated: EngineState::RUNNING.");
+		m_pSystem->Run();	
 	}
+
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Run] End", LogLevelType::Diagnostic);
 }
 
 void CoffeeEngineClass::Shutdown()
 {
+	assert(m_pSystem);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Begin", LogLevelType::Diagnostic);
+
 	//This flag allows this method to be idempotent.
 	if (m_state > EngineState::SHUTDOWN)
 	{
-		assert(m_pSystem);
-		if (m_pSystem)
-			m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Shutting down...");
-		
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] Shutting down...");
+
 		SAFE_DELETE(m_pTimer);
 		ShutdownGraphicsDisplay();
 		m_state = EngineState::SHUTDOWN;
+		m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] State Updated: EngineState::SHUTDOWN.");
 	}
 
 	m_bReady = false;
+	m_pSystem->WriteToLog("[CoffeeEngineClass::Shutdown] End", LogLevelType::Diagnostic);
 }
 
 ////////////////////////////////////////////////////////////
@@ -104,6 +119,7 @@ void CoffeeEngineClass::Shutdown()
 ////////////////////////////////////////////////////////////
 void CoffeeEngineClass::Render(float elapsedTime)
 {
+	assert(m_pSystem);
 	m_pSystem->WriteToLog("[CoffeeEngineClass::Render] Begin", LogLevelType::DeepDiagnostic);
 
 	static float rotationY = 0.0f;
@@ -130,6 +146,7 @@ void CoffeeEngineClass::Render(float elapsedTime)
 
 void CoffeeEngineClass::ManageWorld(float elapsedTime)
 {
+	assert(m_pSystem);
 	m_pSystem->WriteToLog("[CoffeeEngineClass::ManageWorld] Begin", LogLevelType::DeepDiagnostic);
 
 	m_pCamera->Yaw(m_turnMovement);
@@ -141,25 +158,34 @@ void CoffeeEngineClass::ManageWorld(float elapsedTime)
 
 bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 {
-	m_pSystem->WriteToLog("[CoffeeEngineClass::InitializeGraphics] Attempting to create the graphics device.");
+	assert(m_pSystem);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::InitializeGraphics] Begin", LogLevelType::Diagnostic);
 
 	m_graphicsType = graphicsType;
+
+	std::stringstream logMessage("[CoffeeEngineClass::InitializeGraphics] Attempting to create the graphics device ");
+	logMessage << (graphicsType == GraphicsAPIType::DIRECTX ? "DirectX" : "OpenGL") << ".";
+	m_pSystem->WriteToLog(logMessage);
+
 	m_upGraphics = GraphicsFactory::CreateGraphics(graphicsType, m_pSystem);
 	assert(m_upGraphics);
-	if (!m_upGraphics)
+	if (m_upGraphics == nullptr)
 		return false;
 
 	//Parameterize the graphics settings into a structure to reduce the overhead produced by methods with an extremely long number of parameters.
 	//NOTE: Temporary initialization...
-	GRAPHICS_INITIALIZATION_PARAMETERS graphicsInitParams;
-	graphicsInitParams.bFullscreen = false;
-	graphicsInitParams.bVsync = true;
-	graphicsInitParams.fScreenDepth = 1000.0f;
-	graphicsInitParams.fScreenNear = 0.1f;
-	graphicsInitParams.nColorBits = 32;
-	graphicsInitParams.nDepthBits = 32;
-	graphicsInitParams.nScreenHeight = 480;
-	graphicsInitParams.nScreenWidth = 640;
+	GRAPHICS_PRESENTATION_PROPERTIES graphicsInitParams;
+	graphicsInitParams.fullscreen = false;
+	graphicsInitParams.vsyncEnabled = true;
+	graphicsInitParams.screenDepth = 1000.0f;
+	graphicsInitParams.screenNear = 0.1f;
+	graphicsInitParams.colorBits = 32;
+	graphicsInitParams.depthBits = 32;
+	graphicsInitParams.alphaBits = 8;
+	graphicsInitParams.stencilBits = 8;
+	graphicsInitParams.numberOfSamples = 1;
+	graphicsInitParams.screenHeight = 480;
+	graphicsInitParams.screenWidth = 640;
 	graphicsInitParams.version.nMajor = 3;
 	graphicsInitParams.version.nMinor = 1;
 
@@ -185,15 +211,17 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 	//Add our default shader just to rendering something.
 	m_pModel->AddShader(m_pShader);
 
+	m_pSystem->WriteToLog("[CoffeeEngineClass::InitializeGraphics] End", LogLevelType::Diagnostic);
 	return true;
 }
 
 void CoffeeEngineClass::ShutdownGraphicsDisplay()
 {
-	m_pSystem->WriteToLog("[CoffeeEngineClass::ShutdownGraphicsDisplay] Shutting down...");
+	m_pSystem->WriteToLog("[CoffeeEngineClass::ShutdownGraphicsDisplay] Begin", LogLevelType::Diagnostic);
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pModel);
 	SAFE_DELETE(m_pShader);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::ShutdownGraphicsDisplay] End", LogLevelType::Diagnostic);
 }
 
 ////////////////////////////////////////////////////////////
@@ -225,6 +253,7 @@ void CoffeeEngineClass::OnIdle(bool isActive)
 /// </summary>
 void CoffeeEngineClass::OnKeyDown(KeyboardKeys keyboardKey)
 {
+	assert(m_pSystem);
 	std::stringstream stream;
 	stream << "[CoffeeEngineClass::OnKeyDown] Keycode: " << (int)keyboardKey;
 	m_pSystem->WriteToLog(stream, LogLevelType::Diagnostic);
@@ -262,6 +291,7 @@ void CoffeeEngineClass::OnKeyDown(KeyboardKeys keyboardKey)
 /// </summary>
 void CoffeeEngineClass::OnKeyUp(KeyboardKeys keyboardKey)
 {
+	assert(m_pSystem);
 	std::stringstream stream;
 	stream << "[CoffeeEngineClass::OnKeyUp] Keycode: " << (int)keyboardKey;
 	m_pSystem->WriteToLog(stream, LogLevelType::Diagnostic);
@@ -292,7 +322,40 @@ void CoffeeEngineClass::OnKeyUp(KeyboardKeys keyboardKey)
 /// </summary>
 void CoffeeEngineClass::OnChar(uint characterCode)
 {
+	assert(m_pSystem);
 	std::stringstream stream;
 	stream << "[CoffeeEngineClass::OnChar] Keycode: " << characterCode;
 	m_pSystem->WriteToLog(stream, LogLevelType::Diagnostic);
+}
+
+/// <summary>
+/// This event is usually triggered when the graphis type has changed
+/// </summary>
+bool CoffeeEngineClass::OnGraphicsReset(GraphicsAPIType graphicsAPIType)
+{
+	assert(m_pSystem);
+	m_pSystem->WriteToLog("[CoffeeEngineClass::OnGraphicsReset] Begin", LogLevelType::Diagnostic);
+
+	//Prevent resetting the graphics display when unnecessary.
+	if (m_graphicsType != graphicsAPIType)
+	{
+		m_pSystem->WriteToLog("[CoffeeEngineClass::OnGraphicsReset] Resetting...");
+		ShutdownGraphicsDisplay();
+		m_bReady = InitializeGraphics(graphicsAPIType);
+	}
+
+	m_pSystem->WriteToLog("[CoffeeEngineClass::OnGraphicsReset] End", LogLevelType::Diagnostic);
+	return m_bReady;
+}
+
+/// <summary>
+/// This event is usually triggered when a window is resized.
+/// </summary>
+void CoffeeEngineClass::OnWindowResize(int width, int height)
+{
+	assert(m_upGraphics);
+	if (m_upGraphics != nullptr)
+	{
+		m_upGraphics.get()->SetScreenDimensions(width, height);
+	}
 }

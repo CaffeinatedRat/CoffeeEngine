@@ -34,7 +34,7 @@ namespace CoffeeEngine
 		
 				////////////////////////////////////////////////////////////
 				//
-				//                Standard methods
+				//            Constructors/Assignment Operators
 				// 
 				////////////////////////////////////////////////////////////
 
@@ -43,13 +43,19 @@ namespace CoffeeEngine
 				D3DGraphicsClass(const D3DGraphicsClass& object);
 				virtual ~D3DGraphicsClass();
 
+				////////////////////////////////////////////////////////////
+				//
+				//                Standard methods
+				// 
+				////////////////////////////////////////////////////////////
+
 				/// <summary>
 				/// Attempts to initialize the graphics object.
 				/// </summary>
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
+				bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters) override;
 
 				/// <summary>
 				/// Begins the rendering process.
@@ -109,26 +115,24 @@ namespace CoffeeEngine
 				/// <returns>
 				/// Returns a compliant list of video card information.
 				/// </returns>
-				std::vector<std::string> GetVideoCardInfo() const;
+				//std::vector<std::string> GetVideoCardInfo() const;
 
 				////////////////////////////////////////////////////////////
 				//
-				//                Transition methods
+				//                Graphics Properties Methods
 				// 
 				////////////////////////////////////////////////////////////
 
-				inline void GetScreenProperties(int& nWidth, int& nHeight)
-				{
-					nWidth = m_nScreenWidth;
-					nHeight = m_nScreenHeight;
-				}
+				/// <summary>
+				/// Sets the screen dimensions for the graphics presentation properties.
+				/// </summary>
+				virtual void SetScreenDimensions(int width, int height) override;
 
 				////////////////////////////////////////////////////////////
 				//
 				//                DirectX Specific methods
 				// 
 				////////////////////////////////////////////////////////////
-			public:
 				inline ID3D11Device* GetDevice() const { return m_pDevice; }
 				inline ID3D11DeviceContext* GetDeviceContext() const { return m_pDeviceContext; }
 
@@ -139,42 +143,32 @@ namespace CoffeeEngine
 				/// <summary>
 				/// Creates a list of modes based on the available adapter and outputs.
 				/// </summary>
-				/// <returns>
-				/// True if the mode list was constructed.
-				/// </returns>
 				bool CreateModeList();
 
 				/// <summary>
 				/// Creates the swap chain and render target view.
 				/// </summary>
-				/// <returns>
-				/// True if the swap chain and render target view have been created.
-				/// </returns>
 				bool CreateSwapChain();
 				
 				/// <summary>
+				/// Resets the swap chain.
+				/// </summary>
+				bool ResetSwapChain();
+
+				/// <summary>
 				/// Creates a depth buffer, stencil, and view.
 				/// </summary>
-				/// <returns>
-				/// True if the depth buffer was successfully created.
-				/// </returns>
 				bool CreateDepthBuffer();
 
 				/// <summary>
 				/// Creates a raster state.
 				/// </summary>
-				/// <returns>
-				/// True if the raster state was successfully created.
-				/// </returns>
 				bool CreateRasterState();
 
 				/// <summary>
-				/// Create a viewport.
+				/// Sets the viewport.
 				/// </summary>
-				/// <returns>
-				/// True if the viewport was successfully created.
-				/// </returns>
-				bool CreateViewPort();
+				void SetViewport(float x, float y, float width, float height);
 
 			private:
 

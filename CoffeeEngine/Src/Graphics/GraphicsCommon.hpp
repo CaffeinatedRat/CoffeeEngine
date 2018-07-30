@@ -25,16 +25,19 @@ namespace CoffeeEngine
 			int nMinor = 0;
 		};
 
-		struct GRAPHICS_INITIALIZATION_PARAMETERS
+		struct GRAPHICS_PRESENTATION_PROPERTIES
 		{
-			int nScreenHeight = 640;
-			int nScreenWidth = 480;
-			int nColorBits = 32;
-			int nDepthBits = 32;
-			bool bVsync = false;
-			float fScreenDepth = 1000.0f;
-			float fScreenNear = 0.1f;
-			bool bFullscreen = false;
+			int screenHeight = 0;
+			int screenWidth = 0;
+			int colorBits = 0;
+			int depthBits = 0;
+			int alphaBits = 0;
+			int stencilBits = 0;
+			int numberOfSamples = 0;
+			bool vsyncEnabled = false;
+			float screenDepth = 0.0f;
+			float screenNear = 0.0f;
+			bool fullscreen = false;
 			GRAPHICS_VERSION version;
 		};
 	}

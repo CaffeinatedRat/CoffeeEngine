@@ -44,13 +44,19 @@ D3DCameraClass::D3DCameraClass(const D3DCameraClass& object) noexcept
 
 D3DCameraClass::D3DCameraClass(D3DCameraClass&& object) noexcept
 	: CameraClass(object),
-	m_positionVector(std::move(m_positionVector)),
-	m_lookAtVector(std::move(m_lookAtVector)),
-	m_upVector(std::move(m_upVector)),
-	m_viewMatrix(std::move(m_viewMatrix)),
-	m_projectionMatrix(std::move(m_projectionMatrix)),
-	m_worldMatrix(std::move(m_worldMatrix))
+	m_positionVector(std::move(object.m_positionVector)),
+	m_lookAtVector(std::move(object.m_lookAtVector)),
+	m_upVector(std::move(object.m_upVector)),
+	m_viewMatrix(std::move(object.m_viewMatrix)),
+	m_projectionMatrix(std::move(object.m_projectionMatrix)),
+	m_worldMatrix(std::move(object.m_worldMatrix))
 {
+	object.m_positionVector = XMVECTOR();
+	object.m_lookAtVector = XMVECTOR();
+	object.m_upVector = XMVECTOR();
+	object.m_viewMatrix = XMMATRIX();
+	object.m_projectionMatrix = XMMATRIX();
+	object.m_worldMatrix = XMMATRIX();
 }
 
 D3DCameraClass::~D3DCameraClass()
@@ -125,25 +131,19 @@ void D3DCameraClass::SetUp(Vector3&& vector)
 
 bool D3DCameraClass::Initialize()
 {
-	if(m_pGraphicsClass == nullptr)
-		throw NullArgumentException("D3DCameraClass", "Initialize", "m_pGraphicsClass");
-
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Beginning...");
+	assert(m_pGraphicsClass);
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Begin");
 
 	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
 
-	int nScreenWidth, nScreenHeight;
-	pGraphicsClass->GetScreenProperties(nScreenWidth, nScreenHeight);
-
-	float screenDepth = 1000.0f;
-	float screenNear = 0.1f;
+	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
 
 	// Setup the projection matrix.
 	float fieldOfView = (float)XM_PI / 4.0f;
-	float screenAspect = (float)nScreenWidth / (float)nScreenHeight;
+	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
 
 	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, screenNear, screenDepth);
+	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
 
 	// Initialize the world matrix to the identity matrix.
 	m_worldMatrix = XMMatrixIdentity();
@@ -160,7 +160,7 @@ bool D3DCameraClass::Initialize()
 	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
 	m_upVector = XMLoadFloat3(&up);
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Completed.");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] End");
 	return true;
 }
 

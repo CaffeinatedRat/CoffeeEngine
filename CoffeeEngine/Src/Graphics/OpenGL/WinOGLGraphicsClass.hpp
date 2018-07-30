@@ -29,7 +29,7 @@ namespace CoffeeEngine
 		
 				////////////////////////////////////////////////////////////
 				//
-				//                Standard methods
+				//            Constructors/Assignment Operators
 				// 
 				////////////////////////////////////////////////////////////
 
@@ -38,13 +38,19 @@ namespace CoffeeEngine
 				WinOGLGraphicsClass(const WinOGLGraphicsClass& object);
 				virtual ~WinOGLGraphicsClass();
 
+				////////////////////////////////////////////////////////////
+				//
+				//                Standard methods
+				// 
+				////////////////////////////////////////////////////////////
+
 				/// <summary>
 				/// Attempts to initialize the graphics object.
 				/// </summary>
 				/// <returns>
 				/// Returns true if initialization was successful.
 				/// </returns>
-				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters) override;
+				virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters) override;
 
 				/// <summary>
 				/// Begins the rendering process.
@@ -68,9 +74,12 @@ namespace CoffeeEngine
 
 			protected:
 				/// <summary>
-				/// Safely initializes the Glew context once.
+				/// Returns the pixel format based on the initialization parameters.
 				/// </summary>
-				virtual bool InitializeGlew() override;
+				/// <returns>
+				/// The requested pixel format.
+				/// </returns>
+				int GetPixelFormat(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters, PIXELFORMATDESCRIPTOR& pfd);
 
 			private:
 				/// <summary>
@@ -78,17 +87,51 @@ namespace CoffeeEngine
 				/// </summary>
 				void RegisterGlewClass(HINSTANCE hInstance);
 
+				/// <summary>
+				/// Unregisters the Glew specific windows class.
+				/// </summary>
+				void UnregisterGlewClass(HINSTANCE hInstance);
+
+				/// <summary>
+				/// Safely initializes the Glew context once.
+				/// </summary>
+				bool CreateGlewDummyWindow();
+
+				/// <summary>
+				/// Safely destroys the Glew dummy context.
+				/// </summary>
+				void DestroyGlewDummyWindow();
+
+				//LRESULT CALLBACK DummyMessageHandlerGlew(HWND, UINT, WPARAM, LPARAM);
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Typedefs & Constants
+				// 
+				////////////////////////////////////////////////////////////
+			private:
 				const TCHAR* GLEW_CLASS_NAME = _T("GLEW_WINDOW");
 				const TCHAR* GLEW_WINDOW_TITLE = _T("GLEW WINDOW");
+
+				struct GlewDummyInfo
+				{
+					HDC hdc = nullptr;
+					HWND hwnd = nullptr;
+					HGLRC hrc = nullptr;
+					WNDCLASSEX wndClass;
+					bool glewRegistered = false;
+				};
 
 				////////////////////////////////////////////////////////////
 				//
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
+			private:
 				HGLRC m_renderingContext = nullptr;
 				HDC m_hdc = nullptr;
-				bool m_bGlewClassRegistered = false;
+
+				GlewDummyInfo m_glewDummyInfo;
 			};
 		};
 	};

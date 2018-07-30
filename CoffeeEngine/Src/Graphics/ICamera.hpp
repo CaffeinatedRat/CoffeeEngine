@@ -12,13 +12,12 @@
 #include "Math/Vectors.hpp"
 #include "Engine/IObject.hpp"
 
-using namespace CoffeeEngine::Math;
-
 namespace CoffeeEngine
 {
 	namespace Interfaces
 	{
 		using namespace CoffeeEngine::Engine;
+		using namespace CoffeeEngine::Math;
 
 		class ICamera : public IObject
 		{

@@ -54,6 +54,11 @@ namespace CoffeeEngine
 			/// This event is usually triggered when a graphics reset has been issued.
 			/// </summary>
 			virtual bool OnGraphicsReset(GraphicsAPIType) = 0;
+
+			/// <summary>
+			/// This event is usually triggered when a window is resized.
+			/// </summary>
+			virtual void OnWindowResize(int, int) = 0;
 		};
 	};
 };

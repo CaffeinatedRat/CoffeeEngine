@@ -70,9 +70,6 @@ namespace CoffeeEngine
 				inline const glm::mat4& GetWorldMatrix() { return m_worldMatrix; }
 				inline const glm::mat4& GetViewMatrix() { return m_viewMatrix; }
 
-			protected:
-				void OGLMatrixPerspectiveFovLH(float *m, float fov, float aspect, float znear, float zfar);
-
 			private:
 				////////////////////////////////////////////////////////////
 				//

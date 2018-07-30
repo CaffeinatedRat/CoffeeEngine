@@ -31,7 +31,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns true if initialization was successful.
 			/// </returns>
-			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS&) = 0;
+			virtual bool Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES&) = 0;
 
 			/// <summary>
 			/// Begins the rendering process.
@@ -102,7 +102,7 @@ namespace CoffeeEngine
 			/// <returns>
 			/// Returns a compliant list of video card information.
 			/// </returns>
-			virtual std::vector<std::string> GetVideoCardInfo() const = 0;
+			//virtual std::vector<std::string> GetVideoCardInfo() const = 0;
 
 			/// <summary>
 			/// Returns the current graphics library.

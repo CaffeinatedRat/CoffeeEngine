@@ -41,12 +41,12 @@ OGLGraphicsClass::~OGLGraphicsClass()
 // 
 ////////////////////////////////////////////////////////////
 
-bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIALIZATION_PARAMETERS& graphicsInitParameters)
+bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters)
 {
 	if(m_pSystem == nullptr)
 		throw NullArgumentException("OGLGraphicsClass", "Initialize", "m_pSystem");
 
-	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Beginning initialization.");
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Begin", LogLevelType::Diagnostic);
 
 	//Initialize Glew only once.
 	if (!OGLGraphicsClass::InitializeGlew())
@@ -78,24 +78,29 @@ bool OGLGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_INITIAL
 		return false;
 	}
 
-	if(!CreateViewPort())
-	{
-		Shutdown();
-		return false;
-	}
+	SetViewport(0, 0, m_graphicsPresentationProperties.screenWidth, m_graphicsPresentationProperties.screenHeight);
+
+	//Get the actual version, which may not be what we've requested.
+	int version[2] = { 0,0 };
+	glGetIntegerv(GL_MAJOR_VERSION, &version[0]);
+	glGetIntegerv(GL_MINOR_VERSION, &version[1]);
+
+	//Record the actual version information.
+	std::stringstream stringstream;
+	stringstream << "Actual Version: " << version[0] << "." << version[1] << " [OGLV: " << glGetString(GL_VERSION) << " GLSL: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << "]";
+	m_actualVersionInfo = stringstream.str();
+
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] " + m_actualVersionInfo);
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] End", LogLevelType::Diagnostic);
 
 	//We are ready to draw.
-	m_bDisplayReady = true;
-
-	m_pSystem->WriteToLog("[OGLGraphicsClass::Initialize] Ending initialization.");
-
-	return true;
+	return (m_displayReady = true);
 }
 
 void OGLGraphicsClass::BeginScene(float red, float green, float blue, float alpha)
 {
 	//Prevent scene drawing until initialization is complete.
-	if(!m_bDisplayReady)
+	if(!m_displayReady)
 		return;
 
 	glClearColor(red, green, blue, alpha);
@@ -105,29 +110,30 @@ void OGLGraphicsClass::BeginScene(float red, float green, float blue, float alph
 void OGLGraphicsClass::EndScene()
 {
 	//Prevent scene drawing until initialization is complete.
-	if(!m_bDisplayReady)
+	if(!m_displayReady)
 		return;
 }
 
 void OGLGraphicsClass::Shutdown()
 {
-	m_pSystem->WriteToLog("[OGLGraphicsClass::Shutdown] Shutting down...");
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Shutdown] Begin", LogLevelType::Diagnostic);
 
-	m_bDisplayReady = false;
-	m_bGlewInitialized = false;
-
+	m_displayReady = m_isGlewInitialized = false;
 	m_videoCardDescription = "No Information Available.";
-	m_nNumOfModes = 0;
+	m_actualVersionInfo = "No version info available.";
+	m_numberOfModes = 0;
+
+	m_pSystem->WriteToLog("[OGLGraphicsClass::Shutdown] End", LogLevelType::Diagnostic);
 }
 
 IModel* OGLGraphicsClass::CreateModel()
 {
-	return ((IModel*)new OGLModelClass(this));
+	return dynamic_cast<IModel*>(new OGLModelClass(this));
 }
 
 IShader* OGLGraphicsClass::CreateShader()
 {
-	return ((IShader*)new OGLShaderClass(this));
+	return dynamic_cast<IShader*>(new OGLShaderClass(this));
 }
 
 ICamera* OGLGraphicsClass::CreateCamera()
@@ -137,16 +143,26 @@ ICamera* OGLGraphicsClass::CreateCamera()
 
 void OGLGraphicsClass::SetMasterCamera(ICamera* camera)
 {
-	m_bDisplayReady = false;
-
+	m_displayReady = false;
 	m_pMasterCamera = (OGLCameraClass*)camera;
-
-	m_bDisplayReady = true;
+	m_displayReady = true;
 }
 
-std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
+//std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
+//{
+//	throw NotImplementedException("OGLGraphicsClass", "GetVideoCardInfo");
+//}
+
+/// <summary>
+/// Sets the screen dimensions for the graphics presentation properties.
+/// </summary>
+void OGLGraphicsClass::SetScreenDimensions(int width, int height)
 {
-	throw NotImplementedException("OGLGraphicsClass", "GetVideoCardInfo");
+	m_graphicsPresentationProperties.screenWidth = width;
+	m_graphicsPresentationProperties.screenHeight = height;
+
+	//Reset the viewport.
+	SetViewport(0, 0, m_graphicsPresentationProperties.screenWidth, m_graphicsPresentationProperties.screenHeight);
 }
 
 ////////////////////////////////////////////////////////////
@@ -156,9 +172,9 @@ std::vector<std::string> OGLGraphicsClass::GetVideoCardInfo() const
 ////////////////////////////////////////////////////////////
 bool OGLGraphicsClass::InitializeGlew()
 {
-	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] Beginning...");
+	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] Begin", LogLevelType::Diagnostic);
 
-	if (!m_bGlewInitialized)
+	if (!m_isGlewInitialized)
 	{
 		GLenum err = glewInit();
 		if (err != GLEW_OK)
@@ -166,17 +182,12 @@ bool OGLGraphicsClass::InitializeGlew()
 			m_pSystem->WriteToLog((const char*)glewGetErrorString(err), LogLevelType::Error);
 			return false;
 		}
-		m_bGlewInitialized = true;
+		m_isGlewInitialized = true;
 	}
 
-	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] Completed.");
+	m_pSystem->WriteToLog("[OGLGraphicsClass::InitializeGlew] End", LogLevelType::Diagnostic);
 
 	return true;
-}
-
-void OGLGraphicsClass::InitializeGLContext()
-{
-
 }
 
 ////////////////////////////////////////////////////////////
@@ -205,13 +216,9 @@ bool OGLGraphicsClass::CreateRasterState()
 	return true;
 }
 
-bool OGLGraphicsClass::CreateViewPort()
+void OGLGraphicsClass::SetViewport(int x, int y, int width, int height)
 {
-	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Beginning...");
-
-	glViewport(0, 0, m_nScreenWidth, m_nScreenHeight);
-
-	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Completed successfully.");
-
-	return true;
+	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Begin", LogLevelType::Diagnostic);
+	glViewport(x, y, width, height);
+	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] End", LogLevelType::Diagnostic);
 }
