@@ -15,6 +15,7 @@
 #include "Utility/Logger.hpp"
 #include "ITimer.hpp"
 #include "ISystemListener.hpp"
+#include "SystemCommon.hpp"
 #include "Input/Keyboard.hpp"
 
 using namespace CoffeeEngine::Input;
@@ -23,6 +24,8 @@ namespace CoffeeEngine
 {
 	namespace Interfaces
 	{
+		using namespace CoffeeEngine::System;
+
 		class ISystem
 		{
 		public:
@@ -35,7 +38,7 @@ namespace CoffeeEngine
 			/// Attempts to initialize the operating system object, as well as all internal systems such as the graphics engine and main game engine.
 			/// </summary>
 			virtual bool Initialize(ISystemListener* listener) = 0;
-			
+
 			/// <summary>
 			/// Begins running the operating system object once the system has been successfully initialized.
 			/// </summary>
@@ -58,6 +61,11 @@ namespace CoffeeEngine
 			/// Returns the root directory the executable is running in.
 			/// </summary>
 			virtual std::string GetCurrentApplicationDirectory() const = 0;
+
+			/// <summary>
+			/// Returns the windows dimension information.
+			/// </summary>
+			virtual WindowDimensions GetWindowDimensions() const = 0;
 
 			/// <summary>
 			/// Create's system timer.

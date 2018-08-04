@@ -90,7 +90,12 @@ namespace CoffeeEngine
 			/// <summary>
 			/// Returns the root directory the executable is running in.
 			/// </summary>
-			std::string GetCurrentApplicationDirectory() const;
+			std::string GetCurrentApplicationDirectory() const override;
+
+			/// <summary>
+			/// Returns the windows dimension information.
+			/// </summary>
+			WindowDimensions GetWindowDimensions() const override;
 
 			/// <summary>
 			/// Create's system timer.
@@ -152,7 +157,6 @@ namespace CoffeeEngine
 			//Internal system variables.
 			int m_nScreenWidth = 0, m_nScreenHeight = 0;
 			bool m_bIdleInBackground = false;
-			//bool m_bClassRegistered = false;
 
 			//Internal states
 			//We are active by default.

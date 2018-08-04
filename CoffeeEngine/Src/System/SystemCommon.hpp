@@ -13,8 +13,12 @@ namespace CoffeeEngine
 {
 	namespace System
 	{
-		//TO-DO:
-		// Add common systems data-types here.
+		typedef struct WindowDimensions {
+			int x = 0;
+			int y = 0;
+			int width = 0;
+			int height = 0;
+		} WindowDimensions;
 	}
 }
 

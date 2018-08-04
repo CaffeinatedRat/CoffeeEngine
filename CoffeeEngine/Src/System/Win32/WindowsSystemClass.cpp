@@ -61,7 +61,6 @@ bool WindowsSystemClass::Initialize(ISystemListener* listener)
 	WriteToLog("[WindowsSystemClass::Initialize] Begin");
 
 	//Allow this method to be idempotent.
-	assert(m_state == WindowsOSState::SHUTDOWN);
 	if (m_state == WindowsOSState::SHUTDOWN)
 	{
 		m_pListener = listener;
@@ -84,7 +83,6 @@ void WindowsSystemClass::Run()
 {
 	WriteToLog("[WindowsSystemClass::Run] Begin");
 
-	assert(m_state == WindowsOSState::INITIALIZED);
 	if (m_state == WindowsOSState::INITIALIZED)
 	{
 		m_state = WindowsOSState::RUNNING;
@@ -173,8 +171,7 @@ void WindowsSystemClass::Shutdown()
 void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventType) noexcept
 {
 	assert(m_plogger);
-	if (m_plogger != nullptr)
-		m_plogger->Write(szEvent, logEventType);
+	m_plogger->Write(szEvent, logEventType);
 }
 
 /// <summary>
@@ -185,8 +182,7 @@ void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventTy
 void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logEventType) noexcept
 {
 	assert(m_plogger);
-	if (m_plogger != nullptr)
-		m_plogger->Write(sEvent, logEventType);
+	m_plogger->Write(sEvent, logEventType);
 }
 
 std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
@@ -228,6 +224,29 @@ std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
 	SAFE_DELETE(convertedString);
 
 	return rootDirectory;
+}
+
+/// <summary>
+/// Returns the windows dimension information.
+/// </summary>
+WindowDimensions WindowsSystemClass::GetWindowDimensions() const
+{
+	WindowDimensions windowDimensions;
+	RECT rect;
+	if (GetClientRect(m_hWnd, &rect))
+	{
+		windowDimensions.x = rect.left;
+		windowDimensions.y = rect.top;
+		windowDimensions.height = rect.bottom;
+		windowDimensions.width = rect.right;
+	}
+	else
+	{
+		assert(m_plogger);
+		m_plogger->Write(WindowsSystemClass::GetLastErrorMessage(), LogLevelType::Error);
+	}
+
+	return windowDimensions;
 }
 
 inline ITimer* WindowsSystemClass::CreateTimer()
@@ -303,12 +322,19 @@ std::string WindowsSystemClass::GetLastErrorMessage() const
 		(LPWSTR)&lpMsgBuf,
 		0, nullptr);
 
-	std::wstring wstr = std::wstring((wchar_t*)lpMsgBuf);
+	std::string errorMessage;
+	assert(lpMsgBuf != nullptr);
+	if (lpMsgBuf != nullptr)
+	{
+		std::wstring wstr = std::wstring((wchar_t*)lpMsgBuf);
 
-	LocalFree(lpMsgBuf);
+		LocalFree(lpMsgBuf);
 
-	//Remove the CR-LF.
-	return std::string(wstr.begin(), wstr.end() - 2);
+		//Remove the CR-LF.
+		errorMessage = std::string(wstr.begin(), wstr.end() - 2);
+	}
+
+	return errorMessage;
 }
 
 ////////////////////////////////////////////////////////////
