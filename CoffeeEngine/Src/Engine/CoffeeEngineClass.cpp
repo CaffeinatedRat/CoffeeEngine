@@ -47,7 +47,6 @@ bool CoffeeEngineClass::Initialize()
 	m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Begin", LogLevelType::Diagnostic);
 
 	//Allow this method to be idempotent.
-	assert(m_state == EngineState::SHUTDOWN);
 	if (m_state == EngineState::SHUTDOWN)
 	{
 		m_pSystem->WriteToLog("[CoffeeEngineClass::Initialize] Initializing from a shutdown state.");
@@ -168,14 +167,12 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 	m_pSystem->WriteToLog(logMessage);
 
 	m_upGraphics = GraphicsFactory::CreateGraphics(graphicsType, m_pSystem);
-	assert(m_upGraphics);
 	if (m_upGraphics == nullptr)
 		return false;
 
 	//Parameterize the graphics settings into a structure to reduce the overhead produced by methods with an extremely long number of parameters.
 	//NOTE: Temporary initialization...
 	GRAPHICS_PRESENTATION_PROPERTIES graphicsInitParams;
-	graphicsInitParams.fullscreen = false;
 	graphicsInitParams.vsyncEnabled = true;
 	graphicsInitParams.screenDepth = 1000.0f;
 	graphicsInitParams.screenNear = 0.1f;
@@ -184,10 +181,22 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 	graphicsInitParams.alphaBits = 8;
 	graphicsInitParams.stencilBits = 8;
 	graphicsInitParams.numberOfSamples = 1;
-	graphicsInitParams.screenHeight = 480;
-	graphicsInitParams.screenWidth = 640;
 	graphicsInitParams.version.nMajor = 3;
 	graphicsInitParams.version.nMinor = 1;
+
+	//Windowed
+	graphicsInitParams.fullscreen = false;
+	if (graphicsInitParams.fullscreen)
+	{
+		graphicsInitParams.screenHeight = 480;
+		graphicsInitParams.screenWidth = 640;
+	}
+	else
+	{
+		auto dimensions = m_pSystem->GetWindowDimensions();
+		graphicsInitParams.screenHeight = dimensions.height;
+		graphicsInitParams.screenWidth = dimensions.width;
+	}
 
 	//Initialize the graphics object first.
 	if (!m_upGraphics->Initialize(graphicsInitParams))
@@ -353,7 +362,6 @@ bool CoffeeEngineClass::OnGraphicsReset(GraphicsAPIType graphicsAPIType)
 /// </summary>
 void CoffeeEngineClass::OnWindowResize(int width, int height)
 {
-	assert(m_upGraphics);
 	if (m_upGraphics != nullptr)
 	{
 		m_upGraphics.get()->SetScreenDimensions(width, height);
