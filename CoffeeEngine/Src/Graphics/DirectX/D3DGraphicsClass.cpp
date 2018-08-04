@@ -380,7 +380,6 @@ bool D3DGraphicsClass::ResetSwapChain()
 
 		// Preserve the existing buffer count and format.
 		// Automatically choose the width and height to match the client rect for HWNDs.
-		HRESULT hr;
 		if (SUCCEEDED(m_pSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0)))
 		{
 			// Get the pointer to the back buffer.

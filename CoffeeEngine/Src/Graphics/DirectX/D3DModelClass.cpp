@@ -63,8 +63,7 @@ bool D3DModelClass::Initialize(IShader* pShader)
 
 	//Temporary...
 	// Compile the vertex shader code.
-	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
-	std::string fileName = rootPath;
+	auto fileName = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	
 	fileName.append("/Media/coookeee.jpg");
 	std::wstring fileNameW(fileName.begin(), fileName.end());

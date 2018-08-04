@@ -106,9 +106,7 @@ bool OGLModelClass::Initialize(IShader* pShader)
 	//Unbind our vertex array.
 	//glBindVertexArray(0);
 
-	std::string rootPath = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
-	std::string fileName = rootPath;
-
+	auto fileName = pGraphicsClass->GetSystem()->GetCurrentApplicationDirectory();
 	fileName.append("/Media/coookeee.jpg");
 
 	// ---------
