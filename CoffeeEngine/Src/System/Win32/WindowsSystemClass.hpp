@@ -63,29 +63,20 @@ namespace CoffeeEngine
 			void Shutdown() override;
 
 			/// <summary>
-			/// Writes to the event log.
-			/// </summary>
-			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
-			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
-
-			/// <summary>
 			/// Writes an event to the event log.
 			/// </summary>
-			/// <param name="logEvent">Event to write to the log.</param>
+			/// <param name="sEvent">Event to write to the log.</param>
 			/// <param name="logEventType">Type of log event.</param>
-			inline void WindowsSystemClass::WriteToLog(const std::stringstream& logEvent, LogLevelType logEventType) noexcept 
-			{
-				WriteToLog(logEvent.str()), logEventType;
-			};
+			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
+			void WriteToLog(const std::stringstream&, LogLevelType) noexcept override;
 
 			/// <summary>
-			/// Writes an exception as an error event to the log.
+			/// Writes an exception to the event log.
 			/// </summary>
-			/// <param name="exception">Exception to write to the log as an error.</param>
-			inline void WindowsSystemClass::WriteToLog(Exception& exception) noexcept 
-			{
-				WriteToLog(exception.ToString(), LogLevelType::Error);
-			};
+			/// <param name="exception">Exception to write to the log.</param>
+			/// <param name="logEventType">Type of log event.</param>
+			void WriteToLog(Exception&) noexcept override;
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.
@@ -172,7 +163,7 @@ namespace CoffeeEngine
 			//bool m_bHasShutdown = false;
 
 			ISystemListener *m_pListener = nullptr;
-			Logger* m_plogger = nullptr;
+			Logger* m_pLogger = nullptr;
 		};
 	};
 };

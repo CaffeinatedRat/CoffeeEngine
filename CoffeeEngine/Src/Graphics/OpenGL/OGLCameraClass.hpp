@@ -40,6 +40,11 @@ namespace CoffeeEngine
 				void Shutdown() override;
 
 				/// <summary>
+				/// Updates the graphics properties such as aspect ratio and fov.
+				/// </summary>
+				void UpdateGraphicsProperties() override;
+
+				/// <summary>
 				/// Sets the vector position of the camera.
 				/// </summary>
 				inline void SetPosition(float x, float y, float z) override { SetPosition(Vector3(x, y, z)); }

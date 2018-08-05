@@ -162,8 +162,8 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 
 	m_graphicsType = graphicsType;
 
-	std::stringstream logMessage("[CoffeeEngineClass::InitializeGraphics] Attempting to create the graphics device ");
-	logMessage << (graphicsType == GraphicsAPIType::DIRECTX ? "DirectX" : "OpenGL") << ".";
+	std::stringstream logMessage;
+	logMessage << "[CoffeeEngineClass::InitializeGraphics] Attempting to create the graphics device " << (graphicsType == GraphicsAPIType::DIRECTX ? "DirectX" : "OpenGL") << ".";
 	m_pSystem->WriteToLog(logMessage);
 
 	m_upGraphics = GraphicsFactory::CreateGraphics(graphicsType, m_pSystem);
@@ -180,6 +180,7 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 	graphicsInitParams.depthBits = 32;
 	graphicsInitParams.alphaBits = 8;
 	graphicsInitParams.stencilBits = 8;
+	graphicsInitParams.fov = GC_PI / 4.0f;
 	graphicsInitParams.numberOfSamples = 1;
 	graphicsInitParams.version.nMajor = 3;
 	graphicsInitParams.version.nMinor = 1;
@@ -363,7 +364,5 @@ bool CoffeeEngineClass::OnGraphicsReset(GraphicsAPIType graphicsAPIType)
 void CoffeeEngineClass::OnWindowResize(int width, int height)
 {
 	if (m_upGraphics != nullptr)
-	{
 		m_upGraphics.get()->SetScreenDimensions(width, height);
-	}
 }

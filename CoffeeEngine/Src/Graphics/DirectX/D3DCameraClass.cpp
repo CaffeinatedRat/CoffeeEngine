@@ -134,16 +134,7 @@ bool D3DCameraClass::Initialize()
 	assert(m_pGraphicsClass);
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] Begin");
 
-	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
-
-	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
-
-	// Setup the projection matrix.
-	float fieldOfView = (float)XM_PI / 4.0f;
-	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
-
-	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	UpdateGraphicsProperties();
 
 	// Initialize the world matrix to the identity matrix.
 	m_worldMatrix = XMMatrixIdentity();
@@ -191,6 +182,25 @@ void D3DCameraClass::Render(float fElapsedTime)
 void D3DCameraClass::Shutdown()
 {
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Shutdown] Shutting down...");
+}
+
+/// <summary>
+/// Updates the graphics properties such as aspect ratio and fov.
+/// </summary>
+void D3DCameraClass::UpdateGraphicsProperties()
+{
+	assert(m_pGraphicsClass);
+
+	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+
+	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
+
+	// Setup the projection matrix.
+	float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)XM_PI / 4.0f) : graphicsPresentation.fov;
+	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
+
+	// Create the projection matrix for 3D rendering.
+	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
 }
 
 #endif

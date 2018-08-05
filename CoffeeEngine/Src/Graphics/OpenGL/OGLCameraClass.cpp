@@ -130,17 +130,7 @@ bool OGLCameraClass::Initialize()
 	assert(m_pGraphicsClass);
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] Begin");
 
-	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
-	assert(pGraphicsClass);
-
-	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
-
-	// Setup the projection matrix.
-	float fieldOfView = (float)OGL_PI / 4.0f;
-	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
-
-	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	UpdateGraphicsProperties();
 
 	m_positionVector = glm::ext::vec3(m_position);
 	m_lookAtVector = glm::ext::vec3(m_lookAt);
@@ -178,4 +168,24 @@ void OGLCameraClass::Render(float fElapsedTime)
 void OGLCameraClass::Shutdown()
 {
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Shutdown] Shutting down...");
+}
+
+/// <summary>
+/// Updates the graphics properties such as aspect ratio and fov.
+/// </summary>
+void OGLCameraClass::UpdateGraphicsProperties()
+{
+	assert(m_pGraphicsClass);
+	
+	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
+	assert(pGraphicsClass);
+
+	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
+
+	// Setup the projection matrix.
+	float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)OGL_PI / 4.0f) : graphicsPresentation.fov;
+	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
+
+	// Create the projection matrix for 3D rendering.
+	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
 }

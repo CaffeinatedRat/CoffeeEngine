@@ -13,6 +13,8 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
+		const float GC_PI = 3.14159265f;
+
 		enum class GraphicsAPIType
 		{
 			DIRECTX,
@@ -38,6 +40,7 @@ namespace CoffeeEngine
 			float screenDepth = 0.0f;
 			float screenNear = 0.0f;
 			bool fullscreen = false;
+			float fov = 0.0f;
 			GRAPHICS_VERSION version;
 		};
 	}

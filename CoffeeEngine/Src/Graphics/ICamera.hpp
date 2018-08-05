@@ -39,18 +39,23 @@ namespace CoffeeEngine
 			virtual void Shutdown() = 0;
 
 			/// <summary>
+			/// Updates the graphics properties such as aspect ratio and fov.
+			/// </summary>
+			virtual void UpdateGraphicsProperties() = 0;
+
+			/// <summary>
 			/// Sets the position of the object in the world.
 			/// </summary>
-			virtual void SetPosition(float, float, float) override = 0;
-			virtual void SetPosition(const Vector3&) override = 0;
-			virtual void SetPosition(Vector3&&) override = 0;
+			virtual void SetPosition(float, float, float) = 0;
+			virtual void SetPosition(const Vector3&) = 0;
+			virtual void SetPosition(Vector3&&) = 0;
 
 			/// <summary>
 			/// Sets the orientation of the object in the world.
 			/// </summary>
-			virtual void SetOrientation(float, float, float) override = 0;
-			virtual void SetOrientation(const Vector3&) override = 0;
-			virtual void SetOrientation(Vector3&&) override = 0;
+			virtual void SetOrientation(float, float, float) = 0;
+			virtual void SetOrientation(const Vector3&) = 0;
+			virtual void SetOrientation(Vector3&&) = 0;
 
 			/// <summary>
 			/// Sets the lookat vector of the camera.

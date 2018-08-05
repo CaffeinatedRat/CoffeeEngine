@@ -37,7 +37,7 @@ WindowsSystemClass::WindowsSystemClass(Logger *pLogger)
 	if (pLogger == nullptr)
 		throw NullArgumentException("WindowsSystemClass", "Constructor", "pLogger");
 
-	m_plogger = pLogger;
+	m_pLogger = pLogger;
 }
 
 WindowsSystemClass::~WindowsSystemClass()
@@ -170,8 +170,8 @@ void WindowsSystemClass::Shutdown()
 /// <param name="szEvent">Event to write to the log.</param>
 void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventType) noexcept
 {
-	assert(m_plogger);
-	m_plogger->Write(szEvent, logEventType);
+	assert(m_pLogger);
+	m_pLogger->Write(szEvent, logEventType);
 }
 
 /// <summary>
@@ -181,8 +181,25 @@ void WindowsSystemClass::WriteToLog(const char* szEvent, LogLevelType logEventTy
 /// <param name="logEventType">Type of log event.</param>
 void WindowsSystemClass::WriteToLog(const std::string& sEvent, LogLevelType logEventType) noexcept
 {
-	assert(m_plogger);
-	m_plogger->Write(sEvent, logEventType);
+	assert(m_pLogger);
+	m_pLogger->Write(sEvent, logEventType);
+}
+
+void WindowsSystemClass::WriteToLog(const std::stringstream& logEvent, LogLevelType logEventType) noexcept
+{
+	assert(m_pLogger);
+	m_pLogger->Write(logEvent, logEventType);
+}
+
+/// <summary>
+/// Writes an exception to the event log.
+/// </summary>
+/// <param name="exception">Exception to write to the log.</param>
+/// <param name="logEventType">Type of log event.</param>
+void WindowsSystemClass::WriteToLog(Exception& exception) noexcept
+{
+	assert(m_pLogger);
+	m_pLogger->Write(exception);
 }
 
 std::string WindowsSystemClass::GetCurrentApplicationDirectory() const
@@ -242,8 +259,13 @@ WindowDimensions WindowsSystemClass::GetWindowDimensions() const
 	}
 	else
 	{
-		assert(m_plogger);
-		m_plogger->Write(WindowsSystemClass::GetLastErrorMessage(), LogLevelType::Error);
+		auto thisCast = const_cast<WindowsSystemClass*>(this);
+		if (thisCast)
+		{
+			std::stringstream errorMessage;
+			errorMessage << "[WindowsSystemClass::GetWindowDimensions] " << WindowsSystemClass::GetLastErrorMessage();
+			thisCast->WriteToLog(errorMessage, LogLevelType::Error);
+		}
 	}
 
 	return windowDimensions;
@@ -501,8 +523,8 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	case WM_KEYDOWN:
 	{
-		std::stringstream stream("[WindowsSystemClass::WM_KEYDOWN] Keycode: ");
-		stream << (int)wParam;
+		std::stringstream stream;
+		stream << "[WindowsSystemClass::WM_KEYDOWN] Keycode: " << (int)wParam;
 		WriteToLog(stream, LogLevelType::Diagnostic);
 
 		if (m_pListener != nullptr)
@@ -512,8 +534,8 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 
 	case WM_KEYUP:
 	{
-		std::stringstream stream("[WindowsSystemClass::WM_KEYUP] Keycode: ");
-		stream << (int)wParam;
+		std::stringstream stream;
+		stream << "[WindowsSystemClass::WM_KEYUP] Keycode: " << (int)wParam;
 		WriteToLog(stream, LogLevelType::Diagnostic);
 
 		if (m_pListener != nullptr)
@@ -534,14 +556,6 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 		int height = HIWORD(lParam);
 		if (m_pListener != nullptr)
 			m_pListener->OnWindowResize(width, height);
-	}
-	break;
-
-	case WM_SIZING:
-	{
-		RECT* pRect = (RECT*)lParam;
-		if (m_pListener != nullptr)
-			m_pListener->OnWindowResize(pRect->right - pRect->left, pRect->bottom - pRect->top);
 	}
 	break;
 

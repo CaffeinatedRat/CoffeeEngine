@@ -185,6 +185,9 @@ void D3DGraphicsClass::SetScreenDimensions(int width, int height)
 	m_graphicsPresentationProperties.screenWidth = width;
 	m_graphicsPresentationProperties.screenHeight = height;
 
+	if (m_pMasterCamera != nullptr)
+		m_pMasterCamera->UpdateGraphicsProperties();
+
 	ResetSwapChain();
 	SetViewport(0.0f, 0.0f, (float)m_graphicsPresentationProperties.screenWidth, (float)m_graphicsPresentationProperties.screenHeight);
 }
