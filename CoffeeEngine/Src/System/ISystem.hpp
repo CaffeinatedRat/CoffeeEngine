@@ -33,7 +33,7 @@ namespace CoffeeEngine
 			ISystem() = default;
 			//NOTE: Very important, otherwise if we don't add a virtual destructor all of our inherited classes will never have their destructor invoked.
 			virtual ~ISystem() = default;
-		
+
 			/// <summary>
 			/// Attempts to initialize the operating system object, as well as all internal systems such as the graphics engine and main game engine.
 			/// </summary>
@@ -55,7 +55,7 @@ namespace CoffeeEngine
 			virtual void WriteToLog(char const*, Utility::Logging::LogLevelType = Utility::Logging::LogLevelType::Informational) noexcept = 0;
 			virtual void WriteToLog(const std::string&, Utility::Logging::LogLevelType=Utility::Logging::LogLevelType::Informational) noexcept = 0;
 			virtual void WriteToLog(const std::stringstream&, Utility::Logging::LogLevelType=Utility::Logging::LogLevelType::Informational) noexcept = 0;
-			virtual void WriteToLog(Exception&) noexcept = 0;			
+			virtual void WriteToLog(Exception&) noexcept = 0;
 
 			/// <summary>
 			/// Returns the root directory the executable is running in.
