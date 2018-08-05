@@ -72,11 +72,36 @@ namespace CoffeeEngine
 				}
 
 				/// <summary>
-				/// Writes an timestamped event to the error log.
+				/// Writes an event to the event log based on the event type.
 				/// </summary>
+				/// <param name="event">Event to write to the log.</param>
+				/// <param name="logEventType">Type of log event.</param>
 				void Write(const char*, LogLevelType = LogLevelType::Informational);
-				void Write(const std::string&, LogLevelType = LogLevelType::Informational);
-				void Write(Exception&, LogLevelType = LogLevelType::Error);
+
+				/// <summary>
+				/// Writes an event to the event log based on the event type.
+				/// </summary>
+				/// <param name="event">Event to write to the log.</param>
+				/// <param name="logEventType">Type of log event.</param>
+				inline void Write(const std::string& event, LogLevelType logEventType = LogLevelType::Informational)
+				{
+					Write(event.c_str());
+				}
+
+				inline void Write(const std::stringstream& event, LogLevelType logEventType = LogLevelType::Informational)
+				{
+					Write(event.str(), logEventType);
+				}
+
+				/// <summary>
+				/// Writes an exception to the event log based on the event type.
+				/// </summary>
+				/// <param name="exception">Event to write to the log.</param>
+				/// <param name="logEventType">Type of log event.</param>
+				inline void Write(Exception& exception, LogLevelType logEventType = LogLevelType::Error)
+				{
+					Write(exception.ToString(), logEventType);
+				}
 
 			private:
 				unique_file_ptr m_fpLogFile;

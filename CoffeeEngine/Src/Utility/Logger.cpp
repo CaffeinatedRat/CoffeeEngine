@@ -47,9 +47,9 @@ Logger::~Logger()
 /// <summary>
 /// Writes an event to the event log based on the event type.
 /// </summary>
-/// <param name="sEvent">Event to write to the log.</param>
+/// <param name="event">Event to write to the log.</param>
 /// <param name="logEventType">Type of log event.</param>
-void Logger::Write(const char* szEvent, LogLevelType logEventType)
+void Logger::Write(const char* event, LogLevelType logEventType)
 {
 	try
 	{
@@ -86,29 +86,9 @@ void Logger::Write(const char* szEvent, LogLevelType logEventType)
 				}
 
 				//Write the timestamped event.
-				fprintf_s(fileHandle, "<%s> %s -- %s \n", GetLogLevelName(logEventType), timeBuffer, szEvent);
+				fprintf_s(fileHandle, "<%s> %s -- %s \n", GetLogLevelName(logEventType), timeBuffer, event);
 			}
 		}
 	}
 	catch (...) {}
-}
-
-/// <summary>
-/// Writes an event to the event log based on the event type.
-/// </summary>
-/// <param name="sEvent">Event to write to the log.</param>
-/// <param name="logEventType">Type of log event.</param>
-void Logger::Write(const std::string& sEvent, LogLevelType logEventType)
-{
-	Write(sEvent.c_str());
-}
-
-/// <summary>
-/// Writes an exception to the event log based on the event type.
-/// </summary>
-/// <param name="sEvent">Event to write to the log.</param>
-/// <param name="logEventType">Type of log event.</param>
-void Logger::Write(Exception& exception, LogLevelType logEventType)
-{
-	Write(exception.ToString(), logEventType);
 }
