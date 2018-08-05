@@ -57,16 +57,19 @@ namespace CoffeeEngine
 
 			/// <summary>
 			/// This method initializes the engine.
+			/// NOTE: This is invoked during the main function call by the OS entrypoint.
 			/// </summary>
 			bool Initialize();
 
 			/// <summary>
 			/// This method begins the engine.
+			/// NOTE: This is invoked after a successful Initizlie and during the OS entrypoint.
 			/// </summary>
 			void Run();
 
 			/// <summary>
 			/// This method will shutdown the engine, clean up and release any resources.
+			/// NOTE: This is automatically invoked after the class goes out of scope.
 			/// </summary>
 			void Shutdown();
 
