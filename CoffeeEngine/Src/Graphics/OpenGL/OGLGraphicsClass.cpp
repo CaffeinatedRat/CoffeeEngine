@@ -216,12 +216,13 @@ bool OGLGraphicsClass::CreateDepthBuffer()
 
 bool OGLGraphicsClass::CreateRasterState()
 {
+	glDisable(GL_CULL_FACE);
 	return true;
 }
 
 void OGLGraphicsClass::SetViewport(int x, int y, int width, int height)
 {
-	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] Begin", LogLevelType::Diagnostic);
+	m_pSystem->WriteToLog("[OGLGraphicsClass::SetViewport] Begin", LogLevelType::Diagnostic);
 	glViewport(x, y, width, height);
-	m_pSystem->WriteToLog("[OGLGraphicsClass::CreateViewPort] End", LogLevelType::Diagnostic);
+	m_pSystem->WriteToLog("[OGLGraphicsClass::SetViewport] End", LogLevelType::Diagnostic);
 }

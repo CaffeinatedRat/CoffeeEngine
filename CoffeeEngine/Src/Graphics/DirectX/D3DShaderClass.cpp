@@ -53,7 +53,7 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 	if(sFileName.length() == 0)
 		throw NullArgumentException("D3DShaderClass", "Initialize", "sFileName");
 
-	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Beginning...");
+	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Begin");
 
 	//Cast to the Direct3d graphics class so that we can get access to D3D specific methods.
 	//Post-Condition Note: This should never be null as only constructor requires this class to be passed as valid (non-null).
@@ -132,6 +132,10 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 				{
 					bStatus = true;
 				}
+				else
+				{
+					m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Failed to create an input layout.");
+				}
 			}
 			//END OF if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &m_pVertexShader)))...
 
@@ -142,6 +146,7 @@ bool D3DShaderClass::Initialize(const std::string& sFileName)
 			}
 			else
 			{
+				m_pGraphicsClass->GetSystem()->WriteToLog("[D3DShaderClass::Initialize] Failed to create a pixel shader.");
 				bStatus = false;
 			}
 
