@@ -69,7 +69,7 @@ namespace CoffeeEngine
 			/// <param name="logEventType">Type of log event.</param>
 			void WriteToLog(const char*, LogLevelType = LogLevelType::Informational) noexcept override;
 			void WriteToLog(const std::string&, LogLevelType = LogLevelType::Informational) noexcept override;
-			void WriteToLog(const std::stringstream&, LogLevelType) noexcept override;
+			void WriteToLog(const std::stringstream&, LogLevelType = LogLevelType::Informational) noexcept override;
 
 			/// <summary>
 			/// Writes an exception to the event log.
