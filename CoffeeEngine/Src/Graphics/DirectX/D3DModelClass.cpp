@@ -60,6 +60,7 @@ bool D3DModelClass::Initialize(IShader* pShader)
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
 	ID3D11Device* pDevice = pGraphicsClass->GetDevice();
+	assert(pDevice);
 
 	//Temporary...
 	// Compile the vertex shader code.
@@ -88,10 +89,10 @@ bool D3DModelClass::Initialize(IShader* pShader)
 	{
 		float vertices[] = {
 			//positions           //RGBA                    //Textures
-			-3.0f,  3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.5f,   0.0f, 0.0f,
-			3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-			-3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-			3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.2f,   1.0f, 1.0f,
+			-3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+			3.0f,  3.0f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+			-3.0f, -3.0f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+			3.0f, -3.0f, 0.0f,    1.0f, 0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 		};
 
 		// Load the vertex array with data.
@@ -128,12 +129,12 @@ bool D3DModelClass::Initialize(IShader* pShader)
 		vertexBufferDesc.StructureByteStride = 0;
 
 		// Give the subresource structure a pointer to the vertex data.
-		vertexData.pSysMem = vertices; //vertices.get();
+		vertexData.pSysMem = vertices;
 		vertexData.SysMemPitch = 0;
 		vertexData.SysMemSlicePitch = 0;
 
 		// Now finally create the vertex buffer.
-		if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &m_pVertexBuffer)))
+		if(SUCCEEDED(pDevice->CreateBuffer(&vertexBufferDesc, &vertexData, &m_pVertexBuffer)))
 		{
 			bStatus = true;
 		}
@@ -152,13 +153,37 @@ bool D3DModelClass::Initialize(IShader* pShader)
 		indexData.SysMemSlicePitch = 0;
 
 		// Create the index buffer.
-		if(SUCCEEDED(pGraphicsClass->GetDevice()->CreateBuffer(&indexBufferDesc, &indexData, &m_pIndexBuffer)))
+		if(SUCCEEDED(pDevice->CreateBuffer(&indexBufferDesc, &indexData, &m_pIndexBuffer)))
 		{
 			bStatus &= true;
 		}
 		else
 		{
 			bStatus &= false;
+		}
+
+		if (m_enableAlphaBlending) {
+			ID3D11BlendState* d3dBlendState;
+			D3D11_BLEND_DESC blendDesc;
+			ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+			blendDesc.RenderTarget[0].BlendEnable = true;
+			blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+			blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+			blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+			blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+			if (SUCCEEDED(pDevice->CreateBlendState(&blendDesc, &d3dBlendState)))
+			{
+				pGraphicsClass->GetDeviceContext()->OMSetBlendState(d3dBlendState, 0, 0xffffffff);
+				bStatus &= true;
+			}
+			else
+			{
+				bStatus &= false;
+			}
 		}
 	}
 	//END OF if ( (vertices != NULL) && (indices != NULL) )...
@@ -217,7 +242,8 @@ void D3DModelClass::Render(float fElapsedTime) const
 	}
 
 	// Set vertex buffer stride and offset.
-	unsigned int stride = sizeof(SimpleVertexType); 
+	//unsigned int stride = sizeof(SimpleVertexType); 
+	unsigned int stride = (sizeof(float) * 3) + (sizeof(float) * 4) + (sizeof(float) * 2);
 	unsigned int offset = 0;
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
