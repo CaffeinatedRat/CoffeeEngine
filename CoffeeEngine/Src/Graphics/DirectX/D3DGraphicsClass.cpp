@@ -351,6 +351,14 @@ bool D3DGraphicsClass::CreateSwapChain()
 		// Get the pointer to the back buffer.
 		if (SUCCEEDED(m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferPtr)))
 		{
+			auto featureLevel = m_pDevice->GetFeatureLevel();
+			if (FEATURE_DESC_MAP.count(featureLevel))
+			{
+				std::stringstream featureMessage;
+				featureMessage << "[D3DGraphicsClass::CreateSwapChain] Actual Version: " << FEATURE_DESC_MAP.at((uint)featureLevel);
+				pSystem->WriteToLog(featureMessage);
+			}
+
 			// Create the render target view with the back buffer pointer.
 			status = SUCCEEDED(m_pDevice->CreateRenderTargetView(backBufferPtr, NULL, &m_pRenderTargetView));
 		}

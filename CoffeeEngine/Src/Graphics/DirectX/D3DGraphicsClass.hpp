@@ -12,6 +12,7 @@
 #ifndef _D3DGRAPHICS_CLASS_H_
 #define _D3DGRAPHICS_CLASS_H_
 
+#include <map>
 #include "Common.hpp"
 #include "System/ISystem.hpp"
 #include "Graphics/BaseGraphicsClass.hpp"
@@ -171,6 +172,26 @@ namespace CoffeeEngine
 				void SetViewport(float x, float y, float width, float height);
 
 			private:
+
+				////////////////////////////////////////////////////////////
+				//
+				//                Constants
+				// 
+				////////////////////////////////////////////////////////////
+				
+				//Feature info provided by MSDN: https://docs.microsoft.com/en-us/windows/desktop/api/d3dcommon/ne-d3dcommon-d3d_feature_level
+				const std::map<uint, const char*> FEATURE_DESC_MAP = 
+				{
+					{ D3D_FEATURE_LEVEL_9_1, "Feature Level 9.1 (Shader Model 2)"},
+					{ D3D_FEATURE_LEVEL_9_2, "Feature Level 9.2 (Shader Model 2)" },
+					{ D3D_FEATURE_LEVEL_9_3, "Feature Level 9.3 (Shader Model 2.0b)" },
+					{ D3D_FEATURE_LEVEL_10_0, "Feature Level 10.0 (Shader Model 4)" },
+					{ D3D_FEATURE_LEVEL_10_1, "Feature Level 10.1 (Shader Model 4)" },
+					{ D3D_FEATURE_LEVEL_11_0 , "Feature Level 11.0 (Shader Model 5)" },
+					{ D3D_FEATURE_LEVEL_11_1 , "Feature Level 11.1 (Shader Model 5) [WDDM 1.2 Required]" },
+					{ D3D_FEATURE_LEVEL_12_0 , "Feature Level 12.0 (Shader Model 5)" },
+					{ D3D_FEATURE_LEVEL_12_1 , "Feature Level 12.1 (Shader Model 5)" }
+				};				
 
 				////////////////////////////////////////////////////////////
 				//
