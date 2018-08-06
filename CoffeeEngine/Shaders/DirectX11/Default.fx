@@ -17,6 +17,13 @@ struct SimplePixelInputType
     float3 normal: NORMAL;
 };
 
+//////////////////
+// Forward Decs //
+//////////////////
+
+float4 GammaToLinear(float4 color);
+float4 LinearToGamma(float4 color);
+
 /////////////
 // GLOBALS //
 /////////////
@@ -51,8 +58,8 @@ SimplePixelInputType DefaultVertexShader(SimpleVertexInputType input)
     output.texIn = input.texIn;
     
 	//Transform the vertex's normal against the world matrix and normalize it.
-    output.normal = mul(input.normal, (float3x3)worldMatrix);
-    output.normal = normalize(output.normal);
+    //output.normal = mul(input.normal, (float3x3)worldMatrix);
+    //output.normal = normalize(output.normal);
     return output;
 }
 
@@ -71,6 +78,17 @@ float4 DefaultPixelShader(SimplePixelInputType input) : SV_TARGET
     //color = saturate(diffuseColor * lightIntensity);
 
 	//Get pixels color and blend it with the texture's color.
-	float4 color = input.color;
-    return color * textureColor;
+	return LinearToGamma(textureColor) * input.color;
+}
+
+float4 GammaToLinear(float4 color)
+{
+	//Gamma 2.2 (1/2.2f)
+	return pow(color, 2.2f);
+}
+
+float4 LinearToGamma(float4 color)
+{
+	//Gamma 2.2 (1/2.2f)
+	return pow(color, 0.4545f);
 }
