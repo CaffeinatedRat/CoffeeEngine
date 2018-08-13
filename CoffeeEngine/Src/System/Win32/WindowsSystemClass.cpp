@@ -492,13 +492,27 @@ LRESULT CALLBACK WindowsSystemClass::MessageHandler(HWND hWnd, UINT message, WPA
 		case ID_GRAPHICS_OPENGL:
 			WriteToLog("[WindowsSystemClass::MessageHandler] OPENGL command event received.", LogLevelType::Diagnostic);
 			if (m_pListener != nullptr)
+			{
 				m_pListener->OnGraphicsReset(GraphicsAPIType::OPENGL);
+				if (auto hMenu = GetMenu(m_hWnd))
+				{
+					CheckMenuItem(hMenu, ID_GRAPHICS_OPENGL, MF_CHECKED);
+					CheckMenuItem(hMenu, ID_GRAPHICS_DIRECTX, MF_UNCHECKED);
+				}
+			}
 			break;
 
 		case ID_GRAPHICS_DIRECTX:
 			WriteToLog("[WindowsSystemClass::MessageHandler] DIRECTX command event received.", LogLevelType::Diagnostic);
 			if (m_pListener != nullptr)
+			{
 				m_pListener->OnGraphicsReset(GraphicsAPIType::DIRECTX);
+				if (auto hMenu = GetMenu(m_hWnd))
+				{
+					CheckMenuItem(hMenu, ID_GRAPHICS_DIRECTX, MF_CHECKED);
+					CheckMenuItem(hMenu, ID_GRAPHICS_OPENGL, MF_UNCHECKED);
+				}
+			}
 			break;
 
 		default:
