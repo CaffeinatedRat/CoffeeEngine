@@ -29,7 +29,6 @@ using namespace CoffeeEngine::Graphics::DirectX;
 D3DShaderClass::D3DShaderClass(BaseGraphicsClass* pBaseGraphicsClass)
 	: ShaderClass(pBaseGraphicsClass)
 {
-	m_worldMatrix = XMMatrixIdentity();
 }
 
 D3DShaderClass::D3DShaderClass(const D3DShaderClass& object)
@@ -230,19 +229,20 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
 	assert(pGraphicsClass);
 
-	D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
+	//D3DCameraClass* pMasterCamera = (D3DCameraClass*)pGraphicsClass->GetMasterCamera();
+	auto pMasterCamera = dynamic_cast<D3DCameraClass*>(pGraphicsClass->GetMasterCamera());
 	if(pMasterCamera == nullptr)
 		throw Exception("D3DShaderClass", "SetShaderParameters", "There is no master camera.  You need a camera to see!");
 
 	//Retrieve all of our matrices
-	//D3DXMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
+	XMMATRIX worldMatrix = pMasterCamera->GetWorldMatrix();
 	XMMATRIX viewMatrix = pMasterCamera->GetViewMatrix();
 	XMMATRIX projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
 	// Transpose the matrices to prepare them for the shader.
 	// Why do the matrices have to be transposed?
 	// Answer: "Also, because matrices are arranged differently in memory in C++ and HLSL, we must transpose the matrices before updating them."
-	m_worldMatrix = XMMatrixTranspose(m_worldMatrix);
+	worldMatrix = XMMatrixTranspose(worldMatrix);
 	viewMatrix = XMMatrixTranspose(viewMatrix);
 	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
@@ -259,7 +259,7 @@ bool D3DShaderClass::SetShaderParameters(float fElapsedTime)
 	SimpleMatrixBufferType* dataPtr = (SimpleMatrixBufferType*)mappedResource.pData;
 
 	//Copy our matricies into our buffer so they can become accessible to the shader.
-	dataPtr->world = m_worldMatrix;
+	dataPtr->world = worldMatrix;
 	dataPtr->view = viewMatrix;
 	dataPtr->projection = projectionMatrix;
 

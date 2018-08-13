@@ -25,7 +25,7 @@ namespace CoffeeEngine
 	{
 		namespace DirectX
 		{
-			class D3DCameraClass : public CameraClass
+			class D3DCameraClass : public CameraClass<XMMATRIX>
 			{
 			public:
 
@@ -65,32 +65,15 @@ namespace CoffeeEngine
 				void SetUp(const Vector3& vector) override;
 				void SetUp(Vector3&& vector) override;
 
-				////////////////////////////////////////////////////////////
-				//
-				//                DirectX Specific methods
-				// 
-				////////////////////////////////////////////////////////////
-
-				inline const XMMATRIX& GetProjectionMatrix() { return m_projectionMatrix; }
-				inline const XMMATRIX& GetWorldMatrix() { return m_worldMatrix; }
-				inline const XMMATRIX& GetViewMatrix() { return m_viewMatrix; }
-
 			private:
-
 				////////////////////////////////////////////////////////////
 				//
 				//                Member Vars
 				// 
 				////////////////////////////////////////////////////////////
-
 				XMVECTOR m_positionVector;
 				XMVECTOR m_lookAtVector;
 				XMVECTOR m_upVector;
-
-				//Direct3d
-				XMMATRIX m_viewMatrix;
-				XMMATRIX m_projectionMatrix;
-				XMMATRIX m_worldMatrix;
 			};
 		}
 	};

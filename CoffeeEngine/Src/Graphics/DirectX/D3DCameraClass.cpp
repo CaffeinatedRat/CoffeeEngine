@@ -29,16 +29,15 @@ using namespace CoffeeEngine::Graphics::DirectX;
 D3DCameraClass::D3DCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	: CameraClass(pBaseGraphicsClass)
 {
+	// Initialize the world matrix to the identity matrix.
+	m_worldMatrix = XMMatrixIdentity();
 }
 
 D3DCameraClass::D3DCameraClass(const D3DCameraClass& object) noexcept
 	: CameraClass(object),
 	m_positionVector(m_positionVector),
 	m_lookAtVector(m_lookAtVector),
-	m_upVector(m_upVector),
-	m_viewMatrix(m_viewMatrix),
-	m_projectionMatrix(m_projectionMatrix),
-	m_worldMatrix(m_worldMatrix)
+	m_upVector(m_upVector)
 {
 }
 
@@ -46,10 +45,7 @@ D3DCameraClass::D3DCameraClass(D3DCameraClass&& object) noexcept
 	: CameraClass(object),
 	m_positionVector(std::move(object.m_positionVector)),
 	m_lookAtVector(std::move(object.m_lookAtVector)),
-	m_upVector(std::move(object.m_upVector)),
-	m_viewMatrix(std::move(object.m_viewMatrix)),
-	m_projectionMatrix(std::move(object.m_projectionMatrix)),
-	m_worldMatrix(std::move(object.m_worldMatrix))
+	m_upVector(std::move(object.m_upVector))
 {
 	object.m_positionVector = XMVECTOR();
 	object.m_lookAtVector = XMVECTOR();
@@ -136,9 +132,6 @@ bool D3DCameraClass::Initialize()
 
 	UpdateGraphicsProperties();
 
-	// Initialize the world matrix to the identity matrix.
-	m_worldMatrix = XMMatrixIdentity();
-
 	// Set the initial position vector.
 	XMFLOAT3 position = { m_position._x, m_position._y, m_position._z };
 	m_positionVector = XMLoadFloat3(&position);
@@ -162,10 +155,10 @@ void D3DCameraClass::Render(float fElapsedTime)
 	float pitchRate = m_pitch * 0.001f * fElapsedTime;
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
-	//auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitchRate, yawRate, rollRate);
+	auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitchRate, yawRate, rollRate);
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-	//m_lookAtVector = XMVector3Normalize(XMVector3TransformCoord(m_lookAtVector, rotationMatrix));
+	m_lookAtVector = XMVector3Normalize(XMVector3TransformCoord(m_lookAtVector, rotationMatrix));
 
 	// Translate the rotated camera position to the location of the viewer.
 	m_positionVector += m_forward * m_lookAtVector;
@@ -173,8 +166,10 @@ void D3DCameraClass::Render(float fElapsedTime)
 	//auto upVector = XMVector3TransformCoord(m_upVector, rotationMatrix);
 	auto upVector = m_upVector;
 
+	// --- KDA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
 	// Finally create the view matrix from the three updated vectors.
-	m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
+	//m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
+	m_viewMatrix = XMMatrixLookAtRH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
 
 	return;
 }
@@ -189,9 +184,8 @@ void D3DCameraClass::Shutdown()
 /// </summary>
 void D3DCameraClass::UpdateGraphicsProperties()
 {
-	assert(m_pGraphicsClass);
-
-	D3DGraphicsClass* pGraphicsClass = (D3DGraphicsClass*)m_pGraphicsClass;
+	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
+	assert(pGraphicsClass);
 
 	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
 
@@ -199,8 +193,10 @@ void D3DCameraClass::UpdateGraphicsProperties()
 	float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)XM_PI / 4.0f) : graphicsPresentation.fov;
 	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
 
+	// --- KDA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
 	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	//m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	m_projectionMatrix = XMMatrixPerspectiveFovRH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
 }
 
 #endif

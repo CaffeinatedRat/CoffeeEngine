@@ -202,16 +202,17 @@ bool OGLShaderClass::SetShaderParameters(float fElapsedTime)
 	auto pGraphicsClass = dynamic_cast<const OGLGraphicsClass*>(m_pGraphicsClass);
 	assert(pGraphicsClass);
 
-	OGLCameraClass* pMasterCamera = (OGLCameraClass*)pGraphicsClass->GetMasterCamera();
+	//OGLCameraClass* pMasterCamera = (OGLCameraClass*)pGraphicsClass->GetMasterCamera();
+	auto pMasterCamera = dynamic_cast<OGLCameraClass*>(pGraphicsClass->GetMasterCamera());
 	if (pMasterCamera == nullptr)
 		throw Exception("OGLShaderClass", "SetShaderParameters", "There is no master camera.  You need a camera to see!");
 
 	//Retrieve all of our matrices
-	m_worldMatrix = pMasterCamera->GetWorldMatrix();
-	glm::mat4 viewMatrix = pMasterCamera->GetViewMatrix();
-	glm::mat4 projectionMatrix = pMasterCamera->GetProjectionMatrix();
+	auto worldMatrix = pMasterCamera->GetWorldMatrix();
+	auto viewMatrix = pMasterCamera->GetViewMatrix();
+	auto projectionMatrix = pMasterCamera->GetProjectionMatrix();
 
-	setMatrix4("world", m_worldMatrix);
+	setMatrix4("world", worldMatrix);
 	setMatrix4("view", viewMatrix);
 	setMatrix4("projection", projectionMatrix);
 	

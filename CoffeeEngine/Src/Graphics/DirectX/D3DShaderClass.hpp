@@ -41,12 +41,6 @@ namespace CoffeeEngine
 				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
 
-				////////////////////////////////////////////////////////////
-				//
-				//                DirectX Specific methods
-				// 
-				////////////////////////////////////////////////////////////
-				inline void SetWorldMatrix(XMMATRIX& worldMatrix) { m_worldMatrix = worldMatrix; }
 
 			private:
 				bool SetShaderParameters(float fElapsedTime);
@@ -64,8 +58,6 @@ namespace CoffeeEngine
 				ID3D11InputLayout* m_pLayout = nullptr;
 				ID3D11Buffer* m_pMatrixBuffer = nullptr;
 				ID3D11SamplerState* m_pSampleState = nullptr;
-
-				XMMATRIX m_worldMatrix;
 			};
 		};
 	};

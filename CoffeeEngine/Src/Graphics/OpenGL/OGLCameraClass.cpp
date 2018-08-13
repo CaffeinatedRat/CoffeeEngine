@@ -25,6 +25,8 @@ using namespace CoffeeEngine::Graphics::OpenGL;
 OGLCameraClass::OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 	: CameraClass(pBaseGraphicsClass)
 {
+	// Initialize the world matrix to the identity matrix.
+	m_worldMatrix = glm::mat4(1.0f);
 }
 
 OGLCameraClass::OGLCameraClass(const OGLCameraClass& object) noexcept
@@ -32,9 +34,6 @@ OGLCameraClass::OGLCameraClass(const OGLCameraClass& object) noexcept
 	m_positionVector(object.m_positionVector),
 	m_lookAtVector(object.m_lookAtVector),
 	m_upVector(object.m_upVector),
-	m_viewMatrix(object.m_viewMatrix),
-	m_projectionMatrix(object.m_projectionMatrix),
-	m_worldMatrix(object.m_worldMatrix),
 	m_positionX(object.m_positionX),
 	m_positionY(object.m_positionY),
 	m_positionZ(object.m_positionZ),
@@ -49,9 +48,6 @@ OGLCameraClass::OGLCameraClass(OGLCameraClass&& object) noexcept
 	m_positionVector(std::move(object.m_positionVector)),
 	m_lookAtVector(std::move(object.m_lookAtVector)),
 	m_upVector(std::move(object.m_upVector)),
-	m_viewMatrix(std::move(object.m_viewMatrix)),
-	m_projectionMatrix(std::move(object.m_projectionMatrix)),
-	m_worldMatrix(std::move(object.m_worldMatrix)),
 	m_positionX(object.m_positionX),
 	m_positionY(object.m_positionY),
 	m_positionZ(object.m_positionZ),

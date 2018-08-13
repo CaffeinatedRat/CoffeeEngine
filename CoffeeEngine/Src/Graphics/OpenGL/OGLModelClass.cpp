@@ -62,10 +62,10 @@ bool OGLModelClass::Initialize(IShader* pShader)
 
 	float vertices[] = {
 		//positions           //RGBA                    //Textures
-		-3.0f,  3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.5f,   0.0f, 0.0f,
-		 3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-		-3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-		 3.0f, -3.0f, 0.0f,   1.0f, 1.0f, 1.0f, 0.2f,   1.0f, 1.0f,
+		-3.0f,  3.0f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+		3.0f,  3.0f, 0.0f,    0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+		-3.0f, -3.0f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+		3.0f, -3.0f, 0.0f,    1.0f, 0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
 	};
 
 	unsigned int indices[] = {
@@ -165,9 +165,6 @@ void OGLModelClass::Render(float fElapsedTime) const
 
 	//Get the shaders.
 	CoffeeEngine::Graphics::OpenGL::OGLShaderClass* firstShader = (CoffeeEngine::Graphics::OpenGL::OGLShaderClass*)(m_shaders.size() > 0 ? m_shaders[0] : nullptr);
-	if (firstShader != nullptr) {
-		firstShader->SetWorldMatrix(worldMatrix);
-	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_defaultTextureID);

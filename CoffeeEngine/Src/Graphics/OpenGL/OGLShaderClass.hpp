@@ -39,7 +39,6 @@ namespace CoffeeEngine
 				virtual void Render(float fElapsedTime);
 				virtual void Shutdown();
 
-				inline void SetWorldMatrix(glm::mat4 &worldMatrix) { m_worldMatrix = worldMatrix; }
 
 				inline void setInt(const char* name, int value) const {
 					glUniform1i(glGetUniformLocation(m_programId, name), value);
@@ -104,7 +103,6 @@ namespace CoffeeEngine
 				////////////////////////////////////////////////////////////
 			private:
 				GLuint m_programId = 0;
-				glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 
 			};
 		};

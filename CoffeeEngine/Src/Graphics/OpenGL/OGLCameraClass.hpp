@@ -22,7 +22,7 @@ namespace CoffeeEngine
 	{
 		namespace OpenGL
 		{
-			class OGLCameraClass : public CameraClass
+			class OGLCameraClass : public CameraClass<glm::mat4>
 			{			
 			public:		
 
@@ -65,16 +65,6 @@ namespace CoffeeEngine
 				void SetUp(const Vector3& vector) override;
 				void SetUp(Vector3&& vector) override;
 
-				////////////////////////////////////////////////////////////
-				//
-				//                OGL Specific methods
-				// 
-				////////////////////////////////////////////////////////////
-
-				inline const glm::mat4& GetProjectionMatrix() { return m_projectionMatrix; }
-				inline const glm::mat4& GetWorldMatrix() { return m_worldMatrix; }
-				inline const glm::mat4& GetViewMatrix() { return m_viewMatrix; }
-
 			private:
 				////////////////////////////////////////////////////////////
 				//
@@ -89,11 +79,6 @@ namespace CoffeeEngine
 				//Primitives
 				float m_positionX = 0.0f, m_positionY = 0.0f, m_positionZ = 0.0f;
 				float m_rotationX = 0.0f, m_rotationY = 0.0f, m_rotationZ = 0.0f;
-
-				//OGL
-				glm::mat4 m_viewMatrix;
-				glm::mat4 m_projectionMatrix;
-				glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 			};
 		}
 	};
