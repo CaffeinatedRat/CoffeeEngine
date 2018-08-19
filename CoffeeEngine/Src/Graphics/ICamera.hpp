@@ -80,6 +80,7 @@ namespace CoffeeEngine
 			virtual void Pitch(float) = 0;
 			virtual void Roll(float) = 0;
 			virtual void Forward(float) = 0;
+			virtual void Strafe(float) = 0;
 		};
 	};
 };
