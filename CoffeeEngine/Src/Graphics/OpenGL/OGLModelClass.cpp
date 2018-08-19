@@ -69,8 +69,8 @@ bool OGLModelClass::Initialize(IShader* pShader)
 	};
 
 	unsigned int indices[] = {
-		0, 2, 1, // first triangle
-		1, 2, 3  // second triangle
+		0, 1, 2, // first triangle
+		1, 3, 2  // second triangle
 	};
 
 	//Create the vertex buffer and array.
