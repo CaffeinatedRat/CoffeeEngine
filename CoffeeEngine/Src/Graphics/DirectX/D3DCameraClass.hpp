@@ -54,14 +54,14 @@ namespace CoffeeEngine
 				/// <summary>
 				/// Sets the lookat vector of the camera.
 				/// </summary>
-				void SetLookAt(float x, float y, float z) override { SetLookAt(Vector3(x, y, z)); }
+				inline void SetLookAt(float x, float y, float z) override { SetLookAt(Vector3(x, y, z)); }
 				void SetLookAt(const Vector3& vector) override;
 				void SetLookAt(Vector3&& vector) override;
 
 				/// <summary>
 				/// Sets the up vector of the camera.
 				/// </summary>
-				void SetUp(float x, float y, float z)  override { SetUp(Vector3(x, y, z)); }
+				inline void SetUp(float x, float y, float z)  override { SetUp(Vector3(x, y, z)); }
 				void SetUp(const Vector3& vector) override;
 				void SetUp(Vector3&& vector) override;
 
@@ -72,8 +72,6 @@ namespace CoffeeEngine
 				// 
 				////////////////////////////////////////////////////////////
 				XMVECTOR m_positionVector;
-				XMVECTOR m_lookAtVector;
-				XMVECTOR m_upVector;
 			};
 		}
 	};

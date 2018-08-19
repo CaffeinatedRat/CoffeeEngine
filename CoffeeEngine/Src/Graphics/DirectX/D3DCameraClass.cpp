@@ -35,21 +35,15 @@ D3DCameraClass::D3DCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 
 D3DCameraClass::D3DCameraClass(const D3DCameraClass& object) noexcept
 	: CameraClass(object),
-	m_positionVector(m_positionVector),
-	m_lookAtVector(m_lookAtVector),
-	m_upVector(m_upVector)
+	m_positionVector(m_positionVector)
 {
 }
 
 D3DCameraClass::D3DCameraClass(D3DCameraClass&& object) noexcept
 	: CameraClass(object),
-	m_positionVector(std::move(object.m_positionVector)),
-	m_lookAtVector(std::move(object.m_lookAtVector)),
-	m_upVector(std::move(object.m_upVector))
+	m_positionVector(std::move(object.m_positionVector))
 {
 	object.m_positionVector = XMVECTOR();
-	object.m_lookAtVector = XMVECTOR();
-	object.m_upVector = XMVECTOR();
 	object.m_viewMatrix = XMMATRIX();
 	object.m_projectionMatrix = XMMATRIX();
 	object.m_worldMatrix = XMMATRIX();
@@ -93,17 +87,11 @@ void D3DCameraClass::SetPosition(Vector3&& vector)
 void D3DCameraClass::SetLookAt(const Vector3& vector)
 {
 	m_lookAt = vector;
-
-	XMFLOAT3 lookAt = { m_lookAt._x, m_lookAt._y, m_lookAt._z };
-	m_lookAtVector = XMLoadFloat3(&lookAt);
 }
 
 void D3DCameraClass::SetLookAt(Vector3&& vector)
 {
 	m_lookAt = std::move(vector);
-
-	XMFLOAT3 lookAt = { m_lookAt._x, m_lookAt._y, m_lookAt._z };
-	m_lookAtVector = XMLoadFloat3(&lookAt);
 }
 
 /// <summary>
@@ -112,17 +100,11 @@ void D3DCameraClass::SetLookAt(Vector3&& vector)
 void D3DCameraClass::SetUp(const Vector3& vector)
 {
 	m_up = vector;
-
-	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
-	m_upVector = XMLoadFloat3(&up);
 }
 
 void D3DCameraClass::SetUp(Vector3&& vector)
 {
 	m_up = std::move(vector);
-
-	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
-	m_upVector = XMLoadFloat3(&up);
 }
 
 bool D3DCameraClass::Initialize()
@@ -136,42 +118,35 @@ bool D3DCameraClass::Initialize()
 	XMFLOAT3 position = { m_position._x, m_position._y, m_position._z };
 	m_positionVector = XMLoadFloat3(&position);
 
-	// Set the initial lookat vector.
-	XMFLOAT3 lookAt = { m_lookAt._x, m_lookAt._y, m_lookAt._z };
-	m_lookAtVector = XMLoadFloat3(&lookAt);
-
-	// Set the initial up vector.
-	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
-	m_upVector = XMLoadFloat3(&up);
-
 	m_pGraphicsClass->GetSystem()->WriteToLog("[D3DCameraClass::Initialize] End");
 	return true;
 }
 
 void D3DCameraClass::Render(float fElapsedTime)
 {
-	float yawRate = m_yaw * 0.001f * fElapsedTime;
-	float rollRate = m_roll * 0.001f * fElapsedTime;
-	float pitchRate = m_pitch * 0.001f * fElapsedTime;
+	float velocity = CAMERA_SPEED * fElapsedTime;
+	m_orientation._x += m_pitch * velocity;
+	m_orientation._y += m_yaw * velocity;
+	m_orientation._z += m_roll * velocity;
 
+	// --- KA (8/19/18) --- The rotations done with this helper function are clockwise, which is part of the LHS.
+	// We need a counter-clockwise rotation, which we can achieve by inverting all the rotation angles.
 	// Create the rotation matrix from the yaw, pitch, and roll values.
-	auto rotationMatrix = XMMatrixRotationRollPitchYaw(pitchRate, yawRate, rollRate);
+	auto rotationMatrix = XMMatrixRotationRollPitchYaw(-m_orientation._x, -m_orientation._y, -m_orientation._z);
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
-	m_lookAtVector = XMVector3Normalize(XMVector3TransformCoord(m_lookAtVector, rotationMatrix));
+	XMFLOAT3 lookAt = { m_lookAt._x, m_lookAt._y, m_lookAt._z };
+	auto lookAtVector = XMVector3Normalize(XMVector3TransformCoord(XMLoadFloat3(&lookAt), rotationMatrix));
 
-	// Translate the rotated camera position to the location of the viewer.
-	m_positionVector += m_forward * m_lookAtVector;
-
-	//auto upVector = XMVector3TransformCoord(m_upVector, rotationMatrix);
-	auto upVector = m_upVector;
-
-	// --- KDA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
+	// --- KA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
 	// Finally create the view matrix from the three updated vectors.
 	//m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
-	m_viewMatrix = XMMatrixLookAtRH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
+	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
+	m_viewMatrix = XMMatrixLookAtRH(m_positionVector, m_positionVector + lookAtVector, XMLoadFloat3(&up));
 
-	return;
+	// Translate the rotated camera position to the location of the viewer.
+	float forward = m_forward * velocity * 5.0f;
+	m_positionVector += forward * lookAtVector;
 }
 
 void D3DCameraClass::Shutdown()
@@ -184,19 +159,22 @@ void D3DCameraClass::Shutdown()
 /// </summary>
 void D3DCameraClass::UpdateGraphicsProperties()
 {
-	auto pGraphicsClass = dynamic_cast<const D3DGraphicsClass*>(m_pGraphicsClass);
-	assert(pGraphicsClass);
+	assert(m_pGraphicsClass);
 
-	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
+	auto graphicsPresentation = m_pGraphicsClass->GetGraphicsPresentationProperties();
 
-	// Setup the projection matrix.
-	float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)XM_PI / 4.0f) : graphicsPresentation.fov;
-	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
+	assert(graphicsPresentation.screenHeight > 0);
+	if (graphicsPresentation.screenHeight > 0)
+	{
+		// Setup the projection matrix.
+		float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)XM_PI / 4.0f) : graphicsPresentation.fov;
+		float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
 
-	// --- KDA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
-	// Create the projection matrix for 3D rendering.
-	//m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
-	m_projectionMatrix = XMMatrixPerspectiveFovRH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+		// --- KA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
+		// Create the projection matrix for 3D rendering.
+		//m_projectionMatrix = XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+		m_projectionMatrix = XMMatrixPerspectiveFovRH(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	}
 }
 
 #endif

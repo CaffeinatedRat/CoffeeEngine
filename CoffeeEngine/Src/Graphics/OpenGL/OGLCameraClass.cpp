@@ -31,38 +31,18 @@ OGLCameraClass::OGLCameraClass(const BaseGraphicsClass* pBaseGraphicsClass)
 
 OGLCameraClass::OGLCameraClass(const OGLCameraClass& object) noexcept
 	: CameraClass(object),
-	m_positionVector(object.m_positionVector),
-	m_lookAtVector(object.m_lookAtVector),
-	m_upVector(object.m_upVector),
-	m_positionX(object.m_positionX),
-	m_positionY(object.m_positionY),
-	m_positionZ(object.m_positionZ),
-	m_rotationX(object.m_rotationX),
-	m_rotationY(object.m_rotationY),
-	m_rotationZ(object.m_rotationZ)
+	m_positionVector(object.m_positionVector)
 {
 }
 
 OGLCameraClass::OGLCameraClass(OGLCameraClass&& object) noexcept
 	: CameraClass(object),
-	m_positionVector(std::move(object.m_positionVector)),
-	m_lookAtVector(std::move(object.m_lookAtVector)),
-	m_upVector(std::move(object.m_upVector)),
-	m_positionX(object.m_positionX),
-	m_positionY(object.m_positionY),
-	m_positionZ(object.m_positionZ),
-	m_rotationX(object.m_rotationX),
-	m_rotationY(object.m_rotationY),
-	m_rotationZ(object.m_rotationZ)
+	m_positionVector(std::move(object.m_positionVector))
 {
 	object.m_positionVector = glm::vec3();
-	object.m_lookAtVector = glm::vec3();
-	object.m_upVector = glm::vec3();
 	object.m_viewMatrix = glm::mat4();
 	object.m_projectionMatrix = glm::mat4();
 	object.m_worldMatrix = glm::mat4();
-	object.m_positionX = object.m_positionY = object.m_positionZ = 0.0f;
-	object.m_rotationX = object.m_rotationY = object.m_rotationZ = 0.0f;
 }
 
 OGLCameraClass::~OGLCameraClass()
@@ -97,13 +77,11 @@ void OGLCameraClass::SetPosition(Vector3&& vector)
 void OGLCameraClass::SetLookAt(const Vector3& vector)
 {
 	m_lookAt = vector;
-	m_lookAtVector = glm::ext::vec3(m_lookAt);
 }
 
 void OGLCameraClass::SetLookAt(Vector3&& vector)
 {
 	m_lookAt = std::move(vector);
-	m_lookAtVector = glm::ext::vec3(m_lookAt);
 }
 
 /// <summary>
@@ -112,13 +90,11 @@ void OGLCameraClass::SetLookAt(Vector3&& vector)
 void OGLCameraClass::SetUp(const Vector3& vector)
 {
 	m_up = vector;
-	m_upVector = glm::ext::vec3(m_up);
 }
 
 void OGLCameraClass::SetUp(Vector3&& vector)
 {
 	m_up = std::move(vector);
-	m_upVector = glm::ext::vec3(m_up);
 }
 
 bool OGLCameraClass::Initialize()
@@ -129,8 +105,6 @@ bool OGLCameraClass::Initialize()
 	UpdateGraphicsProperties();
 
 	m_positionVector = glm::ext::vec3(m_position);
-	m_lookAtVector = glm::ext::vec3(m_lookAt);
-	m_upVector = glm::ext::vec3(m_up);
 
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] End");
 	return true;
@@ -138,27 +112,29 @@ bool OGLCameraClass::Initialize()
 
 void OGLCameraClass::Render(float fElapsedTime)
 {
-	float yawRate = m_yaw * 0.001f * fElapsedTime;
-	float rollRate = m_roll * 0.001f * fElapsedTime;
-	float pitchRate = m_pitch * 0.001f * fElapsedTime;
+	float velocity = CAMERA_SPEED * fElapsedTime;
+	m_orientation._x += m_pitch * velocity;
+	m_orientation._y += m_yaw * velocity;
+	m_orientation._z += m_roll * velocity;
 
-	glm::vec3 front = m_lookAtVector;
-	//front.x += cos(yawRate) * cos(pitchRate);
-	//front.y += sin(pitchRate);
-	//front.z += sin(yawRate) * cos(pitchRate);
+	auto rollMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._z, glm::vec3(0.0f, 0.0f, 1.0f));
+	auto pitchMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._x, glm::vec3(1.0f, 0.0f, 0.0f));
+	auto yawMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._y, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	//m_lookAtVector = front = glm::normalize(front);
-	
+	auto rotationMatrix = rollMatrix * pitchMatrix * yawMatrix;
+
+	auto lookAt = glm::vec4(glm::ext::vec3(m_lookAt), 0.0f);
+	auto lookAtVector = glm::vec3(glm::normalize(lookAt * rotationMatrix));
+
+	auto upVector = glm::ext::vec3(m_up);
+	m_viewMatrix = glm::lookAtRH(m_positionVector, (m_positionVector + lookAtVector), upVector);
+
+	// ------------------------------------------------- //
+
 	// Translate the rotated camera position to the location of the viewer.
-	m_positionVector += m_forward * m_lookAtVector;
+	float forward = m_forward * velocity * 5.0f;
+	m_positionVector += forward * lookAtVector;
 
-	// Also re-calculate the Right and Up vector
-	auto Right = glm::normalize(glm::cross(front, m_upVector));
-	auto upVector = glm::normalize(glm::cross(Right, front));
-
-	// Finally create the view matrix from the three updated vectors.
-	m_viewMatrix = glm::lookAt(m_positionVector, (m_lookAtVector + m_positionVector), upVector);
-	return;
 }
 
 void OGLCameraClass::Shutdown()
@@ -172,16 +148,17 @@ void OGLCameraClass::Shutdown()
 void OGLCameraClass::UpdateGraphicsProperties()
 {
 	assert(m_pGraphicsClass);
-	
-	OGLGraphicsClass* pGraphicsClass = (OGLGraphicsClass*)m_pGraphicsClass;
-	assert(pGraphicsClass);
 
-	auto graphicsPresentation = pGraphicsClass->GetGraphicsPresentationProperties();
+	auto graphicsPresentation = m_pGraphicsClass->GetGraphicsPresentationProperties();
 
-	// Setup the projection matrix.
-	float fieldOfView = (graphicsPresentation.fov == 0.0f) ? ((float)OGL_PI / 4.0f) : graphicsPresentation.fov;
-	float screenAspect = (float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight;
+	assert(graphicsPresentation.screenHeight > 0);
+	if (graphicsPresentation.screenHeight > 0)
+	{
+		// Setup the projection matrix.
+		float fieldOfView = (graphicsPresentation.fov == 0.0f) ? Trig::C_QuarterPI : graphicsPresentation.fov;
+		float screenAspect = graphicsPresentation.screenHeight > 0 ? ((float)graphicsPresentation.screenWidth / (float)graphicsPresentation.screenHeight) : 0.0f;
 
-	// Create the projection matrix for 3D rendering.
-	m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+		// Create the projection matrix for 3D rendering.
+		m_projectionMatrix = glm::perspective(fieldOfView, screenAspect, graphicsPresentation.screenNear, graphicsPresentation.screenDepth);
+	}
 }

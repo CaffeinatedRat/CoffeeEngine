@@ -143,6 +143,7 @@ namespace CoffeeEngine
 			inline virtual void Pitch(float value) override { m_pitch = value; }
 			inline virtual void Roll(float value) override { m_roll = value; }
 			inline virtual void Forward(float value) override { m_forward = value; }
+			inline virtual void Strafe(float value) override { m_strafe = value; }
 
 		protected:
 
@@ -152,15 +153,17 @@ namespace CoffeeEngine
 			// 
 			////////////////////////////////////////////////////////////
 
+			const float CAMERA_SPEED = 0.001f;
+
 			float m_yaw = 0.0f, m_pitch = 0.0f, m_roll = 0.0f;
 			float m_strafe = 0.0f, m_forward = 0.0f;
 
+			Vector3 m_orientation = Vector3(0.0f, 0.0f, 0.0f);
 			Vector3 m_lookAt = Vector3(0.0f, 0.0f, 1.0f);
 			Vector3 m_up = Vector3(0.0f, 1.0f, 0.0f);
 
 			//Object coordinates.
 			Vector3 m_position = Vector3();
-			Vector3 m_orientation = Vector3();
 
 			TMatrixType m_viewMatrix;
 			TMatrixType m_projectionMatrix;

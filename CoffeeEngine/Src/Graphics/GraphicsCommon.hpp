@@ -13,8 +13,6 @@ namespace CoffeeEngine
 {
 	namespace Graphics
 	{
-		const float GC_PI = 3.14159265f;
-
 		enum class GraphicsAPIType
 		{
 			DIRECTX,

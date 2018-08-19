@@ -12,6 +12,7 @@
 #include "Graphics/CameraClass.hpp"
 
 using namespace CoffeeEngine;
+using namespace CoffeeEngine::Math;
 using namespace CoffeeEngine::Utility;
 using namespace CoffeeEngine::Utility::Logging;
 using namespace CoffeeEngine::Interfaces;
@@ -180,7 +181,7 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 	graphicsInitParams.depthBits = 32;
 	graphicsInitParams.alphaBits = 8;
 	graphicsInitParams.stencilBits = 8;
-	graphicsInitParams.fov = GC_PI / 4.0f;
+	graphicsInitParams.fov = Trig::C_QuarterPI;
 	graphicsInitParams.numberOfSamples = 1;
 	graphicsInitParams.version.nMajor = 3;
 	graphicsInitParams.version.nMinor = 1;
@@ -279,11 +280,11 @@ void CoffeeEngineClass::OnKeyDown(KeyboardKeys keyboardKey)
 
 	if (keyboardKey == KeyboardKeys::UpArrow)
 	{
-		m_pitchMovement = -1.0f;
+		m_pitchMovement = 1.0f;
 	}
 	else if (keyboardKey == KeyboardKeys::DownArrow)
 	{
-		m_pitchMovement = 1.0f;
+		m_pitchMovement = -1.0f;
 	}
 
 	if (keyboardKey == KeyboardKeys::W)

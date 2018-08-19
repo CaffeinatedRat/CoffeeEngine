@@ -158,14 +158,17 @@ void OGLGraphicsClass::SetMasterCamera(ICamera* camera)
 /// </summary>
 void OGLGraphicsClass::SetScreenDimensions(int width, int height)
 {
-	m_graphicsPresentationProperties.screenWidth = width;
-	m_graphicsPresentationProperties.screenHeight = height;
+	if (height > 0)
+	{
+		m_graphicsPresentationProperties.screenWidth = width;
+		m_graphicsPresentationProperties.screenHeight = height;
 
-	if (m_pMasterCamera != nullptr)
-		m_pMasterCamera->UpdateGraphicsProperties();
+		if (m_pMasterCamera != nullptr)
+			m_pMasterCamera->UpdateGraphicsProperties();
 
-	//Reset the viewport.
-	SetViewport(0, 0, m_graphicsPresentationProperties.screenWidth, m_graphicsPresentationProperties.screenHeight);
+		//Reset the viewport.
+		SetViewport(0, 0, m_graphicsPresentationProperties.screenWidth, m_graphicsPresentationProperties.screenHeight);
+	}
 }
 
 ////////////////////////////////////////////////////////////

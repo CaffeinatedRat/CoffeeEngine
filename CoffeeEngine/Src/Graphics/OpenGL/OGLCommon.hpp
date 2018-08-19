@@ -36,8 +36,6 @@ namespace CoffeeEngine
 	{
 		namespace OpenGL
 		{
-			const float OGL_PI = 3.14159265f;
-
 			enum class ShaderType {
 				Vertex,
 				Fragment,
