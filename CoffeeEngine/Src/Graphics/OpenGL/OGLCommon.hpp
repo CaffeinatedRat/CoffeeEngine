@@ -14,6 +14,10 @@
 #define GLEW_STATIC
 #endif
 
+#ifdef FORCE_LHS
+#define GLM_FORCE_LEFT_HANDED
+#endif 
+
 #include <glm/glm.hpp>
 #include <gl/glew.h>
 #include <gl/wglew.h>
@@ -26,6 +30,8 @@ namespace glm
 	namespace ext
 	{
 		inline glm::vec3 vec3(Vector3 v) { return glm::vec3(v._x, v._y, v._z); }
+		inline glm::vec4 vec4(Vector3 v, float f) { return glm::vec4(v._x, v._y, v._z, f);  }
+		inline glm::vec4 vec4(Vector4 v) { return glm::vec4(v._x, v._y, v._z, v._w); }
 	}
 }
 #endif
