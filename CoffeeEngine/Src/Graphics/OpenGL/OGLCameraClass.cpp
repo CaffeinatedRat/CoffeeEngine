@@ -105,36 +105,45 @@ bool OGLCameraClass::Initialize()
 	UpdateGraphicsProperties();
 
 	m_positionVector = glm::ext::vec3(m_position);
-
 	m_pGraphicsClass->GetSystem()->WriteToLog("[OGLCameraClass::Initialize] End");
 	return true;
 }
 
 void OGLCameraClass::Render(float fElapsedTime)
 {
-	float velocity = CAMERA_SPEED * fElapsedTime;
-	m_orientation._x += m_pitch * velocity;
-	m_orientation._y += m_yaw * velocity;
-	m_orientation._z += m_roll * velocity;
-
-	auto rollMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._z, glm::vec3(0.0f, 0.0f, 1.0f));
-	auto pitchMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._x, glm::vec3(1.0f, 0.0f, 0.0f));
+	//Update the orientation angles of the camera.
+	//The angles are in radians.
+	float angularVelocity = CAMERA_SPEED * fElapsedTime;
+	m_orientation._y += m_yawDirection * angularVelocity;
+	m_orientation._x += m_pitchDirection * angularVelocity;
+	m_orientation._z += m_rollDirection * angularVelocity;
+	
+#ifdef FORCE_LHS
+	//Calculate the camera's orientation.
+	auto pitchMatrix = glm::rotate(glm::mat4(1.0f), -m_orientation._x, glm::vec3(1.0f, 0.0f, 0.0f));
+	auto yawMatrix = glm::rotate(glm::mat4(1.0f), -m_orientation._y, glm::vec3(0.0f, 1.0f, 0.0f));
+	auto rollMatrix = glm::rotate(glm::mat4(1.0f), -m_orientation._z, glm::vec3(0.0f, 0.0f, 1.0f));
+#else
+	//Calculate the camera's orientation.
+	auto pitchMatrix = glm::rotate(glm::mat4(1.0f), -m_orientation._x, glm::vec3(1.0f, 0.0f, 0.0f));
 	auto yawMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._y, glm::vec3(0.0f, 1.0f, 0.0f));
-
+	auto rollMatrix = glm::rotate(glm::mat4(1.0f), m_orientation._z, glm::vec3(0.0f, 0.0f, 1.0f));	
+#endif
 	auto rotationMatrix = rollMatrix * pitchMatrix * yawMatrix;
 
-	auto lookAt = glm::vec4(glm::ext::vec3(m_lookAt), 0.0f);
+	//Transform the lookAt vector based on the camera's orientation.
+	auto lookAt = glm::ext::vec4(m_lookAt, 0.0f);
 	auto lookAtVector = glm::vec3(glm::normalize(lookAt * rotationMatrix));
 
-	auto upVector = glm::ext::vec3(m_up);
-	m_viewMatrix = glm::lookAtRH(m_positionVector, (m_positionVector + lookAtVector), upVector);
+	//Calculate the movement delta
+	auto movement = glm::vec4(m_lateralDirection * angularVelocity * 5.0f, 0.0f, -m_movementDirection * angularVelocity * 5.0f, 0.0f);
+	auto movementDelta = glm::vec3(movement * rotationMatrix);
 
-	// ------------------------------------------------- //
+	auto upVector = glm::ext::vec3(m_up);
+	m_viewMatrix = glm::lookAt(m_positionVector, (m_positionVector + lookAtVector), upVector);
 
 	// Translate the rotated camera position to the location of the viewer.
-	float forward = m_forward * velocity * 5.0f;
-	m_positionVector += forward * lookAtVector;
-
+	m_positionVector += movementDelta;
 }
 
 void OGLCameraClass::Shutdown()

@@ -8,6 +8,9 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
+#define FORCE_RHS
+//#define FORCE_LHS
+
 #pragma once
 
 // C RunTime Header Files

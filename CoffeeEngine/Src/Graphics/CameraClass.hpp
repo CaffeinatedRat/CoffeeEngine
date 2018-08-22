@@ -43,11 +43,11 @@ namespace CoffeeEngine
 			//CameraClass<TMatrixType>(const CameraClass& object) noexcept;
 			CameraClass<TMatrixType>(const CameraClass& object)  noexcept
 				: m_pGraphicsClass(object.m_pGraphicsClass),
-				m_yaw(object.m_yaw),
-				m_pitch(object.m_pitch),
-				m_roll(object.m_roll),
-				m_strafe(object.m_strafe),
-				m_forward(object.m_forward),
+				m_yawDirection(object.m_yawDirection),
+				m_pitchDirection(object.m_pitchDirection),
+				m_rollDirection(object.m_rollDirection),
+				m_lateralDirection(object.m_lateralDirection),
+				m_movementDirection(object.m_movementDirection),
 				m_position(object.m_position),
 				m_orientation(object.m_orientation),
 				m_lookAt(object.m_lookAt),
@@ -61,11 +61,11 @@ namespace CoffeeEngine
 			//CameraClass<TMatrixType>(CameraClass&& object) noexcept;
 			CameraClass<TMatrixType>(CameraClass&& object) noexcept
 				: m_pGraphicsClass(object.m_pGraphicsClass),
-				m_yaw(object.m_yaw),
-				m_pitch(object.m_pitch),
-				m_roll(object.m_roll),
-				m_strafe(object.m_strafe),
-				m_forward(object.m_forward),
+				m_yawDirection(object.m_yawDirection),
+				m_pitchDirection(object.m_pitchDirection),
+				m_rollDirection(object.m_rollDirection),
+				m_lateralDirection(object.m_lateralDirection),
+				m_movementDirection(object.m_movementDirection),
 				m_position(std::move(object.m_position)),
 				m_orientation(std::move(object.m_orientation)),
 				m_lookAt(std::move(object.m_lookAt)),
@@ -139,11 +139,11 @@ namespace CoffeeEngine
 			// 
 			////////////////////////////////////////////////////////////
 
-			inline virtual void Yaw(float value) override { m_yaw = value; }
-			inline virtual void Pitch(float value) override { m_pitch = value; }
-			inline virtual void Roll(float value) override { m_roll = value; }
-			inline virtual void Forward(float value) override { m_forward = value; }
-			inline virtual void Strafe(float value) override { m_strafe = value; }
+			inline virtual void Yaw(float value) override { m_yawDirection = value; }
+			inline virtual void Pitch(float value) override { m_pitchDirection = value; }
+			inline virtual void Roll(float value) override { m_rollDirection = value; }
+			inline virtual void Forward(float value) override { m_movementDirection = value; }
+			inline virtual void Strafe(float value) override { m_lateralDirection = value; }
 
 		protected:
 
@@ -155,11 +155,11 @@ namespace CoffeeEngine
 
 			const float CAMERA_SPEED = 0.001f;
 
-			float m_yaw = 0.0f, m_pitch = 0.0f, m_roll = 0.0f;
-			float m_strafe = 0.0f, m_forward = 0.0f;
+			float m_yawDirection = 0.0f, m_pitchDirection = 0.0f, m_rollDirection = 0.0f;
+			float m_lateralDirection = 0.0f, m_movementDirection = 0.0f;
 
 			Vector3 m_orientation = Vector3(0.0f, 0.0f, 0.0f);
-			Vector3 m_lookAt = Vector3(0.0f, 0.0f, 1.0f);
+			Vector3 m_lookAt = Vector3(0.0f, 0.0f, -1.0f);
 			Vector3 m_up = Vector3(0.0f, 1.0f, 0.0f);
 
 			//Object coordinates.
