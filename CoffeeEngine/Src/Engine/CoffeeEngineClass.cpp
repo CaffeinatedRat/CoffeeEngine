@@ -152,6 +152,7 @@ void CoffeeEngineClass::ManageWorld(float elapsedTime)
 	m_pCamera->Yaw(m_turnMovement);
 	m_pCamera->Pitch(m_pitchMovement);
 	m_pCamera->Forward(m_forwardMovement);
+	m_pCamera->Strafe(m_lateralMovement);
 
 	m_pSystem->WriteToLog("[CoffeeEngineClass::ManageWorld] End", LogLevelType::DeepDiagnostic);
 }
@@ -205,7 +206,7 @@ bool CoffeeEngineClass::InitializeGraphics(GraphicsAPIType graphicsType)
 		return false;
 
 	m_pCamera = m_upGraphics->CreateCamera();
-	m_pCamera->SetPosition(Vector3(0.0f, 0.0f, -10.0f));
+	m_pCamera->SetPosition(Vector3(0.0f, 0.0f, 10.0f));
 	if (!m_pCamera->Initialize())
 		return false;
 
@@ -295,6 +296,15 @@ void CoffeeEngineClass::OnKeyDown(KeyboardKeys keyboardKey)
 	{
 		m_forwardMovement = -1.0f;
 	}
+
+	if (keyboardKey == KeyboardKeys::A)
+	{
+		m_lateralMovement = -1.0f;
+	}
+	else if (keyboardKey == KeyboardKeys::D)
+	{
+		m_lateralMovement = 1.0f;
+	}
 }
 
 /// <summary>
@@ -325,6 +335,11 @@ void CoffeeEngineClass::OnKeyUp(KeyboardKeys keyboardKey)
 	if (keyboardKey == KeyboardKeys::W || keyboardKey == KeyboardKeys::S)
 	{
 		m_forwardMovement = 0.0f;
+	}
+
+	if (keyboardKey == KeyboardKeys::A || keyboardKey == KeyboardKeys::D)
+	{
+		m_lateralMovement = 0.0f;
 	}
 }
 
