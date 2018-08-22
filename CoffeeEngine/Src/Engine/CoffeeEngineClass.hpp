@@ -5,6 +5,8 @@
 // http://www.caffeinatedrat.com
 //--------------------------------------------------------------------------------------
 
+//#define FORCE_LHS
+
 #ifndef _COFFEEENGINE_CLASS_H_
 #define _COFFEEENGINE_CLASS_H_
 
@@ -152,6 +154,7 @@ namespace CoffeeEngine
 			float m_pitchMovement = 0.0f;
 			float m_turnMovement = 0.0f;
 			float m_forwardMovement = 0.0f;
+			float m_lateralMovement = 0.0f;
 		};
 	};
 };
