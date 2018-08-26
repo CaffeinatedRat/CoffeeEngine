@@ -127,40 +127,47 @@ void D3DCameraClass::Render(float fElapsedTime)
 	//Update the orientation angles of the camera.
 	//The angles are in radians.
 	float angularVelocity = CAMERA_SPEED * fElapsedTime;
-	m_orientation._y += m_yawDirection * angularVelocity;
 	m_orientation._x += m_pitchDirection * angularVelocity;
+	m_orientation._y += m_yawDirection * angularVelocity;
 	m_orientation._z += m_rollDirection * angularVelocity;
 
 	// --- KA (8/19/18) --- The rotations done with this helper function are clockwise, which is part of the LHS.
 	// We need a counter-clockwise rotation, which we can achieve by inverting all the rotation angles.
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 
-#ifdef FORCE_RHS
-	auto rotationMatrix = XMMatrixRotationRollPitchYaw(m_orientation._x, -m_orientation._y, -m_orientation._z);
-#else
+	//Calculate the orientation.
+	//Normalize the camera rotation so that yaw left is always -1, pitch up is always +1, and roll left is always -1.
+#ifdef FORCE_LHS
 	auto rotationMatrix = XMMatrixRotationRollPitchYaw(m_orientation._x, m_orientation._y, m_orientation._z);
+#else
+	auto rotationMatrix = XMMatrixRotationRollPitchYaw(m_orientation._x, -m_orientation._y, -m_orientation._z);
 #endif 
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	XMFLOAT3 lookAt = { m_lookAt._x, m_lookAt._y, m_lookAt._z };
 	auto lookAtVector = XMVector3Normalize(XMVector3TransformCoord(XMLoadFloat3(&lookAt), rotationMatrix));
 
-	//Calculate the movement delta
+	//Normalize the camera movement so that foward movement is always +1, and lateral left movement is always -1.
+#ifdef FORCE_LHS
+	XMFLOAT3 movement = { -m_lateralDirection * angularVelocity * 5.0f, 0.0f, -m_movementDirection * angularVelocity * 5.0f };
+#else
 	XMFLOAT3 movement = { m_lateralDirection * angularVelocity * 5.0f, 0.0f, -m_movementDirection * angularVelocity * 5.0f };
+#endif 
 	auto movementDelta = XMVector3TransformCoord(XMLoadFloat3(&movement), rotationMatrix);
+
+	// Translate the rotated camera position to the location of the viewer.
+	m_positionVector += movementDelta;
 
 	// --- KA (8/13/18) --- Switch to a right-handed coordinate system to make it easier to sync with OpenGL.
 	// Finally create the view matrix from the three updated vectors.
 	//m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_lookAtVector + m_positionVector, upVector);
 	XMFLOAT3 up = { m_up._x, m_up._y, m_up._z };
-#ifdef FORCE_RHS
-	m_viewMatrix = XMMatrixLookAtRH(m_positionVector, m_positionVector + lookAtVector, XMLoadFloat3(&up));
-#else
+#ifdef FORCE_LHS
 	m_viewMatrix = XMMatrixLookAtLH(m_positionVector, m_positionVector + lookAtVector, XMLoadFloat3(&up));
+#else
+	m_viewMatrix = XMMatrixLookAtRH(m_positionVector, m_positionVector + lookAtVector, XMLoadFloat3(&up));
 #endif
 
-	// Translate the rotated camera position to the location of the viewer.
-	m_positionVector += movementDelta;
 }
 
 void D3DCameraClass::Shutdown()

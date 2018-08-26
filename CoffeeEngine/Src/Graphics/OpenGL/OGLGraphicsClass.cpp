@@ -219,7 +219,13 @@ bool OGLGraphicsClass::CreateDepthBuffer()
 
 bool OGLGraphicsClass::CreateRasterState()
 {
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+#ifdef FORCE_LHS
+	glCullFace(GL_BACK);
+#else
+	glCullFace(GL_FRONT);
+#endif
+	//glDisable(GL_CULL_FACE);
 	return true;
 }
 

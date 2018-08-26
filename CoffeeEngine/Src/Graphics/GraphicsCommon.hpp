@@ -9,10 +9,19 @@
 #ifndef _GRAPHICS_COMMON_H_
 #define _GRAPHICS_COMMON_H_
 
+#define FORCE_RHS
+//#define FORCE_LHS
+
 namespace CoffeeEngine
 {
 	namespace Graphics
 	{
+		#ifdef FORCE_LHS
+		constexpr char* COORDINATE_SYSTEM = "LHS";
+		#else
+		constexpr char* COORDINATE_SYSTEM = "RHS";
+		#endif
+
 		enum class GraphicsAPIType
 		{
 			DIRECTX,

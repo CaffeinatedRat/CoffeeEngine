@@ -46,32 +46,32 @@ D3DGraphicsClass::~D3DGraphicsClass()
 
 bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters)
 {
-	if(m_pSystem == nullptr)
+	if (m_pSystem == nullptr)
 		throw NullArgumentException("D3DGraphicsClass", "Initialize", "m_pSystem");
-	
+
 	m_pSystem->WriteToLog("[D3DGraphicsClass::Initialize] Begin", LogLevelType::Diagnostic);
 
 	BaseGraphicsClass::Initialize(graphicsInitParameters);
 
-	if(!CreateModeList())
+	if (!CreateModeList())
 	{
 		Shutdown();
 		return false;
 	}
 
-	if(!CreateSwapChain())
+	if (!CreateSwapChain())
 	{
 		Shutdown();
 		return false;
 	}
 
-	if(!CreateDepthBuffer())
+	if (!CreateDepthBuffer())
 	{
 		Shutdown();
 		return false;
 	}
 
-	if(!CreateRasterState())
+	if (!CreateRasterState())
 	{
 		Shutdown();
 		return false;
@@ -82,7 +82,7 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENT
 	// Create an orthographic projection matrix for 2D rendering.
 	m_orthoMatrix = XMMatrixOrthographicLH((float)graphicsInitParameters.screenWidth,
 		(float)graphicsInitParameters.screenHeight,
-		graphicsInitParameters.screenNear, 
+		graphicsInitParameters.screenNear,
 		graphicsInitParameters.screenDepth);
 
 	//We are ready to draw.
@@ -95,7 +95,7 @@ bool D3DGraphicsClass::Initialize(const CoffeeEngine::Graphics::GRAPHICS_PRESENT
 void D3DGraphicsClass::BeginScene(float red, float green, float blue, float alpha)
 {
 	//Prevent scene drawing until initialization is complete.
-	if(!m_displayReady)
+	if (!m_displayReady)
 		return;
 
 	//Compile the clear colors (RGBA) into a single float array.
@@ -111,11 +111,11 @@ void D3DGraphicsClass::BeginScene(float red, float green, float blue, float alph
 void D3DGraphicsClass::EndScene()
 {
 	//Prevent scene drawing until initialization is complete.
-	if(!m_displayReady)
+	if (!m_displayReady)
 		return;
 
 	// Present the back buffer to the screen since rendering is complete.
-	m_pSwapChain->Present( ((m_graphicsPresentationProperties.vsyncEnabled) ? 1 : 0), 0);
+	m_pSwapChain->Present(((m_graphicsPresentationProperties.vsyncEnabled) ? 1 : 0), 0);
 }
 
 void D3DGraphicsClass::Shutdown()
@@ -126,7 +126,7 @@ void D3DGraphicsClass::Shutdown()
 
 	// Apparently, DirectX11 and possibly DirectX10 is not capable of closing while in fullscreen, so we have to reset the swap chain to windowed mode before we can release it.
 	// According to www.DirectXTutorials.com, this is due to an implicit threading issue.
-	if(m_pSwapChain)
+	if (m_pSwapChain)
 	{
 		m_pSwapChain->SetFullscreenState(false, nullptr);
 	}
@@ -215,13 +215,13 @@ bool D3DGraphicsClass::CreateModeList()
 
 	// Create a DirectX graphics interface factory.
 	//NOTE: This is a more advanced method than created the IDirect3d9 interface, such as d3d = Direct3DCreate9(D3D_SDK_VERSION), by granting us access to the DirectX Graphics Interface.
-	if(SUCCEEDED(result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory)))
+	if (SUCCEEDED(result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory)))
 	{
 		// Get the primary adapter.
-		if(SUCCEEDED(result = factory->EnumAdapters(0, &adapter)))
+		if (SUCCEEDED(result = factory->EnumAdapters(0, &adapter)))
 		{
 			// Get the adapter (video card) description.
-			if(SUCCEEDED(result = adapter->GetDesc(&adapterDesc)))
+			if (SUCCEEDED(result = adapter->GetDesc(&adapterDesc)))
 			{
 				// Store the dedicated video card memory in megabytes.
 				m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
@@ -229,16 +229,16 @@ bool D3DGraphicsClass::CreateModeList()
 				// Convert the name of the video card to a character array and store it.
 				size_t stringLength = 0;
 				char tmp[128];
-				if(wcstombs_s(&stringLength, tmp, 128, adapterDesc.Description, 128) == 0)
+				if (wcstombs_s(&stringLength, tmp, 128, adapterDesc.Description, 128) == 0)
 					m_videoCardDescription = tmp;
 
 				// Get the primary output device, such as a monitor.
-				if(SUCCEEDED(result = adapter->EnumOutputs(0, &adapterOutput)))
+				if (SUCCEEDED(result = adapter->EnumOutputs(0, &adapterOutput)))
 				{
 					// Get the number of modes that fit the DXGI_FORMAT_R8G8B8A8_UNORM display format for the adapter output (monitor).
 					// Retrieve all of the supported modes for primary adapter and primary output device.
 					// NOTE: We are looking for interlaced modes that support 8-bit ARGB channels that are unsigned and normalized (0,1) per channel.
-					if(SUCCEEDED(adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_numberOfModes, NULL)))
+					if (SUCCEEDED(adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &m_numberOfModes, NULL)))
 					{
 						// Allocate memory for our list of modes.
 						if ((m_pDisplayModeList = new DXGI_MODE_DESC[m_numberOfModes]) != nullptr)
@@ -343,10 +343,10 @@ bool D3DGraphicsClass::CreateSwapChain()
 	createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	UINT numFeatureLevels = ARRAYSIZE( featureLevels );
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
 	// Create the swap chain, Direct3D device, and Direct3D device context.
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevels, numFeatureLevels, 
+	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
 		D3D11_SDK_VERSION, &swapChainDesc, &m_pSwapChain, &m_pDevice, NULL, &m_pDeviceContext);
 	if (SUCCEEDED(result))
 	{
@@ -373,7 +373,7 @@ bool D3DGraphicsClass::CreateSwapChain()
 	}
 	else
 	{
-		if(result == E_INVALIDARG)
+		if (result == E_INVALIDARG)
 			throw Exception("D3DGraphicsClass", "CreateSwapChain", "DirectX is not supported on this machine.");
 	}
 
@@ -460,7 +460,7 @@ bool D3DGraphicsClass::CreateDepthBuffer()
 	depthBufferDesc.MiscFlags = 0;
 
 	// Create the texture for the depth buffer using the filled out description.
-	if(FAILED(m_pDevice->CreateTexture2D(&depthBufferDesc, NULL, &m_pDepthStencilBuffer)))
+	if (FAILED(m_pDevice->CreateTexture2D(&depthBufferDesc, NULL, &m_pDepthStencilBuffer)))
 		return false;
 
 	// Initialize the description of the stencil state.
@@ -488,7 +488,7 @@ bool D3DGraphicsClass::CreateDepthBuffer()
 	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	// Create the depth stencil state.
-	if(FAILED(m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pDepthStencilState)))
+	if (FAILED(m_pDevice->CreateDepthStencilState(&depthStencilDesc, &m_pDepthStencilState)))
 		return false;
 
 	// Set the depth stencil state.
@@ -503,7 +503,7 @@ bool D3DGraphicsClass::CreateDepthBuffer()
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	// Create the depth stencil view.
-	if(FAILED(m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer, &depthStencilViewDesc, &m_pDepthStencilView)))
+	if (FAILED(m_pDevice->CreateDepthStencilView(m_pDepthStencilBuffer, &depthStencilViewDesc, &m_pDepthStencilView)))
 		return false;
 
 	// Bind the render target view and depth stencil buffer to the output render pipeline.
@@ -522,8 +522,13 @@ bool D3DGraphicsClass::CreateRasterState()
 	// Setup the raster description which will determine how and what polygons will be drawn.
 	rasterDesc.AntialiasedLineEnable = true;
 
-	//rasterDesc.CullMode = D3D11_CULL_BACK;
-	rasterDesc.CullMode = D3D11_CULL_NONE;
+#ifdef FORCE_LHS
+	rasterDesc.CullMode = D3D11_CULL_FRONT;
+#else
+	rasterDesc.CullMode = D3D11_CULL_BACK;
+#endif
+
+	//rasterDesc.CullMode = D3D11_CULL_NONE;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
 	rasterDesc.DepthClipEnable = true;
@@ -534,7 +539,7 @@ bool D3DGraphicsClass::CreateRasterState()
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
 	// Create the rasterizer state from the description we just filled out.
-	if(FAILED(m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState)))
+	if (FAILED(m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRasterState)))
 		return false;
 
 	// Now set the rasterizer state.

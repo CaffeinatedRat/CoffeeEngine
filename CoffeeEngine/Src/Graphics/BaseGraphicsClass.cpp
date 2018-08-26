@@ -10,6 +10,7 @@
 
 using namespace CoffeeEngine;
 using namespace CoffeeEngine::Graphics;
+using LogLevelType = CoffeeEngine::Utility::Logging::LogLevelType;
 
 ////////////////////////////////////////////////////////////
 //
@@ -48,6 +49,10 @@ BaseGraphicsClass::BaseGraphicsClass(BaseGraphicsClass&& object) noexcept
 
 bool BaseGraphicsClass::Initialize(const GRAPHICS_PRESENTATION_PROPERTIES& graphicsInitParameters)
 {
+	std::stringstream message;
+	message << "[BaseGraphicsClass::Initialize] Using Coordinate System: " << COORDINATE_SYSTEM;
+	m_pSystem->WriteToLog(message, LogLevelType::Informational);
+
 	m_graphicsPresentationProperties = graphicsInitParameters;
 	return true;
 }
